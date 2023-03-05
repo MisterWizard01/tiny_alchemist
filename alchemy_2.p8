@@ -27,7 +27,9 @@ __lua__
 -- stamina system?
 
 --token saves
+--	★7904
 -- turn first_load into pokes
+-- ★7821
 -- index conditions+processes,
 --  refer to index in mach data
 -- remove/consolidate redundant
@@ -293,12 +295,11 @@ function _init()
 		add_mach(25,-1,2),
 		add_mach(25,-1,3),
 	}
-	if data_found then
-		load_game()
-	else
-		first_load()
+	if not data_found then
+		save_game()
+		poke(0x5e10,unpack(split"1,99,255,255,255,255,2,100,255,255,255,255,9,96,255,255,255,255,10,97,255,255,255,255,17,17,255,255,255,255,18,33,255,255,255,255,19,18,255,255,255,255,20,34,255,255,255,255,7,64,255,255,255,255,8,80,255,255,255,255,16,84,255,255,255,255,15,68,255,255,255,255,11,52,255,255,255,255,22,20,255,255,255,255,13,66,255,255,255,255,23,36,255,255,255,255,27,98,255,255,255,255"))
 	end
-	--save_game()
+	load_game()
 	
 	money+=100
 	
@@ -2154,28 +2155,6 @@ function load_game()
 	end
 end
 
---todo: collapse this into
---a single poke()
-function first_load()
-	add_mach(1,6,3) --cut h top
-	add_mach(2,6,4) --cut h bot
-	add_mach(9,6,0) --bed top
-	add_mach(10,6,1) --bed bot
-	add_mach(17,1,0) --storage tl
-	add_mach(18,2,0) --storage tr
-	add_mach(19,1,1) --storage bl
-	add_mach(20,2,1) --storage br
-	add_mach(7,4,0) --join h lft
-	add_mach(8,5,0) --join h rit
-	add_mach(16,5,4) --dynamo
-	add_mach(15,4,4) --treadmill
-	add_mach(11,3,4) --turn cw
-	add_mach(22,1,4) --trash
-	add_mach(13,4,2) --flip h
-	add_mach(23,2,4) --nest
-	add_mach(27,6,2) --bed bot
-	save_game()
-end
 __gfx__
 77ccc77733333337755577777775557799999997977777977774444744447777777777777777778788888887877777777ee7ee777ee77777777777777777ee77
 7ccccc773333333777555757575557777999997799777997777744474447777777777777777778877888887788777777eeeeeee7eeee7777777e7777777eeee7
