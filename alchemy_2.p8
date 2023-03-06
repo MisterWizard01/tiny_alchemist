@@ -1856,7 +1856,7 @@ function draw_mach(m,x,y,bp)
 	for i=5,8 do
 		local data=mach_data[m.typ]
 		spr(
-			bp and data[i+4] or data[i],
+			bp and data[i+6] or data[i+2],
 			x+max(dirx[i],0)*8,
 			y+max(diry[i],0)*8
 		)
