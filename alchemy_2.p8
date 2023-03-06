@@ -1085,12 +1085,12 @@ function update_bird(b)
 				b.tx-b.x,b.ty-b.y)
 			if (spooked) sfx_no_overlap(9)
 		end
-	elseif b.state=="return" then
 	end
 end
 -->8
 --tools
 
+--★
 function normalize(x,y)
 	local len=sqrt(x*x+y*y)
 	if len>0 then
@@ -1106,24 +1106,25 @@ function rectfill2(x,y,w,h,c)
 	end
 end
 
-function rect2(x,y,w,h,c)
-	if w>0 and h>0 then
-		rect(x,y,x+w-1,y+h-1,c)
-	end
-end
+--function rect2(x,y,w,h,c)
+--	if w>0 and h>0 then
+--		rect(x,y,x+w-1,y+h-1,c)
+--	end
+--end
 
-function circfill2(x,y,r,c)
-	r=flr(r*2)/2
-	if r%1==0 then
-		circfill(x,y,r,c)
-	else
-		circfill(x-.5,y-.5,r,c)
-		circfill(x-.5,y+.5,r,c)
-		circfill(x+.5,y+.5,r,c)
-		circfill(x+.5,y-.5,r,c)
-	end
-end
+--function circfill2(x,y,r,c)
+--	r=flr(r*2)/2
+--	if r%1==0 then
+--		circfill(x,y,r,c)
+--	else
+--		circfill(x-.5,y-.5,r,c)
+--		circfill(x-.5,y+.5,r,c)
+--		circfill(x+.5,y+.5,r,c)
+--		circfill(x+.5,y-.5,r,c)
+--	end
+--end
 
+--★
 function collision(a,b)
 	local a⬅️,a➡️,a⬆️,a⬇️,
 							b⬅️,b➡️,b⬆️,b⬇️=
@@ -1143,10 +1144,11 @@ function collision_tile(s)
 	local ⬅️,➡️,⬆️,⬇️=
 							s.x+s.ox,s.x+s.ox+s.w-1,
 							s.y+s.oy,s.y+s.oy+s.h-1
-	local t1=mget(flr(⬅️/8),flr(⬆️/8))
-	local t2=mget(flr(⬅️/8),flr(⬇️/8))
-	local t3=mget(flr(➡️/8),flr(⬆️/8))
-	local t4=mget(flr(➡️/8),flr(⬇️/8))
+	local t1,t2,t3,t4=
+		mget(flr(⬅️/8),flr(⬆️/8)),
+		mget(flr(⬅️/8),flr(⬇️/8)),
+		mget(flr(➡️/8),flr(⬆️/8)),
+		mget(flr(➡️/8),flr(⬇️/8))
 	
 	return fget(t1,0)
 		or fget(t2,0)
@@ -1169,24 +1171,24 @@ function rrectfill2(x,y,w,h,c,r)
 	rectfill(x+r,y,  x2-r,y2  ,c)
 end
 
-function printw(t,x,y,w,c)
-	local lines=split(t,"|")
-	for l in all(lines) do
-		local cur,i,l=x,1,split(l," ")
-		while i<=#l do
-			local len=measure(l[i])
-			if cur+len<x+w then
-				print(l[i],cur,y,c)
-				cur+=len+4
-				i+=1
-			else
-				cur=x
-				y+=6
-			end
-		end
-		y+=6
-	end
-end
+--function printw(t,x,y,w,c)
+--	local lines=split(t,"|")
+--	for l in all(lines) do
+--		local cur,i,l=x,1,split(l," ")
+--		while i<=#l do
+--			local len=measure(l[i])
+--			if cur+len<x+w then
+--				print(l[i],cur,y,c)
+--				cur+=len+4
+--				i+=1
+--			else
+--				cur=x
+--				y+=6
+--			end
+--		end
+--		y+=6
+--	end
+--end
 
 function measure(s)
 	local total,w=0,4
@@ -1204,6 +1206,7 @@ function measure(s)
 	return total
 end
 
+--★
 function oprint(t,x,y,c,oc)
 	for i=1,8 do
 		print(t,x+dirx[i],y+diry[i],oc)
