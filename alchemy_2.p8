@@ -17,34 +17,14 @@ __lua__
 
 -- batteries
 -- offers shouldn't match
+-- story+tutorial dialogue
 --	character creator
--- story/dialogue
 -- menu juice
 --  animations
 --  sounds
 -- potion material
 --  bird laying egg
 -- stamina system?
-
---token saves
---	★7904
--- turn first_load into pokes
--- ★7821
--- index conditions+processes,
---  refer to index in mach data
--- remove/consolidate redundant
---  tools
--- clean up bird ai
--- put cbox data in a table
--- refactor machines
---  groups are base unit
--- draw_mach func instead of map
--- rrectfill2 use rectfill+pset
---  for corners
--- look for places to use unpack
--- tread_butt -> tread_state
--- 	0 or 1, debranch it
--- store potion sprites in a table?
 
 --sounds
 --00 footsteps
@@ -140,7 +120,6 @@ function _init()
 		end
 	end
 	
-	
 	turn_cw= split("1, 2,3, 5,4, 7,6, 11,8,9,10, 15,12,13,14, 19,16,17,18, 21,20,23,22, 27,24,25,26, 31,28,29,30")
 	turn_ccw=split("1, 2,3, 5,4, 7,6, 9,10,11,8, 13,14,15,12, 17,18,19,16, 21,20,23,22, 25,26,27,24, 29,30,31,28")
 	flip_h=  split("1, 3,2, 4,5, 7,6, 8,11,10,9, 12,15,14,13, 18,17,16,19, 22,23,20,21, 28,31,30,29, 24,27,26,25")
@@ -150,141 +129,76 @@ function _init()
 	flip_h[0]=0
 	flip_v[0]=0
 	
-	mach_data=split2d("h cut,true,4,empty,128,129,144,145,141,143,157,159,0,0,0,0,7,10,7,12|h cut,true,3,empty,160,161,176,177,157,159,173,175,24,64,3,8,7,-2,7,-4|v join,true,4,ready,128,129,144,145,141,143,157,159,0,0,0,0,7,10,7,12|v join,true,3,dont,160,161,176,177,157,159,173,175,42,64,3,8,7,-2,0,0|v cut,true,2,empty,128,130,176,146,141,142,173,174,0,0,0,0,13,4,15,4|v cut,true,1,empty,160,129,146,177,142,143,174,175,51,64,-5,8,1,4,-1,4|h join,true,2,ready,128,130,176,146,141,142,173,174,0,0,0,0,13,4,15,4|h join,true,1,dont,160,129,146,177,142,143,174,175,51,64,-5,8,1,4,0,0|bed,false,4,,137,138,153,154,93,94,157,159,0,0,0,0,0,0,0,0|bed,false,3,,169,170,185,186,157,159,125,127,0,0,0,0,0,0,0,0|cw turn,true,0,,128,129,176,177,141,143,173,175,33,71,3,8,0,10,0,0|ccw turn,true,0,,128,129,176,177,141,143,173,175,24,71,3,8,0,10,0,0|h flip,true,0,,128,129,176,177,141,143,173,175,51,71,3,8,0,10,0,0|v flip,true,0,,128,129,176,177,141,143,173,175,42,71,3,8,0,10,0,0|treadmill,false,0,,192,193,208,209,109,111,125,127,0,0,0,0,0,0,0,0|dynamo,false,0,,224,225,240,241,91,92,125,127,0,0,0,0,0,0,0,0|storage,true,2,,128,130,144,144,141,142,157,158,0,0,0,0,0,0,0,0|storage,true,4,,160,129,144,145,142,143,158,159,0,0,0,0,0,0,0,0|storage,true,3,,160,130,176,146,157,158,173,174,0,0,0,0,0,0,0,0|storage,true,1,,160,161,146,177,158,159,174,175,0,0,0,0,0,0,0,0|battery,false,0,,171,172,187,188,141,143,173,175,0,0,0,0,0,0,0,0|trash,true,0,,139,140,155,156,141,143,173,175,60,64,3,8,1,10,0,0|nest,false,0,,204,205,220,221,107,108,123,124,0,0,0,0,0,0,0,0|blank,false,0,,163,145,163,145,157,159,157,159,0,0,0,0,0,0,0,0|counter,true,0,,165,161,163,145,157,159,157,159,0,0,0,0,0,0,0,0|register,false,0,,228,229,244,245,157,159,157,159,0,0,0,0,0,0,0,0|editor,false,0,,230,231,246,247,141,143,173,175,0,0,0,0,0,0,0,0","|",",")
+	mach_data=split2d("h cut,true,3,1,4,empty,128,129,144,145,141,143,157,159,0,0,0,0,7,10,7,12|h cut,true,3,2,3,empty,160,161,176,177,157,159,173,175,24,64,3,8,7,-2,7,-4|v join,true,4,3,4,ready,128,129,144,145,141,143,157,159,0,0,0,0,7,10,7,12|v join,true,4,0,3,dont,160,161,176,177,157,159,173,175,42,64,3,8,7,-2,0,0|v cut,true,5,4,2,empty,128,130,176,146,141,142,173,174,0,0,0,0,13,4,15,4|v cut,true,5,5,1,empty,160,129,146,177,142,143,174,175,51,64,-5,8,1,4,-1,4|h join,true,6,6,2,ready,128,130,176,146,141,142,173,174,0,0,0,0,13,4,15,4|h join,true,6,0,1,dont,160,129,146,177,142,143,174,175,51,64,-5,8,1,4,0,0|bed,false,1,0,4,,137,138,153,154,93,94,157,159,0,0,0,0,0,0,0,0|bed,false,1,0,3,,169,170,185,186,157,159,125,127,0,0,0,0,0,0,0,0|cw turn,true,2,7,0,,128,129,176,177,141,143,173,175,33,71,3,8,0,10,0,0|ccw turn,true,2,8,0,,128,129,176,177,141,143,173,175,24,71,3,8,0,10,0,0|h flip,true,2,9,0,,128,129,176,177,141,143,173,175,51,71,3,8,0,10,0,0|v flip,true,2,10,0,,128,129,176,177,141,143,173,175,42,71,3,8,0,10,0,0|treadmill,false,1,0,0,,192,193,208,209,109,111,125,127,0,0,0,0,0,0,0,0|dynamo,false,1,0,0,,224,225,240,241,91,92,125,127,0,0,0,0,0,0,0,0|storage,true,1,0,2,,128,130,144,144,141,142,157,158,0,0,0,0,0,0,0,0|storage,true,1,0,4,,160,129,144,145,142,143,158,159,0,0,0,0,0,0,0,0|storage,true,1,0,3,,160,130,176,146,157,158,173,174,0,0,0,0,0,0,0,0|storage,true,1,0,1,,160,161,146,177,158,159,174,175,0,0,0,0,0,0,0,0|battery,false,1,0,0,,171,172,187,188,141,143,173,175,0,0,0,0,0,0,0,0|trash,true,2,11,0,,139,140,155,156,141,143,173,175,60,64,91,72,1,10,0,0|nest,false,1,0,0,,204,205,220,221,107,108,123,124,0,0,0,0,0,0,0,0|blank,false,1,0,0,,163,145,163,145,157,159,157,159,0,0,0,0,0,0,0,0|counter,true,1,0,0,,165,161,163,145,157,159,157,159,0,0,0,0,0,0,0,0|register,false,1,0,0,,228,229,244,245,157,159,157,159,0,0,0,0,0,0,0,0|editor,false,1,0,0,,230,231,246,247,141,143,173,175,0,0,0,0,0,0,0,0","|",",")
 
 	conditions={
-		--cut h top
+		--1 no function
+		function() end,
+		--2 has potion
+		function(pot) return pot end,
+		--3 cut h
 		function(pot)
 			return pot and pot.h==2
 		end,
-		--cut h bot
-		function(pot)
-			return pot and pot.h==2
-		end,
-		--join v top
+		--4 join v
 		function(pot)
 			return pot and pot.h==1
 		end,
-		--join v bot
-		function(pot)
-			return pot and pot.h==1
-		end,
-		--cut v lft
+		--5 cut v
 		function(pot)
 			return pot and pot.w==2
 		end,
-		--cut v rit
-		function(pot)
-			return pot and pot.w==2
-		end,
-		--join h lft
+		--6 join h
 		function(pot)
 			return pot and pot.w==1
 		end,
-		--join h rit
-		function(pot)
-			return pot and pot.w==1
-		end,
-		--bed top+bot
-		no_func,no_func,
-		--turn cw+ccw
-		has_pot,has_pot,
-		--flip h+v
-		has_pot,has_pot,
-		--treadmill+dynamo
-		no_func,no_func,
-		
-		--storage
-		no_func,
-		no_func,
-		no_func,
-		no_func,
-		
-		--battery
-		no_func,
-		--trash
-		has_pot,
-		--nest
-		no_func,
-		--blank
-		no_func,
-		--counter
-		no_func,
-		--register
-		no_func,
-		--editor
-		no_func,
 	}
 	
 	processes={
-		--cut h top
+		--1 cut h top
 		function(m)
 			m.pot,m.partner.pot=cut_h(m.pot)
 		end,
-		--cut h bot
+		--2 cut h bot
 		function(m)
 			m.partner.pot,m.pot=cut_h(m.pot)
 		end,
-		--join v top
-		nil,
-		--join v bot
+		--3 join v top
 		function(m)
-			m.pot,m.partner.pot=join_v(m.pot,m.partner.pot),nil
+			m.pot,m.partner.pot=join_v(m.pot,m.partner.pot)
 		end,
-		--cut v lft
+		--4 cut v lft
 		function(m)
 			m.pot,m.partner.pot=cut_v(m.pot)
 		end,
-		--cut v rit
+		--5 cut v rit
 		function(m)
 			m.partner.pot,m.pot=cut_v(m.pot)
 		end,
-		--join h lft
+		--6 join h lft
 		function(m)
-			m.pot,m.partner.pot=join_h(m.pot,m.partner.pot),nil
+			m.pot,m.partner.pot=join_h(m.pot,m.partner.pot)
 		end,
-		--join h rit
-		nil,
-		--bed top+bot
-		nil,nil,
-		--turn cw
+		--7 turn cw
 		function(m)
 			m.pot=transform(m.pot,turn_cw)
 		end,
-		--turn ccw
+		--8 turn ccw
 		function(m)
 			m.pot=transform(m.pot,turn_ccw)
 		end,
-		--flip h
+		--9 flip h
 		function(m)
 			m.pot=transform(m.pot,flip_h)
 		end,
-		--flip v
+		--10 flip v
 		function(m)
 			m.pot=transform(m.pot,flip_v)
 		end,
-		--treadmill
-		nil,
-		--dynamo
-		nil,
-		--storage
-		nil,nil,nil,nil,
-		--battery
-		nil,
-		--trash
+		--11 trash
 		function(m)
 			m.pot=nil
 		end,
-		--nest
-		nil,
-		--blank
-		nil,
-		--counter
-		nil,
-		--register
-		nil,
-		--editor
-		nil,
 	}
 	
 	machines={}
@@ -511,7 +425,7 @@ function update_game()
 	end
 	
 	for m in all(machines) do
-		m.ready=conditions[m.typ](m.pot)
+		m.ready=m.condition(m.pot)
 		
 		--dynamo animation
 		if m.name=="dynamo" then
@@ -1403,12 +1317,6 @@ function split2d(s,d1,d2)
 	return s
 end
 
-function no_func() end
-
-function has_pot(pot)
-	return pot
-end
-
 function sfx_no_overlap(s)
 	if stat(46)!=s
 	and stat(47)!=s
@@ -1790,16 +1698,18 @@ function add_mach(typ,x,y)
 		prog=0,
 		max_prog=15,
 		container=data[2]=="true",
-		partner_dir=data[3],
-		partner_req=data[4],
-		label_sx=data[13],
-		label_sy=data[14],
-		label_dx=data[15],
-		label_dy=data[16],
-		led1_x=data[17],
-		led1_y=data[18],
-		led2_x=data[19],
-		led2_y=data[20],
+		condition=conditions[data[3]],
+		process=processes[data[4]],
+		partner_dir=data[5],
+		partner_req=data[6],
+		label_sx=data[15],
+		label_sy=data[16],
+		label_dx=data[17],
+		label_dy=data[18],
+		led1_x=data[19],
+		led1_y=data[20],
+		led2_x=data[21],
+		led2_y=data[22],
 	}
 	add(m.group,m)
 	add(machines,m)
@@ -1834,8 +1744,8 @@ function mach_tiles(m)
 			max(diry[i],0),
 			mach_data[m.typ]
 		
-		mset(x+_x,y+_y,data[i])
-		mset(x+_x+64,y+_y,data[i+4])
+		mset(x+_x,y+_y,data[i+2])
+		mset(x+_x+64,y+_y,data[i+6])
 	end
 end
 
@@ -1844,8 +1754,6 @@ end
 --returns false only if there
 --isn't enough power to run it
 function run_mach(m)
-	local process=processes[m.typ]
-	
 	if m.ready
 	and ((m.partner_req=="empty"
 	and not m.partner.pot)
@@ -1857,7 +1765,7 @@ function run_mach(m)
 			m.prog+=1
 			if m.prog>=m.max_prog then
 				m.prog=0
-				process(m)
+				m:process()
 				sfx(2)
 			end
 			return true
