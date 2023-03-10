@@ -6,7 +6,6 @@ __lua__
 
 --todo
 -- lab editor
---  sounds
 --  menu for buying new machines
 --  prevent player from trapping
 --   themself?
@@ -14,6 +13,8 @@ __lua__
 --		undo changes or 
 --   quit w/o saving?
 --  time passes while editing
+--  sounds
+--  expand lab animation/confirmation
 
 -- batteries
 -- offers shouldn't match
@@ -529,7 +530,7 @@ function update_editor()
 	local dx,dy,gx,gy,gw,gh=
 		0,0,cur_x,cur_y,1,1
 	local expandx,expandy=
-		cur_y<lab_h and 1 or 0,
+		(cur_y<lab_h and cur_y>=0) and 1 or 0,
 		cur_x<lab_w and 1 or 0
 	if sel_group then
 		gx,gy,gw,gh,expandx,expandy=
@@ -544,7 +545,7 @@ function update_editor()
 			dx,dy=dirx[i+1],diry[i+1]
 			if (gx==0) dx=max(dx,0)
 			if (gx==lab_w-gw+expandx) dx=min(dx,0)
-			if (gy==0) dy=max(dy,0)
+			if (gy==-expandy) dy=max(dy,0)
 			if (gy==lab_h-gh+expandy) dy=min(dy,0)
 			
 			cur_x+=dx
@@ -874,7 +875,8 @@ function draw_editor()
 	fillp()
 
 	--cursor
-	if cur_x<lab_w and cur_y<lab_h then
+	if cur_x<lab_w and cur_y<lab_h
+	and cur_y>=0 then
 		local cur_col,mach=2,get_mach(cur_x,cur_y)
 		if sel_group then
 			cur_col=14
@@ -942,6 +944,15 @@ function draw_editor()
 	end
 	local x,y=lab_2_world(lab_w/2,lab_h)
 	oprintc("\14expand",x,y+4,6,1)
+	
+	--buy machines
+	pal()
+	if cur_y<0 then
+		pal(1,12)
+	end
+	local x,y=lab_2_world(lab_w/2,-1)
+	oprintc("\14buy machines",
+		x,y-4,6,1)
 	
 	--hud
 	camera()
