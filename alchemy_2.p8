@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 36
+version 41
 __lua__
 --tiny alchemist
 --by glenn cagle
@@ -625,6 +625,9 @@ function update_editor()
 			lab_h+=1
 			money-=lab_w*5
 			fill_invalid_tiles()
+		elseif cur_y<0 then
+			_upd=update_shop
+			_drw=draw_shop
 		end
 	end
 	
@@ -640,6 +643,13 @@ function update_editor()
 		butt_hold+=1
 	else
 		butt_hold=0
+	end
+end
+
+function update_shop()
+	if btn(❎) then
+		_upd=update_editor
+		_drw=draw_editor
 	end
 end
 
@@ -955,14 +965,6 @@ function draw_editor()
 		x,y-4,6,1)
 	
 	--hud
-	camera()
-	pal()
-	rrectfill2(0,-1,128,24,6)
-	rrectfill2(0,-1,128,23,1)
-	
-	print_time(6)
-	do_fade()
-	
 	local name,🅾️text,❎text,name_col,🅾️col=
 		"none","","",13,7
 	if sel_group then
@@ -984,9 +986,27 @@ function draw_editor()
 		end
 		❎text="❎ exit editor"
 	end
-	print("\014"..name,2,2,name_col)
-	print(🅾️text,2,9,🅾️col)
-	print(❎text,2,16,7)
+	
+	draw_banner("\014"..name,
+		🅾️text,❎text,name_col,🅾️col,
+		7,6,1)
+end
+
+function draw_shop()
+	--draw_editor()
+	camera()
+	rrectfill2(0,0,128,67,1)
+	rrectfill2(0,0,128,66,7)
+	rrectfill2(0,0,128,65,6)
+	
+	rrectfill2(8,29,33,33,1)
+	print("\014h cutter",43,30,1)
+	print("\014$100",43,36,1)
+	print("1x2",71,36,1)
+	print("1 owned",91,36,1)
+	
+	print("separates the top\nand bottom halves\nof a formula.",
+		43,44,13)
 end
 -->8
 --sprites
@@ -1886,7 +1906,7 @@ function draw_mach(m,x,y,bp)
 	end
 end
 -->8
---ui
+--hud and ui
 
 function new_menu(lines,butts)
 	local m={
@@ -2010,6 +2030,22 @@ function draw_title()
 	oprintc("press 🅾️ to start",
 		64,96,1,7)
 		
+	do_fade()
+end
+
+function draw_banner(txt1,txt2,txt3,txt1_col,txt2_col,txt3_col,time_col,bkg_col)
+	--hud
+	camera()
+	pal()
+	rrectfill2(0,-1,128,24,13)
+	rrectfill2(0,-1,128,23,bkg_col)
+	
+	print_time(time_col)
+	
+	print(txt1,2,2,txt1_col)
+	print(txt2,2,9,txt2_col)
+	print(txt3,2,16,txt3_col)
+	
 	do_fade()
 end
 -->8
