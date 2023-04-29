@@ -7,6 +7,11 @@ __lua__
 --todo
 -- lab editor
 --  menu for buying new machines
+--   machine preview
+--			machines icons below
+--   menu animation
+--   buy machine
+--   money back for selling
 --  prevent player from trapping
 --   themself?
 --   also send bird to nest
@@ -130,7 +135,8 @@ function _init()
 	flip_h[0]=0
 	flip_v[0]=0
 	
-	mach_data=split2d("h cut,true,3,1,4,empty,128,129,144,145,141,143,157,159,0,0,0,0,7,10,7,12|h cut,true,3,2,3,empty,160,161,176,177,157,159,173,175,24,64,3,8,7,-2,7,-4|v join,true,4,3,4,ready,128,129,144,145,141,143,157,159,0,0,0,0,7,10,7,12|v join,true,4,0,3,dont,160,161,176,177,157,159,173,175,42,64,3,8,7,-2,0,0|v cut,true,5,4,2,empty,128,130,176,146,141,142,173,174,0,0,0,0,13,4,15,4|v cut,true,5,5,1,empty,160,129,146,177,142,143,174,175,51,64,-5,8,1,4,-1,4|h join,true,6,6,2,ready,128,130,176,146,141,142,173,174,0,0,0,0,13,4,15,4|h join,true,6,0,1,dont,160,129,146,177,142,143,174,175,51,64,-5,8,1,4,0,0|bed,false,1,0,4,,137,138,153,154,93,94,157,159,0,0,0,0,0,0,0,0|bed,false,1,0,3,,169,170,185,186,157,159,125,127,0,0,0,0,0,0,0,0|cw turn,true,2,7,0,,128,129,176,177,141,143,173,175,33,71,3,8,0,10,0,0|ccw turn,true,2,8,0,,128,129,176,177,141,143,173,175,24,71,3,8,0,10,0,0|h flip,true,2,9,0,,128,129,176,177,141,143,173,175,51,71,3,8,0,10,0,0|v flip,true,2,10,0,,128,129,176,177,141,143,173,175,42,71,3,8,0,10,0,0|treadmill,false,1,0,0,,192,193,208,209,109,111,125,127,0,0,0,0,0,0,0,0|dynamo,false,1,0,0,,224,225,240,241,91,92,125,127,0,0,0,0,0,0,0,0|storage,true,1,0,2,,128,130,144,144,141,142,157,158,0,0,0,0,0,0,0,0|storage,true,1,0,4,,160,129,144,145,142,143,158,159,0,0,0,0,0,0,0,0|storage,true,1,0,3,,160,130,176,146,157,158,173,174,0,0,0,0,0,0,0,0|storage,true,1,0,1,,160,161,146,177,158,159,174,175,0,0,0,0,0,0,0,0|battery,false,1,0,0,,171,172,187,188,141,143,173,175,0,0,0,0,0,0,0,0|trash,true,2,11,0,,139,140,155,156,141,143,173,175,60,64,91,72,1,10,0,0|nest,false,1,0,0,,204,205,220,221,107,108,123,124,0,0,0,0,0,0,0,0|blank,false,1,0,0,,163,145,163,145,157,159,157,159,0,0,0,0,0,0,0,0|counter,true,1,0,0,,165,161,163,145,157,159,157,159,0,0,0,0,0,0,0,0|register,false,1,0,0,,228,229,244,245,157,159,157,159,0,0,0,0,0,0,0,0|editor,false,1,0,0,,230,231,246,247,141,143,173,175,0,0,0,0,0,0,0,0","|",",")
+	mach_data=split2d("h cut,true,3,1,4,empty,128,129,144,145,141,143,157,159,0,0,0,0,7,10,7,12|h cut,true,3,2,3,empty,160,161,176,177,157,159,173,175,24,64,3,8,7,-2,7,-4|v join,true,4,3,4,ready,128,129,144,145,141,143,157,159,0,0,0,0,7,10,7,12|v join,true,4,0,3,dont,160,161,176,177,157,159,173,175,42,64,3,8,7,-2,0,0|v cut,true,5,4,2,empty,128,130,176,146,141,142,173,174,0,0,0,0,13,4,15,4|v cut,true,5,5,1,empty,160,129,146,177,142,143,174,175,33,64,-5,8,1,4,-1,4|h join,true,6,6,2,ready,128,130,176,146,141,142,173,174,0,0,0,0,13,4,15,4|h join,true,6,0,1,dont,160,129,146,177,142,143,174,175,51,64,-5,8,1,4,0,0|bed,false,1,0,4,,137,138,153,154,93,94,157,159,0,0,0,0,0,0,0,0|bed,false,1,0,3,,169,170,185,186,157,159,125,127,0,0,0,0,0,0,0,0|cw turn,true,2,7,0,,128,129,176,177,141,143,173,175,33,71,3,8,0,10,0,0|ccw turn,true,2,8,0,,128,129,176,177,141,143,173,175,24,71,3,8,0,10,0,0|h flip,true,2,9,0,,128,129,176,177,141,143,173,175,51,71,3,8,0,10,0,0|v flip,true,2,10,0,,128,129,176,177,141,143,173,175,42,71,3,8,0,10,0,0|treadmill,false,1,0,0,,192,193,208,209,109,111,125,127,0,0,0,0,0,0,0,0|dynamo,false,1,0,0,,224,225,240,241,91,92,125,127,0,0,0,0,0,0,0,0|storage,true,1,0,2,,128,130,144,144,141,142,157,158,0,0,0,0,0,0,0,0|storage,true,1,0,4,,160,129,144,145,142,143,158,159,0,0,0,0,0,0,0,0|storage,true,1,0,3,,160,130,176,146,157,158,173,174,0,0,0,0,0,0,0,0|storage,true,1,0,1,,160,161,146,177,158,159,174,175,0,0,0,0,0,0,0,0|battery,false,1,0,0,,171,172,187,188,141,143,173,175,0,0,0,0,0,0,0,0|trash,true,2,11,0,,139,140,155,156,141,143,173,175,60,64,91,72,1,10,0,0|nest,false,1,0,0,,204,205,220,221,107,108,123,124,0,0,0,0,0,0,0,0|blank,false,1,0,0,,163,145,163,145,157,159,157,159,0,0,0,0,0,0,0,0|counter,true,1,0,0,,165,161,163,145,157,159,157,159,0,0,0,0,0,0,0,0|register,false,1,0,0,,228,229,244,245,157,159,157,159,0,0,0,0,0,0,0,0|editor,false,1,0,0,,230,231,246,247,141,143,173,175,0,0,0,0,0,0,0,0","|",",")
+	shop_data=split2d("2,$50,1x2,separates the top\nand bottom halves\nof a formula.|4,$50,1x2,joins two formulas\nvertically.|6,$50,2x1,separates the left\nand right halves\nof a formula.|8,$50,2x1,joins two formulas\nhorizontally.|11,$40,1x1,rotates a formula \n90 degrees\nclockwise.|12,$40,1x1,rotates a formula \n90 degrees\ncounterclockwise.|13,$40,1x1,reflects a formula\nover the y-axis.|14,$40,1x1,reflects a formula\nover the x-axis.|15,$30,1x1,supplies energy to\nan adjacent dynamo.|16,$30,1x1,generates power\nwhen running on an\nadjacent treadmill.|17,$40,2x2,a place to store\nyour potions.|21,$30,1x1,stores unused power.|23,$30,1x1,chicken included.","|",",")
 
 	conditions={
 		--1 no function
@@ -201,6 +207,11 @@ function _init()
 			m.pot=nil
 		end,
 	}
+	
+	mach_count={}
+	for i=1,#mach_data do
+		mach_count[i]=0
+	end
 	
 	machines={}
 	add_mach(24,-1,0) --blank
@@ -580,6 +591,21 @@ function update_editor()
 	cbox_x2=lerp(cbox_x2,x2,.5,.2)
 	cbox_y2=lerp(cbox_y2,y2,.5,.2)
 	
+	if btn(❎) then
+		if sel_group then
+			if butt_hold>20 then
+				--sell machine
+				sel_group=nil
+			end
+		elseif butt_hold==0 then
+			_upd=update_game
+			_drw=draw_game
+		end
+		butt_hold+=1
+	else
+		butt_hold=0
+	end
+	
 	--check if the selected group
 	--overlaps another
 	group_collision=false
@@ -630,26 +656,18 @@ function update_editor()
 			_drw=draw_shop
 		end
 	end
-	
-	if btn(❎) then
-		if sel_group then
-			if butt_hold>20 then
-				sel_group=nil
-			end
-		elseif butt_hold==0 then
-			_upd=update_game
-			_drw=draw_game
-		end
-		butt_hold+=1
-	else
-		butt_hold=0
-	end
 end
 
 function update_shop()
 	if btn(❎) then
 		_upd=update_editor
 		_drw=draw_editor
+	end
+		
+	if btnp(⬅️) then
+		sel=max(1,sel-1)
+	elseif btnp(➡️) then
+		sel=min(#shop_data,sel+1)
 	end
 end
 
@@ -824,12 +842,13 @@ function draw_game()
 	rrectfill2(0,-1,128,23,6)
 	
 	--money
-	print("\014$",2,2,1)
-	for i=1,7-#tostr(flr(show_money)) do
-		print("\0140",2+5*i,2,13)
-	end
-	printr("\014"..flr(show_money),42,2,1)
-	
+--	print("\014$",2,2,1)
+--	for i=1,7-#tostr(flr(show_money)) do
+--		print("\0140",2+5*i,2,13)
+--	end
+--	printr("\014"..flr(show_money),42,2,1)
+	print_money(1,13)
+		
 	--hearts
 	palt(7,true)
 	for i=0,4 do
@@ -987,26 +1006,49 @@ function draw_editor()
 		❎text="❎ exit editor"
 	end
 	
-	draw_banner("\014"..name,
-		🅾️text,❎text,name_col,🅾️col,
-		7,6,1)
+	draw_banner(6,1)
+	print("\014"..name,2,2,name_col)
+	print(🅾️text,2,9,🅾️col)
+	print(❎text,2,16,7)
 end
 
 function draw_shop()
+	draw_editor()
+	
 	--draw_editor()
 	camera()
+	draw_banner(1,13)
+	
 	rrectfill2(0,0,128,67,1)
 	rrectfill2(0,0,128,66,7)
 	rrectfill2(0,0,128,65,6)
 	
-	rrectfill2(8,29,33,33,1)
-	print("\014h cutter",43,30,1)
-	print("\014$100",43,36,1)
-	print("1x2",71,36,1)
-	print("1 owned",91,36,1)
+	local sdata=shop_data[sel]
+	local mdata=mach_data[sdata[1]]
 	
-	print("separates the top\nand bottom halves\nof a formula.",
-		43,44,13)
+	rrectfill2(8,29,33,33,1)
+	print("\014"..mdata[1],43,30,1)
+	print("\014"..sdata[2],43,36,1)
+	print(sdata[3],71,36,1)
+	print(mach_count[sdata[1]].." owned",91,36,1)
+	
+	print(sdata[4],43,44,13)
+	
+	draw_banner(6,1)
+	print_money(7,6)
+	print("🅾️ buy",2,9,7)
+	print("❎ back",2,16,7)
+	
+	pal(split"7,2,3,4,5,1,1,8,9,6,11,12,1,14,15")	
+	local ind=mid(0,sel-5,#shop_data-9)
+	for i=0,8 do
+		rrectfill2(2+14*i,66,13,11,(i+1+ind==sel) and 12 or 6)
+		rrectfill2(3+14*i,67,11,9,10)
+		md=mach_data[shop_data[i+1+ind][1]]
+		sspr(md[15],md[16],9,7,4+14*i,68)
+		--print(i+1+ind,4+14*i,68,1)
+	end
+	pal()
 end
 -->8
 --sprites
@@ -1422,21 +1464,6 @@ function merge_groups(g1,g2)
 	end
 end
 
-function print_time(col)
-	printr("\014week "..flr(day/7)+1,
-		127,2,col)
-	printr("\014"..days[(day%7)+1],
-		127,9,col)
-	local hours,minutes=
-		"\14"..flr(tme/60)..":",
-		tostr(flr(tme%60))
-	if #minutes==1 then
-		minutes="0"..minutes
-	end
-	printr(hours..minutes,
-		127,16,col)
-end
-
 function fill_invalid_tiles()
 	local w,h=lab_w*2,lab_h*2
 
@@ -1747,6 +1774,7 @@ function add_mach(typ,x,y)
 	}
 	add(m.group,m)
 	add(machines,m)
+	mach_count[typ]+=1
 	
 	if m.name=="treadmill" then
 		m.frame=0
@@ -1897,7 +1925,6 @@ function draw_mach(m,x,y,bp)
 	pal(1,7)
 	palt(6,true)
 	pal(13,6)
-	--front label
 	if m.label_sx>0 then
 		sspr(m.label_sx,m.label_sy,
 			9,7,
@@ -2033,7 +2060,7 @@ function draw_title()
 	do_fade()
 end
 
-function draw_banner(txt1,txt2,txt3,txt1_col,txt2_col,txt3_col,time_col,bkg_col)
+function draw_banner(time_col,bkg_col)
 	--hud
 	camera()
 	pal()
@@ -2041,12 +2068,29 @@ function draw_banner(txt1,txt2,txt3,txt1_col,txt2_col,txt3_col,time_col,bkg_col)
 	rrectfill2(0,-1,128,23,bkg_col)
 	
 	print_time(time_col)
-	
-	print(txt1,2,2,txt1_col)
-	print(txt2,2,9,txt2_col)
-	print(txt3,2,16,txt3_col)
-	
-	do_fade()
+end
+
+function print_money(col1,col2)
+	print("\014$",2,2,col1)
+	for i=1,7-#tostr(flr(show_money)) do
+		print("\0140",2+5*i,2,col2)
+	end
+	printr("\014"..flr(show_money),42,2,col1)
+end
+
+function print_time(col)
+	printr("\014week "..flr(day/7)+1,
+		127,2,col)
+	printr("\014"..days[(day%7)+1],
+		127,9,col)
+	local hours,minutes=
+		"\14"..flr(tme/60)..":",
+		tostr(flr(tme%60))
+	if #minutes==1 then
+		minutes="0"..minutes
+	end
+	printr(hours..minutes,
+		127,16,col)
 end
 -->8
 --file i/o
