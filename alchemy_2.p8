@@ -135,9 +135,10 @@ function _init()
 	flip_h[0]=0
 	flip_v[0]=0
 	
-	mach_data=split2d("h cut,true,3,1,4,empty,128,129,144,145,141,143,157,159,0,0,0,0,7,10,7,12|h cut,true,3,2,3,empty,160,161,176,177,157,159,173,175,24,64,3,8,7,-2,7,-4|v join,true,4,3,4,ready,128,129,144,145,141,143,157,159,0,0,0,0,7,10,7,12|v join,true,4,0,3,dont,160,161,176,177,157,159,173,175,42,64,3,8,7,-2,0,0|v cut,true,5,4,2,empty,128,130,176,146,141,142,173,174,0,0,0,0,13,4,15,4|v cut,true,5,5,1,empty,160,129,146,177,142,143,174,175,33,64,-5,8,1,4,-1,4|h join,true,6,6,2,ready,128,130,176,146,141,142,173,174,0,0,0,0,13,4,15,4|h join,true,6,0,1,dont,160,129,146,177,142,143,174,175,51,64,-5,8,1,4,0,0|bed,false,1,0,4,,137,138,153,154,93,94,157,159,0,0,0,0,0,0,0,0|bed,false,1,0,3,,169,170,185,186,157,159,125,127,0,0,0,0,0,0,0,0|cw turn,true,2,7,0,,128,129,176,177,141,143,173,175,33,71,3,8,0,10,0,0|ccw turn,true,2,8,0,,128,129,176,177,141,143,173,175,24,71,3,8,0,10,0,0|h flip,true,2,9,0,,128,129,176,177,141,143,173,175,51,71,3,8,0,10,0,0|v flip,true,2,10,0,,128,129,176,177,141,143,173,175,42,71,3,8,0,10,0,0|treadmill,false,1,0,0,,192,193,208,209,109,111,125,127,0,0,0,0,0,0,0,0|dynamo,false,1,0,0,,224,225,240,241,91,92,125,127,0,0,0,0,0,0,0,0|storage,true,1,0,2,,128,130,144,144,141,142,157,158,0,0,0,0,0,0,0,0|storage,true,1,0,4,,160,129,144,145,142,143,158,159,0,0,0,0,0,0,0,0|storage,true,1,0,3,,160,130,176,146,157,158,173,174,0,0,0,0,0,0,0,0|storage,true,1,0,1,,160,161,146,177,158,159,174,175,0,0,0,0,0,0,0,0|battery,false,1,0,0,,171,172,187,188,141,143,173,175,0,0,0,0,0,0,0,0|trash,true,2,11,0,,139,140,155,156,141,143,173,175,60,64,91,72,1,10,0,0|nest,false,1,0,0,,204,205,220,221,107,108,123,124,0,0,0,0,0,0,0,0|blank,false,1,0,0,,163,145,163,145,157,159,157,159,0,0,0,0,0,0,0,0|counter,true,1,0,0,,165,161,163,145,157,159,157,159,0,0,0,0,0,0,0,0|register,false,1,0,0,,228,229,244,245,157,159,157,159,0,0,0,0,0,0,0,0|editor,false,1,0,0,,230,231,246,247,141,143,173,175,0,0,0,0,0,0,0,0","|",",")
+	mach_data=split2d("h cut,true,3,1,4,empty,0,0,0,0,7,10,7,12|h cut,true,3,2,3,empty,24,64,3,8,7,-2,7,-4|v join,true,4,3,4,ready,0,0,0,0,7,10,7,12|v join,true,4,0,3,dont,42,64,3,8,7,-2,0,0|v cut,true,5,4,2,empty,0,0,0,0,13,4,15,4|v cut,true,5,5,1,empty,33,64,-5,8,1,4,-1,4|h join,true,6,6,2,ready,0,0,0,0,13,4,15,4|h join,true,6,0,1,dont,51,64,-5,8,1,4,0,0|bed,false,1,0,4,,0,0,0,0,0,0,0,0|bed,false,1,0,3,,0,0,0,0,0,0,0,0|cw turn,true,2,7,0,,33,71,3,8,0,10,0,0|ccw turn,true,2,8,0,,24,71,3,8,0,10,0,0|h flip,true,2,9,0,,51,71,3,8,0,10,0,0|v flip,true,2,10,0,,42,71,3,8,0,10,0,0|treadmill,false,1,0,0,,0,0,0,0,0,0,0,0|dynamo,false,1,0,0,,0,0,0,0,0,0,0,0|storage,true,1,0,2,,0,0,0,0,0,0,0,0|storage,true,1,0,4,,0,0,0,0,0,0,0,0|storage,true,1,0,3,,0,0,0,0,0,0,0,0|storage,true,1,0,1,,0,0,0,0,0,0,0,0|battery,false,1,0,0,,0,0,0,0,0,0,0,0|trash,true,2,11,0,,60,64,91,72,1,10,0,0|nest,false,1,0,0,,0,0,0,0,0,0,0,0|blank,false,1,0,0,,0,0,0,0,0,0,0,0|counter,true,1,0,0,,0,0,0,0,0,0,0,0|register,false,1,0,0,,0,0,0,0,0,0,0,0|editor,false,1,0,0,,0,0,0,0,0,0,0,0","|",",")
 	shop_data=split2d("2,$50,1x2,separates the top\nand bottom halves\nof a formula.|4,$50,1x2,joins two formulas\nvertically.|6,$50,2x1,separates the left\nand right halves\nof a formula.|8,$50,2x1,joins two formulas\nhorizontally.|11,$40,1x1,rotates a formula \n90 degrees\nclockwise.|12,$40,1x1,rotates a formula \n90 degrees\ncounterclockwise.|13,$40,1x1,reflects a formula\nover the y-axis.|14,$40,1x1,reflects a formula\nover the x-axis.|15,$30,1x1,supplies energy to\nan adjacent dynamo.|16,$30,1x1,generates power\nwhen running on an\nadjacent treadmill.|17,$40,2x2,a place to store\nyour potions.|21,$30,1x1,stores unused power.|23,$30,1x1,chicken included.","|",",")
-
+	mach_sprs=split2d("128,129,144,145,160,161,176,177|128,129,144,145,160,161,176,177|128,130,160,161,176,146,146,177|128,130,160,161,176,146,146,177|137,138,153,154,169,170,185,186|128,129,176,177|128,129,176,177|128,129,176,177|128,129,176,177|192,193,208,209|224,225,240,241|128,130,160,161,144,144,144,144,160,130,160,161,176,146,146,177|171,172,187,188|139,140,155,156|204,205,220,221|163,145,163,145|165,161,163,145|228,229,244,245|230,231,176,177","|",",")
+	
 	conditions={
 		--1 no function
 		function() end,
@@ -232,16 +233,6 @@ function _init()
 	--search for partners
 	local bed_x,bed_y,nest_x,nest_y=0,0,0,0
 	for m in all(machines) do
-		local x,y,dir=
-			m.x,m.y,m.partner_dir
-		if dir>0 then
-			m.partner=get_mach(
-				x+dirx[dir],
-				y+diry[dir]
-			)
-			merge_groups(m.partner.group,
-				m.group)
-		end
 		if m.typ==9 then --bed
 			bed_x,bed_y=lab_2_world(m.x,m.y)
 		elseif m.name=="nest" then
@@ -294,8 +285,6 @@ function _init()
 	--coordinates for lerping
 	cbox_x0,cbox_y0,cbox_x1,cbox_y1,
 	cbox_x2,cbox_y2=0,0,0,0,1,1
-	
-	--sel_group=nil
 end
 
 function _update()
@@ -410,12 +399,10 @@ function update_game()
 	else
 		butt_hold=0
 	
-		--trade potions with the
-		--machine you're facing
+		--machine interactions
 		if face_mach then
-			if btnp(🅾️)
-			and face_mach.container then
-				act_mach(face_mach)
+			if btnp(🅾️) then
+				swap_pots(act_x,act_y)
 			end
 		
 			if btnp(❎) then
@@ -538,15 +525,15 @@ function update_game()
 end
 
 function update_editor()
-	local dx,dy,gx,gy,gw,gh=
+	local dx,dy,mx,my,mw,mh=
 		0,0,cur_x,cur_y,1,1
 	local expandx,expandy=
 		(cur_y<lab_h and cur_y>=0) and 1 or 0,
 		cur_x<lab_w and 1 or 0
-	if sel_group then
-		gx,gy,gw,gh,expandx,expandy=
-			sel_group.x,sel_group.y,
-			sel_group.w,sel_group.h,
+	if sel_mach then
+		mx,my,mw,mh,expandx,expandy=
+			sel_mach.x,sel_mach.y,
+			sel_mach.w,sel_mach.h,
 			0,0
 	end
 	
@@ -554,23 +541,19 @@ function update_editor()
 	for i=0,3 do
 		if btnp(i) then
 			dx,dy=dirx[i+1],diry[i+1]
-			if (gx==0) dx=max(dx,0)
-			if (gx==lab_w-gw+expandx) dx=min(dx,0)
-			if (gy==-expandy) dy=max(dy,0)
-			if (gy==lab_h-gh+expandy) dy=min(dy,0)
+			if (mx==0) dx=max(dx,0)
+			if (mx==lab_w-mw+expandx) dx=min(dx,0)
+			if (my==-expandy) dy=max(dy,0)
+			if (my==lab_h-mh+expandy) dy=min(dy,0)
 			
 			cur_x+=dx
 			cur_y+=dy
-			gx+=dx
-			gy+=dy
+			mx+=dx
+			my+=dy
 			
-			if sel_group then
-				sel_group.x+=dx
-				sel_group.y+=dy
-				for m in all(sel_group) do
-					m.x+=dx
-					m.y+=dy
-				end
+			if sel_mach then
+				sel_mach.x+=dx
+				sel_mach.y+=dy
 			end
 		end
 	end
@@ -579,10 +562,10 @@ function update_editor()
 	local x1,y1,x2,y2=cur_x,cur_y,
 		cur_x+1,cur_y+1
 	local m=get_mach(cur_x,cur_y)
-	local group=sel_group or m and m.group
-	if group then
-		x1,y1=group.x,group.y
-		x2,y2=x1+group.w,y1+group.h
+	local mach=sel_mach or m
+	if mach then
+		x1,y1=mach.x,mach.y
+		x2,y2=x1+mach.w,y1+mach.h
 	end
 	cbox_x0=lerp(cbox_x0,cur_x,.5,.2)
 	cbox_y0=lerp(cbox_y0,cur_y,.5,.2)
@@ -592,10 +575,10 @@ function update_editor()
 	cbox_y2=lerp(cbox_y2,y2,.5,.2)
 	
 	if btn(❎) then
-		if sel_group then
+		if sel_mach then
 			if butt_hold>20 then
 				--sell machine
-				sel_group=nil
+				sel_mach=nil
 			end
 		elseif butt_hold==0 then
 			_upd=update_game
@@ -606,41 +589,27 @@ function update_editor()
 		butt_hold=0
 	end
 	
-	--check if the selected group
-	--overlaps another
-	group_collision=false
-	if sel_group then
-		for x=gx,gx+gw-1 do
-			for y=gy,gy+gh-1 do
-				local gm=get_mach(x,y)
-				if gm then
-					group_collision=true
+	--check if the selected mach
+	--can be placed
+	can_place=true
+	if sel_mach then
+		for x=mx,mx+mw-1 do
+			for y=my,my+mh-1 do
+				if get_mach(x,y) then
+					can_place=true
 				end
 			end
 		end
 	end
 	if btnp(🅾️) then
-		if not group_collision
-		and sel_group then
+		if can_place and sel_mach then
 			--place machine
-			for gmach in all(sel_group) do
-				mach_tiles(gmach)
-				add(machines,gmach)	
-			end
-			sel_group=nil
-		elseif m and not sel_group then
+			add(machines,gmach)	
+			sel_mach=nil
+		elseif m and not sel_mach then
 			--pick up machine
-			sel_group=m.group
-			for gmach in all(sel_group) do
-				del(machines,gmach)
-			end
-			fill_tiles(
-				sel_group.x*2+12,
-				sel_group.y*2+4,
-				sel_group.w*2,
-				sel_group.h*2,
-				0
-			)
+			sel_mach=m
+			del(machines,m)
 		elseif cur_x==lab_w
 		and money>=lab_h*5 then
 			lab_w+=1
@@ -700,7 +669,8 @@ function draw_game()
 	palt()
 	for m in all(machines) do
 		local mx,my=lab_2_world(m.x,m.y)
-	
+		draw_mach(m.typ,mx,my)
+		
 		--front label
 		if m.label_sx>0 then
 			sspr(m.label_sx,m.label_sy,
@@ -907,7 +877,7 @@ function draw_editor()
 	if cur_x<lab_w and cur_y<lab_h
 	and cur_y>=0 then
 		local cur_col,mach=2,get_mach(cur_x,cur_y)
-		if sel_group then
+		if sel_mach then
 			cur_col=14
 		elseif mach then
 			cur_col=12
@@ -942,21 +912,16 @@ function draw_editor()
 	
 	pal()
 	--red rect for invalid placement
-	if group_collision then
+	if not can_place then
 		local x,y=
 			lab_2_world(cbox_x1,cbox_y1)
-		local w,h=sel_group.w*16-1,sel_group.h*16-1
+		local w,h=sel_mach.w*16-1,sel_mach.h*16-1
 		rrectfill2(x,y,w,h,8)
 	end
 	
-	--selected group
-	for gm in all(sel_group) do
-		draw_mach(gm,
-			gm.x+cbox_x0-cur_x,
-			gm.y+cbox_y0-cur_y,
-			true
-		)
-	end
+	--selected machine
+	local mx,my=lab_2_world(m.x,m.y)
+	draw_mach(sel_mach.typ,mx,my,true)
 	
 	--expand lab width option
 	pal()
@@ -986,15 +951,15 @@ function draw_editor()
 	--hud
 	local name,🅾️text,❎text,name_col,🅾️col=
 		"none","","",13,7
-	if sel_group then
-		if not group_collision then
+	if sel_mach then
+		if can_place then
 			🅾️text="🅾️ place"
 		else
 			🅾️text="invalid placement"
 			🅾️col=8
 		end
 		❎text="❎ hold to sell"
-		name=sel_group[1].name
+		name=sel_mach.name
 		name_col=7
 	else
 		local mach=get_mach(cur_x,cur_y)
@@ -1495,10 +1460,6 @@ function fill_invalid_tiles()
 	mset(w+76,1,90) --tr
 	mset(74,h+4,88) --bl
 	mset(w+76,h+4,122) --br
-	
-	for m in all(machines) do
-		mach_tiles(m)
-	end
 end
 
 function fill_tiles(x,y,w,h,tile,bp)
@@ -1734,35 +1695,19 @@ end
 -->8
 --machines
 
---[[
-partner_req defines what state
-a machine's partner must be in
-for that machine to run
-	
-"": no partner or no process
-empty: partner must be empty
-ready: partner must be ready too
-dont: machine will never process
-	     (partner will handle it)
-]]--
-
 --adds a machine at the given
 --lab coordinates
 function add_mach(typ,x,y)
 	local data=mach_data[typ]
 	local m={
 		x=x,y=y,
-		group={x=x,y=y,w=1,h=1},
 		name=data[1],
 		typ=typ,
 		consum=1/2,
 		prog=0,
 		max_prog=15,
-		container=data[2]=="true",
 		condition=conditions[data[3]],
 		process=processes[data[4]],
-		partner_dir=data[5],
-		partner_req=data[6],
 		label_sx=data[15],
 		label_sy=data[16],
 		label_dx=data[17],
@@ -1772,7 +1717,9 @@ function add_mach(typ,x,y)
 		led2_x=data[21],
 		led2_y=data[22],
 	}
-	add(m.group,m)
+	if data[2]=="true" then
+		m.pots={}
+	end
 	add(machines,m)
 	mach_count[typ]+=1
 	
@@ -1784,7 +1731,6 @@ function add_mach(typ,x,y)
 		m.glow=0
 	end
 
-	mach_tiles(m)
 	return m
 end
 
@@ -1792,22 +1738,10 @@ end
 --lab coordinates
 function get_mach(x,y)
 	for m in all(machines) do
-		if m.x==x and m.y==y then
+		if  mid(m.x,m.x+m.w-1,x)==x
+		and mid(m.y,m.y+m.h-1,y)==y then
 			return m
 		end
-	end
-end
-
-function mach_tiles(m)
-	local x,y=m.x*2+12,m.y*2+4
-	for i=5,8 do
-		local _x,_y,data=
-			max(dirx[i],0),
-			max(diry[i],0),
-			mach_data[m.typ]
-		
-		mset(x+_x,y+_y,data[i+2])
-		mset(x+_x+64,y+_y,data[i+6])
 	end
 end
 
@@ -1816,12 +1750,7 @@ end
 --returns false only if there
 --isn't enough power to run it
 function run_mach(m)
-	if m.ready
-	and ((m.partner_req=="empty"
-	and not m.partner.pot)
-	or (m.partner_req=="ready"
-	and m.partner.ready)
-	or m.partner_req=="") then
+	if m.ready then
 		if power>=m.consum then
 			power-=m.consum
 			m.prog+=1
@@ -1838,10 +1767,15 @@ function run_mach(m)
 	end
 end
 
---interact w the given machine
---trades potions w it
-function act_mach(m)
-	local pot=m.pot
+--trades potions w the
+--machine at x,y
+function swap_pots(x,y)
+	local m=get_mach(x,y)
+	if (not m or not m.pots) return
+	local pot_ind=
+		m.w*(y-m.y)+x-m.x+1
+	local pot=m.pots[pot_ind]
+	
 	if m.name=="counter"
 	and cur_cust then
 		local price=m.offer.price
@@ -1862,7 +1796,7 @@ function act_mach(m)
 		end
 	end
 	
-	m.pot=hold
+	m.pots[pot_ind]=hold
 	hold=pot
 	m.prog=0
 	if (m.pot or hold) sfx(hold and 3 or 4)
@@ -1872,14 +1806,21 @@ function save_mach(m)
 	local data={}
 	data[1]=m.typ
 	data[2]=(m.x<<4)+m.y
-	if m.pot then
-		local pot_data=save_pot(m.pot)
+	if m.pots then
+		local ind=3
 		for i=1,4 do
-			data[i+2]=pot_data[i]
-		end
-	else
-		for i=3,6 do
-			data[i]=255
+			if m.pots[i] then
+				local pot_data=save_pot(m.pot)
+				for j=1,4 do
+					data[ind]=pot_data[j]
+					ind+=1
+				end
+			else
+				for j=1,4 do
+					data[ind]=255
+					ind+=1
+				end
+			end
 		end
 	end
 	return data
@@ -1889,12 +1830,6 @@ function do_treadmill(m)
 	power+=1
 	웃.frame=1
 	m.frame=(m.frame+1)%4
-	local tx,ty,f=m.x*2+12,m.y*2+4,
-		m.frame
-	mset(tx,ty,				192+2*f)
-	mset(tx+1,ty,		193+2*f)
-	mset(tx,ty+1,		208+2*f)
-	mset(tx+1,ty+1,209+2*f)
 end
 
 function draw_dynamo(m)
@@ -1909,13 +1844,13 @@ function draw_dynamo(m)
 	circfill(x+11,y+2,m.glow*(2.7+f),7)
 end
 
-function draw_mach(m,x,y,bp)
+function draw_mach(typ,x,y,bp)
 	pal()
-	x,y=lab_2_world(x or m.x,y or m.y)
+	--x,y=lab_2_world(x or m.x,y or m.y)
+	local data=mach_sprs[typ]
 	for i=5,8 do
-		local data=mach_data[m.typ]
 		spr(
-			bp and data[i+6] or data[i+2],
+			data[i-4],
 			x+max(dirx[i],0)*8,
 			y+max(diry[i],0)*8
 		)
@@ -2125,12 +2060,16 @@ function save_game()
 end
 
 function load_game()
+	--gamestate info
 	day=%0x5e00
 	money=%0x5e02
 	show_money=money
 	local d=@0x5e04
 	hearts,stars=flr(d>>4),d%16
+	
 	--todo: load character appearance
+	
+	--holding potion
 	data={}
 	for i=0,3 do
 		data[i+1]=@(0x5e08+i)
@@ -2138,10 +2077,13 @@ function load_game()
 	if data[1]!=255 then
 		hold=load_pot(data)
 	end
+	
+	--lab size
 	d=@0x5e0c
 	lab_w,lab_h=flr(d>>4),d%16
 	fill_invalid_tiles()
 	
+	--machines
 	for i=0,39 do
 		local data={}
 		for j=0,5 do
@@ -2152,7 +2094,14 @@ function load_game()
 		if typ!=0 then
 			local x,y=flr(pos>>4),pos%16
 			local m=add_mach(typ,x,y)
-			m.pot=load_pot(data)
+			if m.pots then
+				local 
+				for pot_ind=1,m.w*m.h do
+					--fix this
+					m.pots[pot_ind]=
+						load_pot(data)
+				end
+			end
 		end
 	end
 end
@@ -2278,13 +2227,13 @@ ddddddddddddddd0dddddddddd555ddddd555ddd5ddddddd566666666666666000000000d8888888
 07757777777577001111111111111110565d1dd5dd1d566066111111d77d166000000000ddddddddddddddd01666661087778777888888889999999999999999
 76555666665556701171777177111110565ddd85d1d8566066177d711d1116600000000005555555555555001666661087878878888888889999999999999999
 66656666666566601171711171711110561111d5dd8d566066111111111116600000000000000000000000001111161087778878888888889999999999999999
-66d5d66666d5d660177177117711111056155515d1d15660d6666666666666d00000000000000000000000001666611088888888888888889999999999999999
-666d6666666d666017717771717111105615555111115660ddddddddddddddd00000000000000000000000001111111088888888888888889999999999999999
-d6666666666666d011111111111111105615555555551660ddddddddddddddd00000000000000000000000001666661088888888888888889999999999999999
-ddddddddddddddd011111111111111105611111111111660ddddddddddddddd00000000000000000000000001666661088888888888888889999999999999999
-ddd8d8d8d8d8ddd011111111111111105666666666666660ddddddddddddddd00000000000000000000000001611161088888888888888889999999999999999
-ddddddddddddddd011111111111111105666666666666660ddddddddddddddd00000000000000000000000001166611088888888888888889999999999999999
-05555555555555001111111111111110566666666666666005555555555555000000000000000000000000000111110088888888888888889999999999999999
+66d5d66666d5d660177177117711111056155515d1d1566000000000000000000000000000000000000000001666611088888888888888889999999999999999
+666d6666666d66601771777171711110561555511111566000000000000000000000000000000000000000001111111088888888888888889999999999999999
+d6666666666666d01111111111111110561555555555166000000000000000000000000000000000000000001666661088888888888888889999999999999999
+ddddddddddddddd01111111111111110561111111111166000000000000000000000000000000000000000001666661088888888888888889999999999999999
+ddd8d8d8d8d8ddd01111111111111110566666666666666000000000000000000000000000000000000000001611161088888888888888889999999999999999
+ddddddddddddddd01111111111111110566666666666666000000000000000000000000000000000000000001166611088888888888888889999999999999999
+05555555555555001111111111111110566666666666666000000000000000000000000000000000000000000111110088888888888888889999999999999999
 00000000000000000000000000000000566666666666666000000000000000000000000000000000000000000000000088888888888888889999999999999999
 __label__
 66666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666
@@ -2418,7 +2367,7 @@ dd55566666555ddddd55d1d11d111d111d111d111d111d111d111d111d111d111d111d111d111d11
 
 __gff__
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001010100000000000000000000000000010101000000000000000000000000000101010000000000
-0101010000000000000202010100000001010100000000000001010101000000010101010101000001020201010000000101010000010000000101010100000000000000000000000000000002020000000000000000000000020200010100000202000001010101000101000000000001010101010101010000000000000000
+0101010000000000000202010100000001010100000000000001010101000000010101010101000001020201010000000101010000010000000101010100000000000000000000000000000002020000000000000000000000020200010100000202000001010101000101000000000001010101010100000000000000000000
 __map__
 000000000000b3b4b3b46a6969696969696969696969696969696969696969696969696969696969696969696969696900000000000000000000000000000000000000000000000000006a6969696969696969696969696969696969696969696969696969696969696969696969696969696969696969696969696969696969
 000000000000b3b4b3b4785959595959595959595959595959595a6969696969696969696969696969696969696969690000000000000000000000000000000000000000000000000000785959595959595959595959595959595a69696969696969696969696969696969696969696969696969696969696969696969696969
