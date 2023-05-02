@@ -5,6 +5,14 @@ __lua__
 --by glenn cagle
 
 --todo
+-- overhaul
+--  leds
+--  sliding collisions
+--  dynamo animation
+--  y-sorting
+--  check conditions
+--  check processes
+--  check lab editor
 -- lab editor
 --  menu for buying new machines
 --   machine preview
@@ -126,18 +134,18 @@ function _init()
 		end
 	end
 	
-	turn_cw= split("1, 2,3, 5,4, 7,6, 11,8,9,10, 15,12,13,14, 19,16,17,18, 21,20,23,22, 27,24,25,26, 31,28,29,30")
-	turn_ccw=split("1, 2,3, 5,4, 7,6, 9,10,11,8, 13,14,15,12, 17,18,19,16, 21,20,23,22, 25,26,27,24, 29,30,31,28")
-	flip_h=  split("1, 3,2, 4,5, 7,6, 8,11,10,9, 12,15,14,13, 18,17,16,19, 22,23,20,21, 28,31,30,29, 24,27,26,25")
-	flip_v=  split("1, 3,2, 4,5, 7,6, 10,9,8,11, 14,13,12,15, 16,19,18,17, 22,23,20,21, 30,29,28,31, 26,25,24,27")
+	turn_cw= split"1, 2,3, 5,4, 7,6, 11,8,9,10, 15,12,13,14, 19,16,17,18, 21,20,23,22, 27,24,25,26, 31,28,29,30"
+	turn_ccw=split"1, 2,3, 5,4, 7,6, 9,10,11,8, 13,14,15,12, 17,18,19,16, 21,20,23,22, 25,26,27,24, 29,30,31,28"
+	flip_h=  split"1, 3,2, 4,5, 7,6, 8,11,10,9, 12,15,14,13, 18,17,16,19, 22,23,20,21, 28,31,30,29, 24,27,26,25"
+	flip_v=  split"1, 3,2, 4,5, 7,6, 10,9,8,11, 14,13,12,15, 16,19,18,17, 22,23,20,21, 30,29,28,31, 26,25,24,27"
 	turn_cw[0]=0
 	turn_ccw[0]=0
 	flip_h[0]=0
 	flip_v[0]=0
 	
-	mach_data=split2d("h cut,true,3,1,4,empty,0,0,0,0,7,10,7,12|h cut,true,3,2,3,empty,24,64,3,8,7,-2,7,-4|v join,true,4,3,4,ready,0,0,0,0,7,10,7,12|v join,true,4,0,3,dont,42,64,3,8,7,-2,0,0|v cut,true,5,4,2,empty,0,0,0,0,13,4,15,4|v cut,true,5,5,1,empty,33,64,-5,8,1,4,-1,4|h join,true,6,6,2,ready,0,0,0,0,13,4,15,4|h join,true,6,0,1,dont,51,64,-5,8,1,4,0,0|bed,false,1,0,4,,0,0,0,0,0,0,0,0|bed,false,1,0,3,,0,0,0,0,0,0,0,0|cw turn,true,2,7,0,,33,71,3,8,0,10,0,0|ccw turn,true,2,8,0,,24,71,3,8,0,10,0,0|h flip,true,2,9,0,,51,71,3,8,0,10,0,0|v flip,true,2,10,0,,42,71,3,8,0,10,0,0|treadmill,false,1,0,0,,0,0,0,0,0,0,0,0|dynamo,false,1,0,0,,0,0,0,0,0,0,0,0|storage,true,1,0,2,,0,0,0,0,0,0,0,0|storage,true,1,0,4,,0,0,0,0,0,0,0,0|storage,true,1,0,3,,0,0,0,0,0,0,0,0|storage,true,1,0,1,,0,0,0,0,0,0,0,0|battery,false,1,0,0,,0,0,0,0,0,0,0,0|trash,true,2,11,0,,60,64,91,72,1,10,0,0|nest,false,1,0,0,,0,0,0,0,0,0,0,0|blank,false,1,0,0,,0,0,0,0,0,0,0,0|counter,true,1,0,0,,0,0,0,0,0,0,0,0|register,false,1,0,0,,0,0,0,0,0,0,0,0|editor,false,1,0,0,,0,0,0,0,0,0,0,0","|",",")
+	mach_data=split2d("h cut,1,2,true,3,1,24,64,3,24,7,10,7,12|v join,1,2,true,4,3,42,64,3,24,7,10,7,12|v cut,2,1,true,5,4,33,64,11,8,13,4,15,4|h join,2,1,true,6,6,51,64,11,8,13,4,15,4|bed,1,2,false,1,0,0,0,0,0,0,0,0,0|cw turn,1,1,true,2,7,33,71,3,8,0,10,0,0|ccw turn,1,1,true,2,8,24,71,3,8,0,10,0,0|h flip,1,1,true,2,9,51,71,3,8,0,10,0,0|v flip,1,1,true,2,10,42,71,3,8,0,10,0,0|treadmill,1,1,false,1,0,0,0,0,0,0,0,0,0|dynamo,1,1,false,1,0,0,0,0,0,0,0,0,0|storage,2,2,true,1,0,0,0,0,0,0,0,0,0|battery,1,1,false,1,0,0,0,0,0,0,0,0,0|trash,1,1,true,2,11,60,64,91,72,1,10,0,0|nest,1,1,false,1,0,0,0,0,0,0,0,0,0|blank,1,1,false,1,0,0,0,0,0,0,0,0,0|counter,1,1,true,1,0,0,0,0,0,0,0,0,0|register,1,1,false,1,0,0,0,0,0,0,0,0,0|editor,1,1,false,1,0,0,0,0,0,0,0,0,0","|",",")
 	shop_data=split2d("2,$50,1x2,separates the top\nand bottom halves\nof a formula.|4,$50,1x2,joins two formulas\nvertically.|6,$50,2x1,separates the left\nand right halves\nof a formula.|8,$50,2x1,joins two formulas\nhorizontally.|11,$40,1x1,rotates a formula \n90 degrees\nclockwise.|12,$40,1x1,rotates a formula \n90 degrees\ncounterclockwise.|13,$40,1x1,reflects a formula\nover the y-axis.|14,$40,1x1,reflects a formula\nover the x-axis.|15,$30,1x1,supplies energy to\nan adjacent dynamo.|16,$30,1x1,generates power\nwhen running on an\nadjacent treadmill.|17,$40,2x2,a place to store\nyour potions.|21,$30,1x1,stores unused power.|23,$30,1x1,chicken included.","|",",")
-	mach_sprs=split2d("128,129,144,145,160,161,176,177|128,129,144,145,160,161,176,177|128,130,160,161,176,146,146,177|128,130,160,161,176,146,146,177|137,138,153,154,169,170,185,186|128,129,176,177|128,129,176,177|128,129,176,177|128,129,176,177|192,193,208,209|224,225,240,241|128,130,160,161,144,144,144,144,160,130,160,161,176,146,146,177|171,172,187,188|139,140,155,156|204,205,220,221|163,145,163,145|165,161,163,145|228,229,244,245|230,231,176,177","|",",")
+	mach_sprs=split2d("128,129,144,145,160,161,176,177|128,129,144,145,160,161,176,177|128,130,160,129,176,146,146,177|128,130,160,129,176,146,146,177|137,138,153,154,169,170,185,186|128,129,176,177|128,129,176,177|128,129,176,177|128,129,176,177|192,193,208,209|224,225,240,241|128,130,160,129,144,144,144,145,160,130,160,161,176,146,146,177|171,172,187,188|139,140,155,156|204,205,220,221|163,145,163,145|165,161,163,145|228,229,244,245|230,231,176,177","|",",")
 	
 	conditions={
 		--1 no function
@@ -215,16 +223,16 @@ function _init()
 	end
 	
 	machines={}
-	add_mach(24,-1,0) --blank
-	add_mach(26,-1,4) --register
+	add_mach(16,-1,0) --blank
+	add_mach(18,-1,4) --register
 	offer_counters={
-		add_mach(25,-1,1),
-		add_mach(25,-1,2),
-		add_mach(25,-1,3),
+		add_mach(17,-1,1),
+		add_mach(17,-1,2),
+		add_mach(17,-1,3),
 	}
 	if not data_found then
 		save_game()
-		poke(0x5e10,unpack(split"1,99,255,255,255,255,2,100,255,255,255,255,9,96,255,255,255,255,10,97,255,255,255,255,17,17,255,255,255,255,18,33,255,255,255,255,19,18,255,255,255,255,20,34,255,255,255,255,7,64,255,255,255,255,8,80,255,255,255,255,16,84,255,255,255,255,15,68,255,255,255,255,11,52,255,255,255,255,22,20,255,255,255,255,13,66,255,255,255,255,23,36,255,255,255,255,27,98,255,255,255,255"))
+		poke(0x5e10,unpack(split"1,99,255,255,255,255,255,255,255,255,5,96,12,17,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,4,64,255,255,255,255,255,255,255,255,11,84,10,68,6,52,255,255,255,255,14,20,255,255,255,255,8,66,255,255,255,255,15,36,19,98"))
 	end
 	load_game()
 	
@@ -233,10 +241,17 @@ function _init()
 	--search for partners
 	local bed_x,bed_y,nest_x,nest_y=0,0,0,0
 	for m in all(machines) do
-		if m.typ==9 then --bed
+		if m.name=="bed" then --bed
 			bed_x,bed_y=lab_2_world(m.x,m.y)
+			m.box=new_sprite(
+				bed_x,bed_y+24,16)
 		elseif m.name=="nest" then
 			nest_x,nest_y=lab_2_world(m.x,m.y)
+			half_box(m)
+		elseif m.name=="dynamo" then
+			half_box(m)
+		elseif m.name=="treadmill" then
+			m.box=new_sprite(0,0,0,0)
 		end
 	end
 	
@@ -1031,11 +1046,11 @@ end
 
 function new_char(x,y)
 	local skin_cols,hair_cols,shirt_cols,coat_cols,pants_cols=
-		split("4,12,13,14,15"),
-		split("1,2,4,5,8,9,10,11,12,13,14"),
-		split("1,2,3,4,5,8,9,10,11,12,13,14,15"),
-		split("1,2,3,4,5,8,9,10,11,12,13,14,15"),
-		split("1,2,3,4,5,8,9,10,11,12,13,14,15")
+		split"4,12,13,14,15",
+		split"1,2,4,5,8,9,10,11,12,13,14",
+		split"1,2,3,4,5,8,9,10,11,12,13,14,15",
+		split"1,2,3,4,5,8,9,10,11,12,13,14,15",
+		split"1,2,3,4,5,8,9,10,11,12,13,14,15"
 	
 	local p=new_sprite(x,y,6,6,1,10)
 	p.head=flr(rnd(8))
@@ -1125,6 +1140,14 @@ function update_bird(b)
 		end
 	end
 end
+
+--sets a machine's hitbox
+--to its lower half
+function half_box(m)
+	local x,y=lab_2_world(m.x,m.y)
+	m.box=new_sprite(x,y+8,
+		m.w*16,m.h*16)
+end
 -->8
 --tools
 
@@ -1170,11 +1193,8 @@ function collision(a,b)
 							a.y+a.oy,a.y+a.oy+a.h,
 							b.x+b.ox,b.x+b.ox+b.w,
 							b.y+b.oy,b.y+b.oy+b.h
-	if a➡️<=b⬅️ or a⬅️>=b➡️
-	or a⬇️<=b⬆️ or a⬆️>=b⬇️ then
-		return
-	end
-	return true
+	return not (a➡️<=b⬅️ or a⬅️>=b➡️
+	or a⬇️<=b⬆️ or a⬆️>=b⬇️)
 end
 
 --only checks the corners of the sprite
@@ -1265,15 +1285,16 @@ function printr(t,x,y,c)
 end
 
 function move_out(s,dx,dy,dist)
-	local moved,box=0,{
-		x=s.x,
-		y=s.y,
-		w=s.w,
-		h=s.h,
-		ox=s.ox,
-		oy=s.oy,
-	}
-	while collision_tile(box) do
+	local moved,box=0,new_sprite(
+		s.x,s.y,s.w,s.h,s.ox,s.oy)
+	local col_mach
+	for m in all(machines) do
+		if collision(m.box,box) then
+			col_mach=m
+		end
+	end
+	while col_mach
+	and collision(col_mach.box,box) do
 		box.x+=dx
 		box.y+=dy
 		moved+=1
@@ -1470,6 +1491,7 @@ function fill_tiles(x,y,w,h,tile,bp)
 		end
 	end
 end
+
 -->8
 --potions
 
@@ -1700,26 +1722,30 @@ end
 function add_mach(typ,x,y)
 	local data=mach_data[typ]
 	local m={
+		typ=typ,
 		x=x,y=y,
 		name=data[1],
-		typ=typ,
+		w=data[2],h=data[3],
 		consum=1/2,
 		prog=0,
 		max_prog=15,
-		condition=conditions[data[3]],
-		process=processes[data[4]],
-		label_sx=data[15],
-		label_sy=data[16],
-		label_dx=data[17],
-		label_dy=data[18],
-		led1_x=data[19],
-		led1_y=data[20],
-		led2_x=data[21],
-		led2_y=data[22],
+		condition=conditions[data[5]],
+		process=processes[data[6]],
+		label_sx=data[7],
+		label_sy=data[8],
+		label_dx=data[9],
+		label_dy=data[10],
+		led1_x=data[11],
+		led1_y=data[12],
+		led2_x=data[13],
+		led2_y=data[14],
 	}
-	if data[2]=="true" then
+	if data[4]=="true" then
 		m.pots={}
 	end
+	x,y=lab_2_world(x,y)
+	m.box=new_sprite(x,y,
+		m.w*16,m.h*16)
 	add(machines,m)
 	mach_count[typ]+=1
 	
@@ -1847,24 +1873,23 @@ end
 function draw_mach(typ,x,y,bp)
 	pal()
 	--x,y=lab_2_world(x or m.x,y or m.y)
-	local data=mach_sprs[typ]
-	for i=5,8 do
-		spr(
-			data[i-4],
-			x+max(dirx[i],0)*8,
-			y+max(diry[i],0)*8
-		)
+	local sprs=mach_sprs[typ]
+	local data=mach_data[typ]
+	local ind=1
+	for ty=0,2*data[3]-1 do
+		for tx=0,2*data[2]-1 do
+			spr(sprs[ind],x+8*tx,y+8*ty)
+			ind+=1
+		end
 	end
 	
 	--front label
-	pal(1,7)
-	palt(6,true)
-	pal(13,6)
-	if m.label_sx>0 then
-		sspr(m.label_sx,m.label_sy,
-			9,7,
-			x+m.label_dx,
-			y+m.label_dy)
+	--pal(1,7)
+	--palt(6,true)
+	--pal(13,6)
+	if data[7]>0 then
+		sspr(data[7],data[8],9,7,
+			x+data[9],y+data[10])
 	end
 end
 -->8
@@ -2047,13 +2072,15 @@ function save_game()
 	end
 
 	--save all the current machines
+	local write=0x5310
 	for i=0,#machines-1 do
 		local m=machines[i+1]
 		if m.name!="counter"
 		and m.name!="blank" then
 			local data=save_mach(m)
-			for j=0,5 do
-				poke(0x5e10+i*6+j,data[j+1])
+			for j=1,#data do
+				poke(write,data[j])
+				write+=1
 			end
 		end
 	end
@@ -2084,23 +2111,26 @@ function load_game()
 	fill_invalid_tiles()
 	
 	--machines
-	for i=0,39 do
-		local data={}
-		for j=0,5 do
-			data[j+1]=peek(0x5e10+i*6+j)
-		end
-		local typ,pos=deli(data,1),
-			deli(data,1)
-		if typ!=0 then
-			local x,y=flr(pos>>4),pos%16
-			local m=add_mach(typ,x,y)
-			if m.pots then
-				local 
-				for pot_ind=1,m.w*m.h do
-					--fix this
-					m.pots[pot_ind]=
-						load_pot(data)
+	local addr=0x5e10
+	while true do
+		local typ=@addr
+		if (typ==0) break
+		addr+=1
+		
+		local pos=@addr
+		addr+=1
+		local x,y=flr(pos>>4),pos%16
+		local m=add_mach(typ,x,y)
+			
+		--pots in machine
+		if m.pots then
+			for pot_ind=1,m.w*m.h do
+				local pot_data={}
+				for j=1,4 do
+					add(pot_data,@addr)
+					addr+=1
 				end
+				m.pots[pot_ind]=load_pot(data)
 			end
 		end
 	end
