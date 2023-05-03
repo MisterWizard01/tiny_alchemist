@@ -6,10 +6,9 @@ __lua__
 
 --todo
 -- overhaul
+--  collisions with top bed
 --  leds
---  sliding collisions
 --  dynamo animation
---  y-sorting
 --  check conditions
 --  check processes
 --  check lab editor
@@ -242,16 +241,15 @@ function _init()
 	local bed_x,bed_y,nest_x,nest_y=0,0,0,0
 	for m in all(machines) do
 		if m.name=="bed" then --bed
-			bed_x,bed_y=lab_2_world(m.x,m.y)
-			m.box=new_sprite(
-				bed_x,bed_y+24,16)
+			bed_x,bed_y=m.x,m.y
+			m.h,m.oy=8,24
 		elseif m.name=="nest" then
-			nest_x,nest_y=lab_2_world(m.x,m.y)
+			nest_x,nest_y=m.x,m.y
 			half_box(m)
 		elseif m.name=="dynamo" then
 			half_box(m)
 		elseif m.name=="treadmill" then
-			m.box=new_sprite(0,0,0,0)
+			m.w,m.h=0,0
 		end
 	end
 	
@@ -304,6 +302,7 @@ end
 
 function _update()
 	_upd()
+	debug[2]=웃.x..","..웃.y
 	⧗+=1
 end
 
@@ -339,7 +338,8 @@ function update_game()
 	end
 	
 	--movement with corner slips
-	웃.x+=dx*spd
+	웃.x=mid(95,웃.x+dx*spd,
+		lab_w*16+96-웃.w)
 	local back,up,down=
 		move_out(웃,-dx,0,spd),
 		move_out(웃,0,-1,4),
@@ -352,7 +352,8 @@ function update_game()
 		웃.x-=dx*back
 	end
 	
-	웃.y+=dy*spd
+	웃.y=mid(24,웃.y+dy*spd,
+		lab_h*16+22-웃.h)
 	local back,left,right=
 		move_out(웃,0,-dy,spd),
 		move_out(웃,-1,0,4),
@@ -440,6 +441,7 @@ function update_game()
 	
 	for m in all(machines) do
 		m.ready=m.condition(m.pot)
+		add(lab_sprs,m)
 		
 		--dynamo animation
 		if m.name=="dynamo" then
@@ -682,55 +684,6 @@ function draw_game()
 	end
 	
 	palt()
-	for m in all(machines) do
-		local mx,my=lab_2_world(m.x,m.y)
-		draw_mach(m.typ,mx,my)
-		
-		--front label
-		if m.label_sx>0 then
-			sspr(m.label_sx,m.label_sy,
-				9,7,
-				mx+m.label_dx,
-				my+m.label_dy)
-		end
-				
-		--indicator leds
-		if m.led1_x!=0 or m.led1_y!=0 then
-			pset(mx+m.led1_x,my+m.led1_y,
-				m.ready and 8 or 5)
-		end
-		
-		local lx,ly=mx+m.led2_x,my+m.led2_y
-		if m.partner_req=="ready" then
-			pset(lx,ly,(m.ready and
-				m.partner.ready) and 8 or 5)
-		end
-		if m.partner_req=="empty"
-		and pget(lx,ly)!=8 then
-			pset(lx,ly,(m.ready and not
-				m.partner.pot) and 8 or 5)
-		end
-		
-		--potions in machines
-		local pot=m.pot
-		if pot then
-			draw_pot(pot,mx+4,my,true)
-		end
-	end
-	
-	for m in all(machines) do
-		--progress bars
-		if m.prog>0 then
-			local bar_x,bar_y=lab_2_world(m.x,m.y)
-			bar_y+=15
-			shade_rrect(bar_x,bar_y,15,4,
-				split("1,2,3,4,5,6,7,8,9,10,11,12,5,14,15"))
-			rectfill2(bar_x+1,bar_y+1,
-				13,2,13)
-			rectfill2(bar_x+1,bar_y+1,
-				13*m.prog/m.max_prog,2,10)
-		end
-	end
 	
 	--customers
 	if cust[1] then
@@ -795,8 +748,7 @@ function draw_game()
 		local fx,fy,mx,my=
 			dirx[웃.face+1],
 			diry[웃.face+1],
-			lab_2_world(face_mach.x,
-				face_mach.y)
+			face_mach.x,face_mach.y
 		draw_formula(face_mach.pot,
 			mx+7*fx+7,my+7*fy+4,-fx,-fy)
 	end
@@ -807,7 +759,7 @@ function draw_game()
 		local fx,fy,mx,my=
 			dirx[웃.face+1],
 			diry[웃.face+1],
-			lab_2_world(oc.x,oc.y)
+			oc.x,oc.y
 		
 		if oc==face_mach
 		and cur_cust then	
@@ -912,7 +864,7 @@ function draw_editor()
 	
 	--machine labels
 	for m in all(machines) do
-		local mx,my=lab_2_world(m.x,m.y)
+		local mx,my=m.x,m.y
 		pal(1,7)
 		palt(6,true)
 		pal(13,6)
@@ -935,7 +887,7 @@ function draw_editor()
 	end
 	
 	--selected machine
-	local mx,my=lab_2_world(m.x,m.y)
+	local mx,my=m.x,m.y
 	draw_mach(sel_mach.typ,mx,my,true)
 	
 	--expand lab width option
@@ -1121,7 +1073,7 @@ function update_bird(b)
 		b.flp=b.dx<0
 		if abs(b.tx-b.x)<1
 		and abs(b.ty-b.y)<1
-		or collision_tile(b) then
+		or collision_mach(b) then
 			b.x=flr(b.x-b.dx)
 			b.y=flr(b.y-b.dy)
 			b.state="wait"
@@ -1144,9 +1096,18 @@ end
 --sets a machine's hitbox
 --to its lower half
 function half_box(m)
-	local x,y=lab_2_world(m.x,m.y)
-	m.box=new_sprite(x,y+8,
-		m.w*16,m.h*16)
+	m.h=8
+	m.oy=8	
+end
+
+--returns a machine that is
+--colliding with s
+function collision_mach(s)
+	for m in all(machines) do
+		if collision(m,s) then
+			return m
+		end
+	end
 end
 -->8
 --tools
@@ -1156,9 +1117,8 @@ function normalize(x,y)
 	local len=sqrt(x*x+y*y)
 	if len>0 then
 		return x/len,y/len
-	else
-		return x,y
 	end
+	return x,y
 end
 
 function rectfill2(x,y,w,h,c)
@@ -1198,21 +1158,21 @@ function collision(a,b)
 end
 
 --only checks the corners of the sprite
-function collision_tile(s)
-	local ⬅️,➡️,⬆️,⬇️=
-							s.x+s.ox,s.x+s.ox+s.w-1,
-							s.y+s.oy,s.y+s.oy+s.h-1
-	local t1,t2,t3,t4=
-		mget(flr(⬅️/8),flr(⬆️/8)),
-		mget(flr(⬅️/8),flr(⬇️/8)),
-		mget(flr(➡️/8),flr(⬆️/8)),
-		mget(flr(➡️/8),flr(⬇️/8))
-	
-	return fget(t1,0)
-		or fget(t2,0)
-		or fget(t3,0)
-		or fget(t4,0)
-end
+--function collision_tile(s)
+--	local ⬅️,➡️,⬆️,⬇️=
+--							s.x+s.ox,s.x+s.ox+s.w-1,
+--							s.y+s.oy,s.y+s.oy+s.h-1
+--	local t1,t2,t3,t4=
+--		mget(flr(⬅️/8),flr(⬆️/8)),
+--		mget(flr(⬅️/8),flr(⬇️/8)),
+--		mget(flr(➡️/8),flr(⬆️/8)),
+--		mget(flr(➡️/8),flr(⬇️/8))
+--	
+--	return fget(t1,0)
+--		or fget(t2,0)
+--		or fget(t3,0)
+--		or fget(t4,0)
+--end
 
 function rrectfill2(x,y,w,h,c,r)
 	r=r or 2
@@ -1287,14 +1247,10 @@ end
 function move_out(s,dx,dy,dist)
 	local moved,box=0,new_sprite(
 		s.x,s.y,s.w,s.h,s.ox,s.oy)
-	local col_mach
-	for m in all(machines) do
-		if collision(m.box,box) then
-			col_mach=m
+	while true do
+		if not collision_mach(box) then
+			return moved
 		end
-	end
-	while col_mach
-	and collision(col_mach.box,box) do
 		box.x+=dx
 		box.y+=dy
 		moved+=1
@@ -1302,7 +1258,6 @@ function move_out(s,dx,dy,dist)
 			return
 		end
 	end
-	return moved
 end
 
 function shade_rrect(x,y,w,h,_pal)
@@ -1428,26 +1383,6 @@ function lerp(val,targ,perc,min_add)
 	local dif=abs(targ-val)
 	local delta=mid(dif,dif*perc,min_add)
 	return val+delta*sign(targ-val)
-end
-
-function merge_groups(g1,g2)
-	for m2 in all(g2) do
-		local x,y,found=m2.x,m2.y
-		for m1 in all(g1) do
-			if m1==m2 then
-				--already in the new group
-				found=true
-			end
-		end
-		if not found then
-			add(g1,m2)
-		end
-		m2.group=g1
-		g1.x=min(g1.x,x)
-		g1.y=min(g1.y,y)
-		g1.w=max(g1.w,abs(x-g1.x)+1)
-		g1.h=max(g1.h,abs(y-g1.y)+1)
-	end
 end
 
 function fill_invalid_tiles()
@@ -1718,34 +1653,25 @@ end
 --machines
 
 --adds a machine at the given
---lab coordinates
+--world coordinates
 function add_mach(typ,x,y)
 	local data=mach_data[typ]
 	local m={
 		typ=typ,
 		x=x,y=y,
+		ox=0,oy=0,
 		name=data[1],
-		w=data[2],h=data[3],
+		w=data[2]*16,h=data[3]*16,
+		draw=mach_draw,
 		consum=1/2,
 		prog=0,
 		max_prog=15,
 		condition=conditions[data[5]],
 		process=processes[data[6]],
-		label_sx=data[7],
-		label_sy=data[8],
-		label_dx=data[9],
-		label_dy=data[10],
-		led1_x=data[11],
-		led1_y=data[12],
-		led2_x=data[13],
-		led2_y=data[14],
 	}
 	if data[4]=="true" then
 		m.pots={}
 	end
-	x,y=lab_2_world(x,y)
-	m.box=new_sprite(x,y,
-		m.w*16,m.h*16)
 	add(machines,m)
 	mach_count[typ]+=1
 	
@@ -1761,7 +1687,7 @@ function add_mach(typ,x,y)
 end
 
 --gets the machine at the given
---lab coordinates
+--world coordinates
 function get_mach(x,y)
 	for m in all(machines) do
 		if  mid(m.x,m.x+m.w-1,x)==x
@@ -1829,9 +1755,10 @@ function swap_pots(x,y)
 end
 
 function save_mach(m)
-	local data={}
+	local data,x,y={},
+		world_2_lab(m.x,m.y)
 	data[1]=m.typ
-	data[2]=(m.x<<4)+m.y
+	data[2]=(x<<4)+y
 	if m.pots then
 		local ind=3
 		for i=1,4 do
@@ -1860,8 +1787,8 @@ end
 
 function draw_dynamo(m)
 	pal()
-	local x,y=lab_2_world(m.x,m.y)
-	local f=sin(time()*2.5)*.8
+	local x,y,f=m.x,m.y,
+		sin(time()*2.5)*.8
 	circfill(x+3, y+2,m.glow*(4.8+f),2)
 	circfill(x+11,y+2,m.glow*(4.8+f),2)
 	circfill(x+3, y+2,m.glow*(3.75+f),14)
@@ -1870,7 +1797,7 @@ function draw_dynamo(m)
 	circfill(x+11,y+2,m.glow*(2.7+f),7)
 end
 
-function draw_mach(typ,x,y,bp)
+function draw_mach_body(typ,x,y,bp)
 	pal()
 	--x,y=lab_2_world(x or m.x,y or m.y)
 	local sprs=mach_sprs[typ]
@@ -1891,6 +1818,53 @@ function draw_mach(typ,x,y,bp)
 		sspr(data[7],data[8],9,7,
 			x+data[9],y+data[10])
 	end
+end
+
+function draw_mach(m,bp)
+	draw_mach_body(m.typ,m.x,m.y,bp)
+
+	--indicator leds
+	local led1_x,led1_y,led2_x,led2_y=
+		data[11],data[12],data[13],data[14]
+	if led1_x!=0 or led1_y!=0 then
+		pset(mx+led1_x,my+led1_y,
+			m.ready and 8 or 5)
+	end
+		
+--	local lx,ly=mx+m.led2_x,my+m.led2_y
+--	if m.partner_req=="ready" then
+--		pset(lx,ly,(m.ready and
+--			m.partner.ready) and 8 or 5)
+--	end
+--	if m.partner_req=="empty"
+--	and pget(lx,ly)!=8 then
+--		pset(lx,ly,(m.ready and not
+--			m.partner.pot) and 8 or 5)
+--	end
+		
+	--potions in machines
+	local pot=m.pot
+	if pot then
+		draw_pot(pot,mx+4,my,true)
+	end
+
+	--progress bars
+	if m.prog>0 then
+		local bar_x,bar_y=m.x,m.y
+		bar_y+=15
+		shade_rrect(bar_x,bar_y,15,4,
+			split("1,2,3,4,5,6,7,8,9,10,11,12,5,14,15"))
+		rectfill2(bar_x+1,bar_y+1,
+			13,2,13)
+		rectfill2(bar_x+1,bar_y+1,
+			13*m.prog/m.max_prog,2,10)
+	end
+end
+
+--wrapper function to be the
+--machine's :darw() call
+function mach_draw(m)
+	draw_mach(m,_upd==update_editor)
 end
 -->8
 --hud and ui
@@ -2119,12 +2093,14 @@ function load_game()
 		
 		local pos=@addr
 		addr+=1
-		local x,y=flr(pos>>4),pos%16
+		local x,y=lab_2_world(
+			flr(pos>>4),pos%16)
+		print(typ)
 		local m=add_mach(typ,x,y)
 			
 		--pots in machine
 		if m.pots then
-			for pot_ind=1,m.w*m.h do
+			for pot_ind=1,m.w*m.h/256 do
 				local pot_data={}
 				for j=1,4 do
 					add(pot_data,@addr)
