@@ -7,10 +7,6 @@ __lua__
 --todo
 -- overhaul
 --  collisions with top bed
---  leds
---  dynamo animation
---  check conditions
---  check processes
 --  check lab editor
 -- lab editor
 --  menu for buying new machines
@@ -113,7 +109,7 @@ function _init()
 	--starting materials
 	mats={0,1}
 	--mats=split("0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23")
-	upcharge=split("1,1.5,1.5,1.5,1.5,1.5,1.5,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2,2,2,2,2.75,2.75,2.75,2.75,2.75,2.75,2.75,2.75")
+	upcharge=split"1,1.5,1.5,1.5,1.5,1.5,1.5,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2,2,2,2,2.75,2.75,2.75,2.75,2.75,2.75,2.75,2.75"
 	upcharge[0]=1
 
 	--title screen background
@@ -142,79 +138,48 @@ function _init()
 	flip_h[0]=0
 	flip_v[0]=0
 	
-	mach_data=split2d("h cut,1,2,true,3,1,24,64,3,24,7,10,7,12|v join,1,2,true,4,3,42,64,3,24,7,10,7,12|v cut,2,1,true,5,4,33,64,11,8,13,4,15,4|h join,2,1,true,6,6,51,64,11,8,13,4,15,4|bed,1,2,false,1,0,0,0,0,0,0,0,0,0|cw turn,1,1,true,2,7,33,71,3,8,0,10,0,0|ccw turn,1,1,true,2,8,24,71,3,8,0,10,0,0|h flip,1,1,true,2,9,51,71,3,8,0,10,0,0|v flip,1,1,true,2,10,42,71,3,8,0,10,0,0|treadmill,1,1,false,1,0,0,0,0,0,0,0,0,0|dynamo,1,1,false,1,0,0,0,0,0,0,0,0,0|storage,2,2,true,1,0,0,0,0,0,0,0,0,0|battery,1,1,false,1,0,0,0,0,0,0,0,0,0|trash,1,1,true,2,11,60,64,91,72,1,10,0,0|nest,1,1,false,1,0,0,0,0,0,0,0,0,0|blank,1,1,false,1,0,0,0,0,0,0,0,0,0|counter,1,1,true,1,0,0,0,0,0,0,0,0,0|register,1,1,false,1,0,0,0,0,0,0,0,0,0|editor,1,1,false,1,0,0,0,0,0,0,0,0,0","|",",")
+	mach_data=split2d("h cut,1,2,true,3,1,24,64,3,24,7,12,7,10,7,14|v join,1,2,true,4,2,42,64,3,24,7,12,7,10,7,14|v cut,2,1,true,5,3,33,64,11,8,15,4,13,4,17,4|h join,2,1,true,6,4,51,64,11,8,15,4,13,4,17,4|bed,1,2,false,1,0,0,0,0,0,0,0,0,0,0,0|cw turn,1,1,true,2,5,33,71,3,8,0,10,0,0,0,0|ccw turn,1,1,true,2,6,24,71,3,8,0,10,0,0,0,0|h flip,1,1,true,2,7,51,71,3,8,0,10,0,0,0,0|v flip,1,1,true,2,8,42,71,3,8,0,10,0,0,0,0|treadmill,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|dynamo,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|storage,2,2,true,1,0,0,0,0,0,0,0,0,0,0,0|battery,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|trash,1,1,true,2,9,60,64,91,72,1,10,0,0,0,0|nest,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|blank,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|counter,1,1,true,1,0,0,0,0,0,0,0,0,0,0,0|register,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|editor,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0","|",",")
 	shop_data=split2d("2,$50,1x2,separates the top\nand bottom halves\nof a formula.|4,$50,1x2,joins two formulas\nvertically.|6,$50,2x1,separates the left\nand right halves\nof a formula.|8,$50,2x1,joins two formulas\nhorizontally.|11,$40,1x1,rotates a formula \n90 degrees\nclockwise.|12,$40,1x1,rotates a formula \n90 degrees\ncounterclockwise.|13,$40,1x1,reflects a formula\nover the y-axis.|14,$40,1x1,reflects a formula\nover the x-axis.|15,$30,1x1,supplies energy to\nan adjacent dynamo.|16,$30,1x1,generates power\nwhen running on an\nadjacent treadmill.|17,$40,2x2,a place to store\nyour potions.|21,$30,1x1,stores unused power.|23,$30,1x1,chicken included.","|",",")
 	mach_sprs=split2d("128,129,144,145,160,161,176,177|128,129,144,145,160,161,176,177|128,130,160,129,176,146,146,177|128,130,160,129,176,146,146,177|137,138,153,154,169,170,185,186|128,129,176,177|128,129,176,177|128,129,176,177|128,129,176,177|192,193,208,209|224,225,240,241|128,130,160,129,144,144,144,145,160,130,160,161,176,146,146,177|171,172,187,188|139,140,155,156|204,205,220,221|163,145,163,145|165,161,163,145|228,229,244,245|230,231,176,177","|",",")
 	
 	conditions={
 		--1 no function
-		function() end,
+		function()
+			return {}
+		end,
 		--2 has potion
-		function(pot) return pot end,
-		--3 cut h
-		function(pot)
-			return pot and pot.h==2
+		function(p1)
+			return {p1}
+		end,
+		--3 cut h ★?
+		function(p1,p2)
+		 local r1,r2=(p1 and p1.h or 0),
+		 	(p2 and p2.h or 0)
+			return {abs(r1-r2)==2,
+				r1==2,r2==2}
 		end,
 		--4 join v
-		function(pot)
-			return pot and pot.h==1
+		function(p1,p2)
+			local r1,r2=p1 and p1.h==1,
+		 	p2 and p2.h==1
+			return {r1 and r2,r1,r2}
 		end,
 		--5 cut v
-		function(pot)
-			return pot and pot.w==2
+		function(p1,p2)
+			local r1,r2=p1 and p1.w or 0,
+		 	p2 and p2.w or 0
+			return {abs(r1-r2)==2,
+				r1==2,r2==2}
 		end,
 		--6 join h
-		function(pot)
-			return pot and pot.w==1
+		function(p1,p2)
+			local r1,r2=p1 and p1.w==1,
+		 	p2 and p2.w==1
+			return {r1 and r2,r1,r2}
 		end,
 	}
 	
-	processes={
-		--1 cut h top
-		function(m)
-			m.pot,m.partner.pot=cut_h(m.pot)
-		end,
-		--2 cut h bot
-		function(m)
-			m.partner.pot,m.pot=cut_h(m.pot)
-		end,
-		--3 join v top
-		function(m)
-			m.pot,m.partner.pot=join_v(m.pot,m.partner.pot)
-		end,
-		--4 cut v lft
-		function(m)
-			m.pot,m.partner.pot=cut_v(m.pot)
-		end,
-		--5 cut v rit
-		function(m)
-			m.partner.pot,m.pot=cut_v(m.pot)
-		end,
-		--6 join h lft
-		function(m)
-			m.pot,m.partner.pot=join_h(m.pot,m.partner.pot)
-		end,
-		--7 turn cw
-		function(m)
-			m.pot=transform(m.pot,turn_cw)
-		end,
-		--8 turn ccw
-		function(m)
-			m.pot=transform(m.pot,turn_ccw)
-		end,
-		--9 flip h
-		function(m)
-			m.pot=transform(m.pot,flip_h)
-		end,
-		--10 flip v
-		function(m)
-			m.pot=transform(m.pot,flip_v)
-		end,
-		--11 trash
-		function(m)
-			m.pot=nil
-		end,
-	}
+	init_processes()
 	
 	mach_count={}
 	for i=1,#mach_data do
@@ -222,7 +187,7 @@ function _init()
 	end
 	
 	machines={}
-	add_mach(16,-1,0) --blank
+	--add_mach(16,-1,0) --blank
 	add_mach(18,-1,4) --register
 	offer_counters={
 		add_mach(17,-1,1),
@@ -235,9 +200,11 @@ function _init()
 	end
 	load_game()
 	
+	--stuff for debugging
 	money+=100
+	hold=rand_pot(mats)
 	
-	--search for partners
+	--extra mach data
 	local bed_x,bed_y,nest_x,nest_y=0,0,0,0
 	for m in all(machines) do
 		if m.name=="bed" then --bed
@@ -257,6 +224,7 @@ function _init()
 	웃=new_char(bed_x+4,bed_y+6)
 	웃.draw=draw_char
 	spd=2
+	act_x,act_y=0,0
 	
 	birds={}
 	add_bird(nest_x+4,nest_y)
@@ -302,7 +270,6 @@ end
 
 function _update()
 	_upd()
-	debug[2]=웃.x..","..웃.y
 	⧗+=1
 end
 
@@ -380,12 +347,11 @@ function update_game()
 	end
 	
 	--update action tile
-	local x,y=
-		world_2_lab(웃.x+4,웃.y+10)
+	local x,y=웃.x+4,웃.y+10
 	stand_mach=get_mach(x,y)
 	act_x,act_y=
-		x+dirx[웃.face+1],
-		y+diry[웃.face+1]
+		x+dirx[웃.face+1]*16,
+		y+diry[웃.face+1]*16
 	face_mach=get_mach(act_x,act_y)
 	
 	--buttons
@@ -440,7 +406,11 @@ function update_game()
 	end
 	
 	for m in all(machines) do
-		m.ready=m.condition(m.pot)
+		local pots=m.pots
+		if pots then
+			m.ready=
+				m.condition(unpack(pots,1,2))
+		end
 		add(lab_sprs,m)
 		
 		--dynamo animation
@@ -670,7 +640,8 @@ function draw_game()
 	for i=6,5+lab_w do
 		for j=2,1+lab_h do
 			rrectfill2(i*16,j*16,15,15,6)
-			if i-6!=act_x or j-2!=act_y then
+			local ax,ay=world_2_lab(act_x,act_y)
+			if i-6!=ax or j-2!=ay then
 				rectfill2(i*16+1,j*16+1,13,13,7)
 			end
 		end
@@ -709,20 +680,13 @@ function draw_game()
 		s:draw()
 	end
 	
-	--dynamo animation
-	for m in all(machines) do
-		if m.name=="dynamo" then
-			draw_dynamo(m)
-		end
-	end
-	
-	--foreground tiles
-	palt(7,true)
-	map(0,0,0,0,32,16,2)
-	
-	--웃 head
-	draw_char(웃,true)
-	
+--	--foreground tiles
+--	palt(7,true)
+--	map(0,0,0,0,32,16,2)
+--	
+--	--웃 head
+--	draw_char(웃,true)
+--	
 	pal()
 	--treadmill key prompt
 	if stand_mach_name=="treadmill" then
@@ -742,14 +706,17 @@ function draw_game()
 	end
 			
 	--potion formulas
-	if face_mach
-	and face_mach.name!="counter"
-	and face_mach.pot then
+	local m,pot_ind=
+		get_pot_slot(act_x,act_y)
+	if m and m.pots
+	and m.pots[pot_ind] then
+		local help=pot_ind-1
 		local fx,fy,mx,my=
 			dirx[웃.face+1],
 			diry[웃.face+1],
-			face_mach.x,face_mach.y
-		draw_formula(face_mach.pot,
+			face_mach.x+help%m.lw*16,
+			face_mach.y+help\m.lw*16
+		draw_formula(m.pots[pot_ind],
 			mx+7*fx+7,my+7*fy+4,-fx,-fy)
 	end
 	
@@ -868,7 +835,6 @@ function draw_editor()
 		pal(1,7)
 		palt(6,true)
 		pal(13,6)
-		--front label
 		if m.label_sx>0 then
 			sspr(m.label_sx,m.label_sy,
 				9,7,
@@ -1427,6 +1393,10 @@ function fill_tiles(x,y,w,h,tile,bp)
 	end
 end
 
+function xor(a,b)
+	return a and not b
+		or b and not a
+end
 -->8
 --potions
 
@@ -1447,6 +1417,7 @@ function rand_pot(mats)
 		pot.bl=nil
 		pot.br=nil
 	end
+	
 	return pot
 end
 
@@ -1524,65 +1495,123 @@ function norm_pot(pot)
 	}
 end
 
-function transform(pot,table)
-	return norm_pot({
-		w=pot.h,
-		h=pot.w,
-		tl=table[pot.bl],
-		tr=table[pot.tl],
-		bl=table[pot.br],
-		br=table[pot.tr],
-	})
-end
-
-function cut_h(pot)
-	return norm_pot({
-		w=pot.w,
-		h=1,
-		tl=pot.tl,
-		tr=pot.tr,
-	}),norm_pot({
-		w=pot.w,
-		h=1,
-		tl=pot.bl,
-		tr=pot.br,
-	})
-end
-
-function cut_v(pot)
-	return norm_pot({
-		w=1,
-		h=pot.h,
-		tl=pot.tl,
-		bl=pot.bl,
-	}),norm_pot({
-		w=1,
-		h=pot.h,
-		tl=pot.tr,
-		bl=pot.br,
-	})
-end
-
-function join_v(pot1,pot2)
-	return norm_pot({
-		w=max(pot1.w,pot2.w),
-		h=2,
-		tl=pot1.tl,
-		tr=pot1.tr,
-		bl=pot2.tl,
-		br=pot2.tr,
-	})
-end
-
-function join_h(pot1,pot2)
-	return norm_pot({
-		w=2,
-		h=max(pot1.w,pot2.w),
-		tl=pot1.tl,
-		tr=pot2.tl,
-		bl=pot1.bl,
-		br=pot2.bl,
-	})
+function init_processes()
+	processes={
+		--1 cut h
+		function(pots)
+			local pot=pots[1] or pots[2]
+			return {norm_pot({
+				w=pot.w,
+				h=1,
+				tl=pot.tl,
+				tr=pot.tr,
+			}),norm_pot({
+				w=pot.w,
+				h=1,
+				tl=pot.bl,
+				tr=pot.br,
+			})}
+		end,
+		
+		--2 join v
+		function(pots)
+			local pot1,pot2=unpack(pots)
+			return {norm_pot({
+				w=max(pot1.w,pot2.w),
+				h=2,
+				tl=pot1.tl,
+				tr=pot1.tr,
+				bl=pot2.tl,
+				br=pot2.tr,
+			})}
+		end,
+		
+		--3 cut v
+		function(pots)
+			local pot=pots[1] or pots[2]
+			return {norm_pot({
+				w=1,
+				h=pot.h,
+				tl=pot.tl,
+				bl=pot.bl,
+			}),norm_pot({
+				w=1,
+				h=pot.h,
+				tl=pot.tr,
+				bl=pot.br,
+			})}
+		end,
+		
+		--4 join h
+		function(pots)
+			local pot1,pot2=unpack(pots)
+			return {norm_pot({
+				w=2,
+				h=max(pot1.w,pot2.w),
+				tl=pot1.tl,
+				tr=pot2.tl,
+				bl=pot1.bl,
+				br=pot2.bl,
+			})}
+		end,
+		
+		--5 turn cw
+		function(pots)
+			local pot=pots[1]
+			return {norm_pot({
+				w=pot.h,
+				h=pot.w,
+				tl=turn_cw[pot.bl],
+				tr=turn_cw[pot.tl],
+				bl=turn_cw[pot.br],
+				br=turn_cw[pot.tr],
+			})}
+		end,
+		
+		--6 turn ccw
+		function(pots)
+			local pot=pots[1]
+			return {norm_pot({
+				w=pot.h,
+				h=pot.w,
+				tl=turn_ccw[pot.tr],
+				tr=turn_ccw[pot.br],
+				bl=turn_ccw[pot.tl],
+				br=turn_ccw[pot.bl],
+			})}
+		end,
+		
+		--7 flip h
+		function(pots)
+			local pot=pots[1]
+			return {norm_pot({
+				w=pot.w,
+				h=pot.h,
+				tl=flip_h[pot.tr],
+				tr=flip_h[pot.tl],
+				bl=flip_h[pot.br],
+				br=flip_h[pot.bl],
+			})}
+		end,
+		
+		--8 flip v
+		function(pots)
+			local pot=pots[1]
+			return {norm_pot({
+				w=pot.w,
+				h=pot.h,
+				tl=flip_v[pot.bl],
+				tr=flip_v[pot.br],
+				bl=flip_v[pot.tl],
+				br=flip_v[pot.tr],
+			})}
+		end,
+		
+		--9 trash
+		function(pots)
+			return {}
+		end,
+	}
 end
 
 function pots_match(a,b)
@@ -1662,12 +1691,14 @@ function add_mach(typ,x,y)
 		ox=0,oy=0,
 		name=data[1],
 		w=data[2]*16,h=data[3]*16,
+		lw=data[2],lh=data[3],
 		draw=mach_draw,
-		consum=1/2,
+		consum=.5,
 		prog=0,
 		max_prog=15,
 		condition=conditions[data[5]],
 		process=processes[data[6]],
+		ready={},
 	}
 	if data[4]=="true" then
 		m.pots={}
@@ -1690,11 +1721,20 @@ end
 --world coordinates
 function get_mach(x,y)
 	for m in all(machines) do
-		if  mid(m.x,m.x+m.w-1,x)==x
-		and mid(m.y,m.y+m.h-1,y)==y then
+		local x2,y2=m.x+m.lw*16,
+			m.y+m.lh*16
+		if  mid(m.x,x2,x)==x
+		and mid(m.y,y2,y)==y then
 			return m
 		end
 	end
+end
+
+function get_pot_slot(x,y)
+	local m=get_mach(x,y)
+	if (not m or not m.pots) return
+	local px,py=(x-m.x)\16,(y-m.y)\16
+	return m,m.lw*py+px+1
 end
 
 --adds power to the given
@@ -1702,13 +1742,13 @@ end
 --returns false only if there
 --isn't enough power to run it
 function run_mach(m)
-	if m.ready then
+	if m.ready[1] then
 		if power>=m.consum then
 			power-=m.consum
 			m.prog+=1
 			if m.prog>=m.max_prog then
 				m.prog=0
-				m:process()
+				m.pots=m.process(m.pots)
 				sfx(2)
 			end
 			return true
@@ -1722,10 +1762,8 @@ end
 --trades potions w the
 --machine at x,y
 function swap_pots(x,y)
-	local m=get_mach(x,y)
+	local m,pot_ind=get_pot_slot(x,y)
 	if (not m or not m.pots) return
-	local pot_ind=
-		m.w*(y-m.y)+x-m.x+1
 	local pot=m.pots[pot_ind]
 	
 	if m.name=="counter"
@@ -1797,15 +1835,15 @@ function draw_dynamo(m)
 	circfill(x+11,y+2,m.glow*(2.7+f),7)
 end
 
-function draw_mach_body(typ,x,y,bp)
+function draw_mach_body(typ,x,y,bp,f)
 	pal()
 	--x,y=lab_2_world(x or m.x,y or m.y)
 	local sprs=mach_sprs[typ]
 	local data=mach_data[typ]
-	local ind=1
+	local ind,f=1,f or 0
 	for ty=0,2*data[3]-1 do
 		for tx=0,2*data[2]-1 do
-			spr(sprs[ind],x+8*tx,y+8*ty)
+			spr(sprs[ind]+f*2,x+8*tx,y+8*ty)
 			ind+=1
 		end
 	end
@@ -1821,39 +1859,44 @@ function draw_mach_body(typ,x,y,bp)
 end
 
 function draw_mach(m,bp)
-	draw_mach_body(m.typ,m.x,m.y,bp)
+	local mx,my,data=m.x,m.y,
+		mach_data[m.typ]
+
+	if m.name=="dynamo" then
+		draw_dynamo(m)
+	end
+
+	draw_mach_body(m.typ,mx,my,bp,
+		m.frame)
 
 	--indicator leds
-	local led1_x,led1_y,led2_x,led2_y=
-		data[11],data[12],data[13],data[14]
-	if led1_x!=0 or led1_y!=0 then
-		pset(mx+led1_x,my+led1_y,
-			m.ready and 8 or 5)
+	for i=1,3 do
+		local led_x,led_y=unpack(data,9+i*2,10+i*2)
+		if led_x!=0 or led_y!=0 then
+			pset(mx+led_x,my+led_y,
+				m.ready[i] and 8 or 5)
+		end
 	end
-		
---	local lx,ly=mx+m.led2_x,my+m.led2_y
---	if m.partner_req=="ready" then
---		pset(lx,ly,(m.ready and
---			m.partner.ready) and 8 or 5)
---	end
---	if m.partner_req=="empty"
---	and pget(lx,ly)!=8 then
---		pset(lx,ly,(m.ready and not
---			m.partner.pot) and 8 or 5)
---	end
 		
 	--potions in machines
-	local pot=m.pot
-	if pot then
-		draw_pot(pot,mx+4,my,true)
+	if m.pots then
+		for py=0,m.lh-1 do
+			for px=0,m.lw-1 do
+				local pot=m.pots[px+py*m.lw+1]
+				if pot then
+					draw_pot(pot,mx+4+px*16,
+						my+py*16,true)
+				end
+			end
+		end
 	end
-
+	
 	--progress bars
 	if m.prog>0 then
 		local bar_x,bar_y=m.x,m.y
 		bar_y+=15
 		shade_rrect(bar_x,bar_y,15,4,
-			split("1,2,3,4,5,6,7,8,9,10,11,12,5,14,15"))
+			split"1,2,3,4,5,6,7,8,9,10,11,12,5,14,15")
 		rectfill2(bar_x+1,bar_y+1,
 			13,2,13)
 		rectfill2(bar_x+1,bar_y+1,
@@ -2095,7 +2138,6 @@ function load_game()
 		addr+=1
 		local x,y=lab_2_world(
 			flr(pos>>4),pos%16)
-		print(typ)
 		local m=add_mach(typ,x,y)
 			
 		--pots in machine
@@ -2106,7 +2148,7 @@ function load_game()
 					add(pot_data,@addr)
 					addr+=1
 				end
-				m.pots[pot_ind]=load_pot(data)
+				m.pots[pot_ind]=load_pot(pot_data)
 			end
 		end
 	end
@@ -2230,7 +2272,7 @@ ddddddddddddddd0dddddddddd555ddddd555ddd5ddddddd566666666666666000000000d8888888
 05555500055555001711711171117170565ddd7666666660661d777d17d7166000000000d6666666666666d01116161087788777878788889777979797979979
 05555500055555001771711177117170565d8dd77777666066171117117d166000000000ddddddddddddddd01666611087888787877788889797977797779979
 00555000005550001771777177717170565ddd15d8d17660661d777d1111166000000000ddd8d8d8d8d8ddd01111111088888888888888889999999999999999
-07757777777577001111111111111110565d1dd5dd1d566066111111d77d166000000000ddddddddddddddd01666661087778777888888889999999999999999
+00050000000500001111111111111110565d1dd5dd1d566066111111d77d166000000000ddddddddddddddd01666661087778777888888889999999999999999
 76555666665556701171777177111110565ddd85d1d8566066177d711d1116600000000005555555555555001666661087878878888888889999999999999999
 66656666666566601171711171711110561111d5dd8d566066111111111116600000000000000000000000001111161087778878888888889999999999999999
 66d5d66666d5d660177177117711111056155515d1d1566000000000000000000000000000000000000000001666611088888888888888889999999999999999
