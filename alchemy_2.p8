@@ -7,7 +7,8 @@ __lua__
 --todo
 -- overhaul
 --  collisions with top bed
---  check lab editor
+--  counter in blueprint mode
+--  shop bugs
 -- lab editor
 --  menu for buying new machines
 --   machine preview
@@ -138,9 +139,10 @@ function _init()
 	flip_h[0]=0
 	flip_v[0]=0
 	
-	mach_data=split2d("h cut,1,2,true,3,1,24,64,3,24,7,12,7,10,7,14|v join,1,2,true,4,2,42,64,3,24,7,12,7,10,7,14|v cut,2,1,true,5,3,33,64,11,8,15,4,13,4,17,4|h join,2,1,true,6,4,51,64,11,8,15,4,13,4,17,4|bed,1,2,false,1,0,0,0,0,0,0,0,0,0,0,0|cw turn,1,1,true,2,5,33,71,3,8,0,10,0,0,0,0|ccw turn,1,1,true,2,6,24,71,3,8,0,10,0,0,0,0|h flip,1,1,true,2,7,51,71,3,8,0,10,0,0,0,0|v flip,1,1,true,2,8,42,71,3,8,0,10,0,0,0,0|treadmill,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|dynamo,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|storage,2,2,true,1,0,0,0,0,0,0,0,0,0,0,0|battery,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|trash,1,1,true,2,9,60,64,91,72,1,10,0,0,0,0|nest,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|blank,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|counter,1,1,true,1,0,0,0,0,0,0,0,0,0,0,0|register,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|editor,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0","|",",")
+	mach_data=split2d("h cut,1,2,true,3,1,24,64,3,24,7,12,7,10,7,14|v join,1,2,true,4,2,42,64,3,24,7,12,7,10,7,14|v cut,2,1,true,5,3,33,64,11,8,15,4,13,4,17,4|h join,2,1,true,6,4,51,64,11,8,15,4,13,4,17,4|bed,1,2,false,1,0,0,0,0,0,0,0,0,0,0,0|cw turn,1,1,true,2,5,33,71,3,8,0,10,0,0,0,0|ccw turn,1,1,true,2,6,24,71,3,8,0,10,0,0,0,0|h flip,1,1,true,2,7,51,71,3,8,0,10,0,0,0,0|v flip,1,1,true,2,8,42,71,3,8,0,10,0,0,0,0|treadmill,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|dynamo,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|storage,2,2,true,1,0,0,0,0,0,0,0,0,0,0,0|battery,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|trash,1,1,true,2,9,60,64,3,8,1,10,0,0,0,0|nest,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|blank,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|counter,1,1,true,1,0,0,0,0,0,0,0,0,0,0,0|register,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0|editor,1,1,false,1,0,0,0,0,0,0,0,0,0,0,0","|",",")
 	shop_data=split2d("2,$50,1x2,separates the top\nand bottom halves\nof a formula.|4,$50,1x2,joins two formulas\nvertically.|6,$50,2x1,separates the left\nand right halves\nof a formula.|8,$50,2x1,joins two formulas\nhorizontally.|11,$40,1x1,rotates a formula \n90 degrees\nclockwise.|12,$40,1x1,rotates a formula \n90 degrees\ncounterclockwise.|13,$40,1x1,reflects a formula\nover the y-axis.|14,$40,1x1,reflects a formula\nover the x-axis.|15,$30,1x1,supplies energy to\nan adjacent dynamo.|16,$30,1x1,generates power\nwhen running on an\nadjacent treadmill.|17,$40,2x2,a place to store\nyour potions.|21,$30,1x1,stores unused power.|23,$30,1x1,chicken included.","|",",")
 	mach_sprs=split2d("128,129,144,145,160,161,176,177|128,129,144,145,160,161,176,177|128,130,160,129,176,146,146,177|128,130,160,129,176,146,146,177|137,138,153,154,169,170,185,186|128,129,176,177|128,129,176,177|128,129,176,177|128,129,176,177|192,193,208,209|224,225,240,241|128,130,160,129,144,144,144,145,160,130,160,161,176,146,146,177|171,172,187,188|139,140,155,156|204,205,220,221|163,145,163,145|165,161,163,145|228,229,244,245|230,231,176,177","|",",")
+	blup_sprs=split2d("141,143,157,159,157,159,173,175|141,143,157,159,157,159,173,175|141,142,142,143,173,174,174,175|141,142,142,143,173,174,174,175|93,94,157,159,157,159,173,175|141,143,173,175|141,143,173,175|141,143,173,175|141,143,173,175|109,111,125,127|91,92,125,127|141,142,142,143,157,158,158,159,157,158,158,159,173,174,174,175|171,172,187,188|141,143,173,175|107,108,123,124|157,159,157,159|157,159,157,159|157,159,157,159|141,143,173,175","|",",")
 	
 	conditions={
 		--1 no function
@@ -539,8 +541,8 @@ function update_editor()
 			my+=dy
 			
 			if sel_mach then
-				sel_mach.x+=dx
-				sel_mach.y+=dy
+				sel_mach.x+=dx*16
+				sel_mach.y+=dy*16
 			end
 		end
 	end
@@ -548,11 +550,11 @@ function update_editor()
 	--update cursor
 	local x1,y1,x2,y2=cur_x,cur_y,
 		cur_x+1,cur_y+1
-	local m=get_mach(cur_x,cur_y)
+	local m=get_mach(lab_2_world(cur_x,cur_y))
 	local mach=sel_mach or m
 	if mach then
-		x1,y1=mach.x,mach.y
-		x2,y2=x1+mach.w,y1+mach.h
+		x1,y1=world_2_lab(mach.x,mach.y)
+		x2,y2=x1+mach.lw,y1+mach.lh
 	end
 	cbox_x0=lerp(cbox_x0,cur_x,.5,.2)
 	cbox_y0=lerp(cbox_y0,cur_y,.5,.2)
@@ -580,10 +582,10 @@ function update_editor()
 	--can be placed
 	can_place=true
 	if sel_mach then
-		for x=mx,mx+mw-1 do
-			for y=my,my+mh-1 do
-				if get_mach(x,y) then
-					can_place=true
+		for x=x1,x2-1 do
+			for y=y1,y2-1 do
+				if get_mach(lab_2_world(x,y)) then
+					can_place=false
 				end
 			end
 		end
@@ -591,7 +593,7 @@ function update_editor()
 	if btnp(🅾️) then
 		if can_place and sel_mach then
 			--place machine
-			add(machines,gmach)	
+			add(machines,sel_mach)	
 			sel_mach=nil
 		elseif m and not sel_mach then
 			--pick up machine
@@ -795,22 +797,25 @@ function draw_editor()
 	camera(cam_x,cam_y)
 
 	--background grid
-	cls(1)
+	cls"1"
 	fillp(▒)
-	for i=6,6+lab_w do
-		line(i*16-1,32,i*16-1,
-			(2+lab_h)*16,13)
+	local x,y,x2,y2=95,31,
+		96+lab_w*16,32+lab_h*16
+	while x<x2 do
+		line(x,31,x,y2,13)
+		x+=16
 	end
-	for i=2,2+lab_h do
-		line(96,i*16-1,(6+lab_w)*16,
-			i*16-1,13)
+	while y<y2 do
+		line(95,y,x2,y)
+		y+=16
 	end
 	fillp()
 
 	--cursor
+	local cur_col,mach=2,get_mach(
+		lab_2_world(cur_x,cur_y))
 	if cur_x<lab_w and cur_y<lab_h
 	and cur_y>=0 then
-		local cur_col,mach=2,get_mach(cur_x,cur_y)
 		if sel_mach then
 			cur_col=14
 		elseif mach then
@@ -827,34 +832,32 @@ function draw_editor()
 			13,13,13)
 	end
 	
-	map(64,0)
+--	map(64,0)
 	
 	--machine labels
 	for m in all(machines) do
 		local mx,my=m.x,m.y
-		pal(1,7)
-		palt(6,true)
-		pal(13,6)
-		if m.label_sx>0 then
-			sspr(m.label_sx,m.label_sy,
-				9,7,
-				mx+m.label_dx,
-				my+m.label_dy)
-		end
+--		pal(1,7)
+--		palt(6,true)
+--		pal(13,6)
+		draw_mach(m,true)
 	end
 	
 	pal()
-	--red rect for invalid placement
-	if not can_place then
+	
+	if sel_mach then
 		local x,y=
 			lab_2_world(cbox_x1,cbox_y1)
-		local w,h=sel_mach.w*16-1,sel_mach.h*16-1
-		rrectfill2(x,y,w,h,8)
-	end
+		--red rect for invalid placement
+		if not can_place then
+			local w,h=sel_mach.w-1,sel_mach.h-1
+			rrectfill2(x,y,w,h,8)
+		end
 	
-	--selected machine
-	local mx,my=m.x,m.y
-	draw_mach(sel_mach.typ,mx,my,true)
+		--selected machine
+		draw_mach_body(sel_mach.typ,
+			x,y,true)
+	end
 	
 	--expand lab width option
 	pal()
@@ -883,7 +886,7 @@ function draw_editor()
 	
 	--hud
 	local name,🅾️text,❎text,name_col,🅾️col=
-		"none","","",13,7
+		"none","","❎ exit editor",13,7
 	if sel_mach then
 		if can_place then
 			🅾️text="🅾️ place"
@@ -894,14 +897,10 @@ function draw_editor()
 		❎text="❎ hold to sell"
 		name=sel_mach.name
 		name_col=7
-	else
-		local mach=get_mach(cur_x,cur_y)
-		if mach then
-			🅾️text="🅾️ pick up"
-			name=mach.name
-			name_col=7
-		end
-		❎text="❎ exit editor"
+	elseif mach then
+		🅾️text="🅾️ pick up"
+		name=mach.name
+		name_col=7
 	end
 	
 	draw_banner(6,1)
@@ -1392,11 +1391,6 @@ function fill_tiles(x,y,w,h,tile,bp)
 		end
 	end
 end
-
-function xor(a,b)
-	return a and not b
-		or b and not a
-end
 -->8
 --potions
 
@@ -1721,8 +1715,8 @@ end
 --world coordinates
 function get_mach(x,y)
 	for m in all(machines) do
-		local x2,y2=m.x+m.lw*16,
-			m.y+m.lh*16
+		local x2,y2=m.x+m.lw*16-1,
+			m.y+m.lh*16-1
 		if  mid(m.x,x2,x)==x
 		and mid(m.y,y2,y)==y then
 			return m
@@ -1837,8 +1831,7 @@ end
 
 function draw_mach_body(typ,x,y,bp,f)
 	pal()
-	--x,y=lab_2_world(x or m.x,y or m.y)
-	local sprs=mach_sprs[typ]
+	local sprs=bp and blup_sprs[typ] or mach_sprs[typ]
 	local data=mach_data[typ]
 	local ind,f=1,f or 0
 	for ty=0,2*data[3]-1 do
@@ -1849,9 +1842,10 @@ function draw_mach_body(typ,x,y,bp,f)
 	end
 	
 	--front label
-	--pal(1,7)
-	--palt(6,true)
-	--pal(13,6)
+	if bp then
+		pal(split"7,2,3,4,5,6,7,8,9,10,11,12,6,14,15")
+		palt(6,true)
+	end
 	if data[7]>0 then
 		sspr(data[7],data[8],9,7,
 			x+data[9],y+data[10])
@@ -1868,6 +1862,8 @@ function draw_mach(m,bp)
 
 	draw_mach_body(m.typ,mx,my,bp,
 		m.frame)
+	
+	if bp then return end
 
 	--indicator leds
 	for i=1,3 do
