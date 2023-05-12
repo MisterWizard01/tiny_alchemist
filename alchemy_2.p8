@@ -6,7 +6,6 @@ __lua__
 
 --todo
 -- overhaul
---  shop bugs
 --  loading bugs
 --  bed visuals
 --  collisions with top bed
@@ -945,10 +944,16 @@ function draw_shop()
 	pal(split"7,2,3,4,5,1,1,8,9,6,11,12,1,14,15")	
 	local ind=mid(0,sel-5,4)
 	for i=0,8 do
-		rrectfill2(2+14*i,66,13,11,(i+1+ind==sel) and 12 or 6)
+		rrectfill2(2+14*i,66,13,11,
+			(i+1+ind==sel) and 12 or 6)
 		rrectfill2(3+14*i,67,11,9,10)
 		md=mach_data[i+1+ind]
-		sspr(md[9],md[10],9,7,4+14*i,68)
+		if md[9]>0 then
+			sspr(md[9],md[10],9,7,4+14*i,68)
+		else
+			rectfill2(4+14*i,68,9,7,6)
+			print(sub(md[1],1,1),7+14*i,69,1)
+		end
 		--print(i+1+ind,4+14*i,68,1)
 	end
 	pal()
@@ -1652,7 +1657,7 @@ function rand_offer()
 end
 
 function save_pot(pot)
-	if (not pot) pot={}
+	pot=pot or {}
 	return {
 		pot.tl or 255,
 		pot.tr or 255,
@@ -1806,18 +1811,11 @@ function save_mach(m)
 	data[2]=(x<<4)+y
 	if m.pots then
 		local ind=3
-		for i=1,4 do
-			if m.pots[i] then
-				local pot_data=save_pot(m.pot)
-				for j=1,4 do
-					data[ind]=pot_data[j]
-					ind+=1
-				end
-			else
-				for j=1,4 do
-					data[ind]=255
-					ind+=1
-				end
+		for i=1,m.lw*m.lh do
+			local pot_data=save_pot(m.pots[i])
+			for j=1,4 do
+				data[ind]=pot_data[j]
+				ind+=1
 			end
 		end
 	end
@@ -2099,15 +2097,15 @@ function save_game()
 	end
 
 	--save all the current machines
-	local write=0x5310
+	local addr=0x5e10
 	for i=0,#machines-1 do
 		local m=machines[i+1]
 		if m.name!="counter"
-		and m.name!="blank" then
+		and m.name!="register" then
 			local data=save_mach(m)
 			for j=1,#data do
-				poke(write,data[j])
-				write+=1
+				poke(addr,data[j])
+				addr+=1
 			end
 		end
 	end
