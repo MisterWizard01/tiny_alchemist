@@ -4,27 +4,16 @@ __lua__
 --tiny alchemist
 --by glenn cagle
 
---todo
--- overhaul
---  loading bugs
---  bed visuals
---  collisions with top bed
--- 	chicken wall collisions
--- lab editor
---  menu for buying new machines
---   machine preview
---			machines icons below
---   menu animation
---   buy machine
---   money back for selling
---  prevent player from trapping
---   themself?
---   also send bird to nest
---		undo changes or 
---   quit w/o saving?
---  time passes while editing
---  sounds
---  expand lab animation/confirmation
+--todos
+-- horizontal slide in mach shop
+-- expand lab animation/confirmation
+-- editor sounds
+
+-- collisions with top bed
+
+-- wall machs?
+--  editor
+-- 	mirror for adjusting appearance?
 
 -- batteries
 -- offers shouldn't match
@@ -35,7 +24,6 @@ __lua__
 --  sounds
 -- potion material
 --  bird laying egg
--- stamina system?
 
 --sounds
 --00 footsteps
@@ -53,7 +41,8 @@ __lua__
 --12 westminster chimes
 
 function _init()
-	data_found=cartdata("mrwiz_alchemist_0")
+	version="v1"
+	data_found=cartdata("mrwiz_alchemist_1")
 
 	music(0)
 	music_playing=true
@@ -97,8 +86,12 @@ function _init()
 	tread_butt="❎"
 	power=0
 	max_power=0
-	butt_hold=0
+	
+	butt_hold=0	
+	shop_size=14
 	sel=1
+	shop_slide=54
+	hslide=0
 	
 	--customers come between
 	--8:00 and 20:00
@@ -140,9 +133,9 @@ function _init()
 	flip_h[0]=0
 	flip_v[0]=0
 	
-	mach_data=split2d("h cut,1,2,50,separates the top\nand bottom halves\nof a formula.,true,3,1,24,64,3,24,7,12,7,10,7,14|v join,1,2,50,joins two formulas\nvertically.,true,4,2,42,64,3,24,7,12,7,10,7,14|v cut,2,1,50,separates the left\nand right halves\nof a formula.,true,5,3,33,64,11,8,15,4,13,4,17,4|h join,2,1,50,joins two formulas\nhorizontally.,true,6,4,51,64,11,8,15,4,13,4,17,4|cw turn,1,1,40,rotates a formula \n90 degrees\nclockwise.,true,2,5,33,71,3,8,0,10,0,0,0,0|ccw turn,1,1,40,rotates a formula \n90 degrees\ncounterclockwise.,true,2,6,24,71,3,8,0,10,0,0,0,0|h flip,1,1,40,reflects a formula\nover the y-axis.,true,2,7,51,71,3,8,0,10,0,0,0,0|v flip,1,1,40,reflects a formula\nover the x-axis.,true,2,8,42,71,3,8,0,10,0,0,0,0|treadmill,1,1,30,supplies energy to\nan adjacent dynamo.,false,1,0,0,0,0,0,0,0,0,0,0,0|dynamo,1,1,30,generates power\nwhen running on an\nadjacent treadmill.,false,1,0,0,0,0,0,0,0,0,0,0,0|storage,2,2,40,a place to store\nyour potions.,true,1,0,0,0,0,0,0,0,0,0,0,0|battery,1,1,30,stores unused power.,false,1,0,0,0,0,0,0,0,0,0,0,0|nest,1,1,30,chicken included.,false,1,0,0,0,0,0,0,0,0,0,0,0|bed,1,2,0,,false,1,0,0,0,0,0,0,0,0,0,0,0|trash,1,1,0,,true,2,9,60,64,3,8,1,10,0,0,0,0|counter,1,1,0,,true,1,0,0,0,0,0,0,0,0,0,0,0|register,1,1,0,,false,1,0,0,0,0,0,0,0,0,0,0,0|editor,1,1,0,,false,1,0,0,0,0,0,0,0,0,0,0,0","|",",")
-	mach_sprs=split2d("128,129,144,145,160,161,176,177|128,129,144,145,160,161,176,177|128,130,160,129,176,146,146,177|128,130,160,129,176,146,146,177|128,129,176,177|128,129,176,177|128,129,176,177|128,129,176,177|192,193,208,209|224,225,240,241|128,130,160,129,144,144,144,145,160,130,160,161,176,146,146,177|171,172,187,188|204,205,220,221|137,138,153,154,169,170,185,186|139,140,155,156|165,161,163,145|228,229,244,245|230,231,176,177","|",",")
-	blup_sprs=split2d("141,143,157,159,157,159,173,175|141,143,157,159,157,159,173,175|141,142,142,143,173,174,174,175|141,142,142,143,173,174,174,175|141,143,173,175|141,143,173,175|141,143,173,175|141,143,173,175|109,111,125,127|91,92,125,127|141,142,142,143,157,158,158,159,157,158,158,159,173,174,174,175|171,172,187,188|107,108,123,124|93,94,157,159,157,159,125,127|141,143,173,175|157,159,157,159|157,159,157,159|141,143,173,175|","|",",")
+	mach_data=split2d("h cut,1,2,50,separates the top\nand bottom halves\nof a formula.,0,true,3,1,24,64,3,24,7,12,7,10,7,14|v join,1,2,50,joins two formulas\nvertically.,0,true,4,2,42,64,3,24,7,12,7,10,7,14|v cut,2,1,50,separates the left\nand right halves\nof a formula.,0,true,5,3,33,64,11,8,15,4,13,4,17,4|h join,2,1,50,joins two formulas\nhorizontally.,0,true,6,4,51,64,11,8,15,4,13,4,17,4|cw turn,1,1,40,rotates a formula \n90 degrees\nclockwise.,0,true,2,5,33,71,3,8,0,10,0,0,0,0|ccw turn,1,1,40,rotates a formula \n90 degrees\ncounterclockwise.,0,true,2,6,24,71,3,8,0,10,0,0,0,0|h flip,1,1,40,reflects a formula\nover the y-axis.,0,true,2,7,51,71,3,8,0,10,0,0,0,0|v flip,1,1,40,reflects a formula\nover the x-axis.,0,true,2,8,42,71,3,8,0,10,0,0,0,0|treadmill,1,1,30,supplies energy to\nan adjacent dynamo.,1,false,1,0,0,0,0,0,0,0,0,0,0,0|dynamo,1,1,30,generates power\nwhen running on an\nadjacent treadmill.,1,false,1,0,0,0,0,0,0,0,0,0,0,0|storage,2,2,40,a place to store\nyour potions.,0,true,1,0,0,0,0,0,0,0,0,0,0,0|battery,1,1,30,stores unused power.,0,false,1,0,0,0,0,0,0,0,0,0,0,0|nest,1,1,30,chicken included.,0,false,1,0,0,0,0,0,0,0,0,0,0,0|trash,1,1,10,safely disposes of\nunneeded potions.,1,true,2,9,60,64,3,8,1,10,0,0,0,0|bed,1,2,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0|counter,1,1,0,,3,true,1,0,0,0,0,0,0,0,0,0,0,0|register,1,1,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0|editor,1,1,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0","|",",")
+	mach_sprs=split2d("128,129,144,145,160,161,176,177|128,129,144,145,160,161,176,177|128,130,160,129,176,146,146,177|128,130,160,129,176,146,146,177|128,129,176,177|128,129,176,177|128,129,176,177|128,129,176,177|192,193,208,209|224,225,240,241|128,130,160,129,144,144,144,145,160,130,160,161,176,146,146,177|171,172,187,188|204,205,220,221|139,140,155,156|95,95,95,95,169,170,185,186|165,161,163,145|228,229,244,245|230,231,246,247","|",",")
+	blup_sprs=split2d("141,143,157,159,157,159,173,175|141,143,157,159,157,159,173,175|141,142,142,143,173,174,174,175|141,142,142,143,173,174,174,175|141,143,173,175|141,143,173,175|141,143,173,175|141,143,173,175|109,111,125,127|91,92,125,127|141,142,142,143,157,158,158,159,157,158,158,159,173,174,174,175|171,172,187,188|107,108,123,124|141,143,173,175|93,94,157,159,157,159,125,127|157,159,157,159|157,159,157,159|141,143,173,175","|",",")
 	
 	conditions={
 		--1 no function
@@ -197,47 +190,32 @@ function _init()
 	}
 	if not data_found then
 		save_game()
-		poke(0x5e10,unpack(split"1,99,255,255,255,255,255,255,255,255,14,96,11,17,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,4,64,255,255,255,255,255,255,255,255,10,84,9,68,5,52,255,255,255,255,15,20,255,255,255,255,7,66,255,255,255,255,13,36,18,98"))
+		poke(0x5e10,unpack(split"1,99,255,255,255,255,255,255,255,255,15,96,11,17,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,4,64,255,255,255,255,255,255,255,255,10,84,9,68,5,52,255,255,255,255,14,20,255,255,255,255,7,66,255,255,255,255,13,36,18,98"))
 	end
 	load_game()
 	
 	--stuff for debugging
-	money+=100
-	hold=rand_pot(mats)
-	
-	--extra mach data
-	local bed_x,bed_y,nest_x,nest_y=0,0,0,0
-	for m in all(machines) do
-		if m.name=="bed" then --bed
-			bed_x,bed_y=m.x,m.y
-			m.h,m.oy=8,24
-		elseif m.name=="nest" then
-			nest_x,nest_y=m.x,m.y
-			half_box(m)
-		elseif m.name=="dynamo" then
-			half_box(m)
-		elseif m.name=="treadmill" then
-			m.w,m.h=0,0
-		end
-	end
+	--money+=100
+	--hold=rand_pot(mats)
 	
 	cust={}
-	웃=new_char(bed_x+4,bed_y+6)
+	웃=new_char(bed.x+4,bed.y+6)
 	웃.draw=draw_char
 	spd=2
 	act_x,act_y=0,0
 	
 	birds={}
-	add_bird(nest_x+4,nest_y)
+	add_bird(nest.x+4,nest.y)
 	
-	days=split("sunday,monday,tuesday,wednesday,thursday,friday,saturday")
+	days=split"sunday,monday,tuesday,wednesday,thursday,friday,saturday"
 
 	menu_sleep=new_menu(
-		split("do you want to,go to sleep and,save the game?"),
+		split"do you want to,go to sleep and,save the game?",
 		{
 			{text="yes",action=function()
 				fade_out()
-				day+=1
+				if (tme>360) day+=1
+				tme=360 --6:00
 				save_game()
 				show_menu(menu_confirm)
 			end},
@@ -245,7 +223,7 @@ function _init()
 		}
 	)
 	menu_confirm=new_menu(
-		split("game saved!,return to title,or continue?"),
+		split"game saved!,return to title,or continue?",
 		{
 			{text="title",action=function()
 				close_menu()
@@ -255,7 +233,6 @@ function _init()
 			{text="cont.",action=function()
 				next_customer=480+rnd(720/13)
 				customers_left=6
-				tme=360 --6:00
 				close_menu()
 			end},
 		}
@@ -294,6 +271,9 @@ function update_game()
 	if fade_perc>0 then
 		fade_perc=max(fade_perc-0.04,0)
 	end
+	
+	--reset shop_slide
+	shop_slide=54	
 	
 	--directional input
 	local dx,dy=0,0
@@ -356,10 +336,7 @@ function update_game()
 	face_mach=get_mach(act_x,act_y)
 	
 	--buttons
-	stand_mach_name=nil
-	if stand_mach then
-		stand_mach_name=stand_mach.name
-	end
+	stand_mach_name=stand_mach and stand_mach.name
 	if stand_mach_name=="treadmill" then
 		if btn(❎) and not btn(🅾️)
 		and stand_mach.frame%2==0 then
@@ -379,6 +356,12 @@ function update_game()
 			butt_hold=0
 			show_menu(menu_sleep)
 		end
+	elseif stand_mach_name=="editor" then
+		if btnp(❎) then
+			_upd=update_editor
+			_drw=draw_editor
+			butt_hold=1
+		end
 	else
 		butt_hold=0
 	
@@ -397,10 +380,6 @@ function update_game()
 						offer_counters[i].pots[1]=nil
 					end
 					sfx(7)
-				elseif face_mach.name=="editor" then
-					_upd=update_editor
-					_drw=draw_editor
-					butt_hold=1
 				end
 			end
 		end
@@ -497,15 +476,7 @@ function update_game()
 		add(lab_sprs,b)
 	end
 	
-	--in game clock
-	tme+=.125
-	if tme>=60*24 then
-		day+=1
-		tme=0
-	end
-	if tme==480 or tme==1200 then
-		sfx(12)
-	end
+	update_time()
 	
 	--lerp money on hud
 	local prev=show_money
@@ -515,6 +486,11 @@ function update_game()
 end
 
 function update_editor()
+	update_time()
+
+	--slide the shop back up
+	shop_slide=lerp(shop_slide,54,.5,.2)
+
 	local dx,dy,mx,my,mw,mh=
 		0,0,cur_x,cur_y,1,1
 	local expandx,expandy=
@@ -563,33 +539,16 @@ function update_editor()
 	cbox_x2=lerp(cbox_x2,x2,.5,.2)
 	cbox_y2=lerp(cbox_y2,y2,.5,.2)
 	
-	if btn(❎) then
-		if sel_mach then
-			if butt_hold>20 then
-				--sell machine
-				sel_mach=nil
-			end
-		elseif butt_hold==0 then
-			_upd=update_game
-			_drw=draw_game
+	if btnp(❎) and not sel_mach
+	and butt_hold==0 then
+		for b in all(birds) do
+			b.x,b.y=nest.x+4,nest.y
 		end
-		butt_hold+=1
-	else
-		butt_hold=0
+		웃.x,웃.y=editor.x+4,editor.y
+		_upd=update_game
+		_drw=draw_game
 	end
 	
-	--check if the selected mach
-	--can be placed
-	can_place=true
-	if sel_mach then
-		for x=x1,x2-1 do
-			for y=y1,y2-1 do
-				if get_mach(lab_2_world(x,y)) then
-					can_place=false
-				end
-			end
-		end
-	end
 	if btnp(🅾️) then
 		if can_place and sel_mach then
 			--place machine
@@ -611,21 +570,89 @@ function update_editor()
 			fill_invalid_tiles()
 		elseif cur_y<0 then
 			_upd=update_shop
-			_drw=draw_shop
+--			_drw=draw_shop
 		end
+	end
+	
+	can_place,can_sell=true
+	local typ
+	if sel_mach then
+		typ=sel_mach.typ
+	
+		--update can_place
+		for x=x1,x2-1 do
+			for y=y1,y2-1 do
+				if get_mach(lab_2_world(x,y)) then
+					can_place=false
+				end
+			end
+		end
+		
+		--update can_sell
+		can_sell=is_empty(sel_mach)
+			and mach_count[typ]>mach.min_count
+	end
+		
+	if btn(❎) then
+		if butt_hold>20
+		and can_sell then
+			--sell machine
+			money+=mach_data[typ][4]
+			sel_mach=nil
+			mach_count[typ]-=1
+		end
+		butt_hold+=1
+	else
+		butt_hold=0
 	end
 end
 
 function update_shop()
-	if btn(❎) then
+	update_time()
+
+	--slide the shop down
+	shop_slide=lerp(shop_slide,0,.5,.2)
+	hslide=lerp(hslide,0,.5,.2)
+	
+	if btnp(❎) then
 		_upd=update_editor
 		_drw=draw_editor
 	end
-		
-	if btnp(⬅️) then
-		sel=max(1,sel-1)
-	elseif btnp(➡️) then
-		sel=min(13,sel+1)
+	
+	local price=mach_data[sel][4]
+	if btnp(🅾️)
+	and money>=price then
+		money-=price
+		sel_mach=add_mach(sel,
+			lab_2_world(0,0))
+		del(machines,sel_mach)
+		cur_x,cur_y=0,0
+		_upd=update_editor
+		_drw=draw_editor
+	end
+	
+	if btnp(⬅️) and sel>1 then
+		sel-=1
+		if sel<shop_size-4 and sel>4 then
+			hslide=-14
+		end
+	elseif btnp(➡️) and sel<shop_size then
+		sel+=1
+		if sel<shop_size-3 and sel>5 then
+			hslide=14
+		end
+	end
+end
+
+--updates the in game clock
+function update_time()
+	tme+=.125
+	if tme>=60*24 then
+		day+=1
+		tme=0
+	end
+	if tme==480 or tme==1200 then
+		sfx(12)
 	end
 end
 
@@ -665,6 +692,9 @@ function draw_game()
 		end
 	end
 	
+	--bed headboard
+	spr(137,bed.x,bed.y,2,3)
+	
 	--sprites in the lab
 	for i=1,#lab_sprs-1 do
 		for j=i+1,#lab_sprs do
@@ -688,7 +718,7 @@ function draw_game()
 --	
 --	--웃 head
 --	draw_char(웃,true)
---	
+
 	pal()
 	--treadmill key prompt
 	if stand_mach_name=="treadmill" then
@@ -696,17 +726,17 @@ function draw_game()
 	--bed key prompt
 	elseif stand_mach_name=="bed" then
 		key_prompt("hold ❎",45)
+	--editor key prompt
+	elseif stand_mach_name=="editor" then
+		key_prompt("❎")
 	elseif face_mach then
 		--register key prompt
 	 if face_mach.name=="register"
 		and cur_cust then
 			key_prompt("❎")
-		--editor key prompt
-		elseif face_mach.name=="editor" then
-			key_prompt("❎")
 		end
 	end
-			
+	
 	--potion formulas
 	local m,pot_ind=
 		get_pot_slot(act_x,act_y)
@@ -724,11 +754,10 @@ function draw_game()
 	
 	--customer offers
 	for i=1,3 do
-		local oc=offer_counters[i]
+		local oc,f=offer_counters[i],
+			웃.face+1
 		local fx,fy,mx,my=
-			dirx[웃.face+1],
-			diry[웃.face+1],
-			oc.x,oc.y
+			dirx[f],diry[f],oc.x,oc.y
 		
 		if oc==face_mach
 		and cur_cust then	
@@ -838,9 +867,6 @@ function draw_editor()
 	--machine labels
 	for m in all(machines) do
 		local mx,my=m.x,m.y
---		pal(1,7)
---		palt(6,true)
---		pal(13,6)
 		draw_mach(m,true)
 	end
 	
@@ -855,7 +881,7 @@ function draw_editor()
 				sel_mach.lh*16-1
 			rrectfill2(x,y,w,h,8)
 		end
-	
+		
 		--selected machine
 		draw_mach_body(sel_mach.typ,
 			x,y,true)
@@ -886,77 +912,123 @@ function draw_editor()
 	oprintc("\14buy machines",
 		x,y-4,6,1)
 	
-	--hud
-	local name,🅾️text,❎text,name_col,🅾️col=
-		"none","","❎ exit editor",13,7
-	if sel_mach then
-		if can_place then
-			🅾️text="🅾️ place"
-		else
-			🅾️text="invalid placement"
-			🅾️col=8
-		end
-		❎text="❎ hold to sell"
-		name=sel_mach.name
-		name_col=7
-	elseif mach then
-		🅾️text="🅾️ pick up"
-		name=mach.name
-		name_col=7
-	end
-	
-	draw_banner(6,1)
-	print("\014"..name,2,2,name_col)
-	print(🅾️text,2,9,🅾️col)
-	print(❎text,2,16,7)
-end
-
-function draw_shop()
-	draw_editor()
-	
+	--shop
 	camera()
 	draw_banner(1,13)
 	
 	--background
-	rrectfill2(0,0,128,67,1)
-	rrectfill2(0,0,128,66,7)
-	rrectfill2(0,0,128,65,6)
+	rrectfill2(0,-shop_slide,0,67,1)
+	rrectfill2(0,-shop_slide,128,66,7)
+	rrectfill2(0,-shop_slide,128,65,6)
 	
-	local mdata=mach_data[sel]
+	local name,w,h,price,desc=
+		unpack(mach_data[sel])
 	
-	rrectfill2(8,29,33,33,1)
+	rrectfill2(8,29-shop_slide,33,33,1)
 	--name
-	print("\014"..mdata[1],43,30,1)
+	print("\014"..name,43,
+		30-shop_slide,1)
 	--price
-	print("\014$"..mdata[4],43,36,1)
+	print("\014$"..price,43,
+		36-shop_slide,money>=price and 1 or 2)
 	--size
-	print(mdata[2].."x"..mdata[3],71,36,1)
+	print(w.."x"..h,71,
+		36-shop_slide,1)
 	--owned
-	print(mach_count[sel].." owned",91,36,1)
+	print(mach_count[sel].." owned",
+		91,36-shop_slide,1)
 	--description
-	print(mdata[5],43,44,13)
+	print(desc,43,44-shop_slide,13)
+	--preview
+	draw_mach_body(sel,25-w*8,
+		46-h*8-shop_slide,true)
+	pal()
+	--arrows
+	if sel>1 then
+		spr(86,⧗/10%2,42-shop_slide)
+	end
+	if sel<shop_size then
+		spr(86,120.9-⧗/10%2,
+			42-shop_slide,1,1,true)
+	end
 	
-	draw_banner(6,1)
-	print_money(7,6)
-	print("🅾️ buy",2,9,7)
-	print("❎ back",2,16,7)
-	
-	pal(split"7,2,3,4,5,1,1,8,9,6,11,12,1,14,15")	
-	local ind=mid(0,sel-5,4)
-	for i=0,8 do
-		rrectfill2(2+14*i,66,13,11,
-			(i+1+ind==sel) and 12 or 6)
-		rrectfill2(3+14*i,67,11,9,10)
-		md=mach_data[i+1+ind]
-		if md[9]>0 then
-			sspr(md[9],md[10],9,7,4+14*i,68)
-		else
-			rectfill2(4+14*i,68,9,7,6)
-			print(sub(md[1],1,1),7+14*i,69,1)
+	--label previews
+	pal(split"7,2,3,4,5,1,1,8,9,6,11,12,1,14,15")
+	for i=-5,5 do
+		local ind,x=
+			mid(5,sel,shop_size-4)+i,
+			58+14*i+hslide
+		if ind>0 and ind<=shop_size then
+			rrectfill2(x,66-shop_slide,13,
+				11,(ind==sel) and 12 or 6)
+			rrectfill2(x+1,67-shop_slide,
+				11,9,10)
+			md=mach_data[ind]
+			if md[10]>0 then
+				sspr(md[10],md[11],9,7,x+2,
+					68-shop_slide)
+			else
+				rectfill2(x+2,68-shop_slide,
+					9,7,6)
+				print(sub(md[1],1,1),x+5,
+					69-shop_slide,1)
+			end
 		end
 		--print(i+1+ind,4+14*i,68,1)
 	end
 	pal()
+	
+	--hud
+	draw_banner(6,1)
+	if _upd==update_editor then
+		local name,🅾️text,❎text,
+			name_col,🅾️col,❎col="none",
+			"","❎ exit editor",7,7,7
+		if cur_x==lab_w then
+			name="expand lab"
+			🅾️text="🅾️ expand for \14$"..5*lab_h
+			❎text=""
+		elseif cur_y==lab_h then
+			name="expand lab"
+			🅾️text="🅾️ expand for \14$"..5*lab_w
+			❎text=""
+		elseif cur_y==-1 then
+			name="machine shop"
+			🅾️text="🅾️ open shop"
+		elseif sel_mach then
+			if can_place then
+				🅾️text="🅾️ place"
+			else
+				🅾️text="invalid placement"
+				🅾️col=8
+			end
+			if can_sell then
+--				❎text="❎ hold to sell for $"..mach_data[sel_mach.typ][4]
+				❎text="❎ hold to sell"
+			elseif is_empty(sel_mach) then
+				❎text,❎col=
+					"need at least "..sel_mach.min_count,
+					13
+			else
+				❎text,❎col=
+					"must empty to sell",13
+			end
+			name=sel_mach.name
+		elseif mach then
+			🅾️text,name="🅾️ pick up",
+				mach.name
+		else
+			name_col=13
+		end
+		
+		print("\014"..name,2,2,name_col)
+		print(🅾️text,2,9,🅾️col)
+		print(❎text,2,16,❎col)
+	else
+		print_money(7,6)
+		print("🅾️ buy",2,9,7)
+		print("❎ back",2,16,7)
+	end
 end
 -->8
 --sprites
@@ -1041,6 +1113,7 @@ function draw_bird(b)
 		1,1,b.flp)
 end
 
+--★
 function update_bird(b)
 	if b.state=="wander" then
 		b.x+=b.dx
@@ -1060,8 +1133,8 @@ function update_bird(b)
 		local spooked=collision(웃,b)
 		if ⧗>=b.⧗ or spooked then
 			b.state="wander"
-			b.tx=flr(rnd(lab_w*16)+128)
-			b.ty=flr(rnd(lab_h*16+2)+31)
+			b.tx=rnd(lab_w*16)+96
+			b.ty=rnd(lab_h*16)+32
 			b.dx,b.dy=normalize(
 				b.tx-b.x,b.ty-b.y)
 			if (spooked) sfx_no_overlap(9)
@@ -1701,11 +1774,13 @@ function add_mach(typ,x,y)
 		consum=.5,
 		prog=0,
 		max_prog=15,
-		condition=conditions[data[7]],
-		process=processes[data[8]],
+		min_count=data[6],
+		condition=conditions[data[8]],
+		process=processes[data[9]],
 		ready={},
+		frame=0,
 	}
-	if data[6]=="true" then
+	if data[7]=="true" then
 		m.pots={}
 	end
 --	m.label_sx,m.label_sy,
@@ -1718,12 +1793,19 @@ function add_mach(typ,x,y)
 	add(machines,m)
 	mach_count[typ]+=1
 	
-	if m.name=="treadmill" then
-		m.frame=0
-	end
-	
-	if m.name=="dynamo" then
+	local name=m.name
+	if name=="dynamo" then
 		m.glow=0
+		half_box(m)
+	elseif name=="editor" then
+		editor,m.h=m,8
+	elseif name=="bed" then
+		bed,m.h,m.oy=m,8,24
+	elseif name=="nest" then
+		nest=m
+		half_box(m)
+	elseif name=="treadmill" then
+		m.w,m.h=0,0
 	end
 
 	return m
@@ -1830,22 +1912,24 @@ end
 
 function draw_dynamo(m)
 	pal()
-	local x,y,f=m.x,m.y,
-		sin(time()*2.5)*.8
-	circfill(x+3, y+2,m.glow*(4.8+f),2)
-	circfill(x+11,y+2,m.glow*(4.8+f),2)
-	circfill(x+3, y+2,m.glow*(3.75+f),14)
-	circfill(x+11,y+2,m.glow*(3.75+f),14)
-	circfill(x+3, y+2,m.glow*(2.7+f),7)
-	circfill(x+11,y+2,m.glow*(2.7+f),7)
+	local x,y,cols=m.x,m.y,
+		split"2,14,7"
+	for i=1,3 do
+		local r=m.glow*(5.85-1.05*i+
+			sin(time()*2.5)*.8)
+		for _x=3,11,8 do
+			circfill(x+_x,y+2,r,cols[i])
+		end
+	end
 end
 
 function draw_mach_body(typ,x,y,bp,f)
 	pal()
---	local sprs=bp and blup_sprs[typ] or mach_sprs[typ]
+	--bed
+	if (typ==15 and not bp) palt(6,true)
 	local sprs=bp and blup_sprs[typ] or mach_sprs[typ]
 	local data=mach_data[typ]
-	local ind,f=1,f or 0
+	local ind,f=1,(not bp and f) or 0
 	for ty=0,2*data[3]-1 do
 		for tx=0,2*data[2]-1 do
 			spr(sprs[ind]+f*2,x+8*tx,y+8*ty)
@@ -1858,9 +1942,9 @@ function draw_mach_body(typ,x,y,bp,f)
 		pal(split"7,2,3,4,5,6,7,8,9,10,11,12,6,14,15")
 		palt(6,true)
 	end
-	if data[9]>0 then
-		sspr(data[9],data[10],9,7,
-			x+data[11],y+data[12])
+	if data[10]>0 then
+		sspr(data[10],data[11],9,7,
+			x+data[12],y+data[13])
 	end
 end
 
@@ -1879,7 +1963,8 @@ function draw_mach(m,bp)
 
 	--indicator leds
 	for i=1,3 do
-		local led_x,led_y=unpack(data,i*2+11)
+		local led_x,led_y=
+			unpack(data,i*2+12)
 		if led_x!=0 or led_y!=0 then
 			pset(mx+led_x,my+led_y,
 				m.ready[i] and 8 or 5)
@@ -1917,6 +2002,14 @@ end
 function mach_draw(m)
 	draw_mach(m,_upd==update_editor)
 end
+
+function is_empty(m)
+	if (not m.pots) return true
+	for i=1,4 do
+		if (m.pots[i]) return false
+	end
+	return true
+end
 -->8
 --hud and ui
 
@@ -1946,8 +2039,8 @@ function draw_menu(menu)
 		menu.w-2,menu.h-2,6)
 	for i=1,#menu.lines do
 		printc(menu.lines[i],
-			menu.x+menu.w/2,menu.y-3+i*8,
-			1)
+			menu.x+menu.w/2,
+			menu.y-3+i*8,1)
 	end
 	
 	palt(0)
@@ -2042,6 +2135,8 @@ function draw_title()
 	oprintc("press 🅾️ to start",
 		64,96,1,7)
 		
+	oprint(version,1,1,6,7)
+		
 	do_fade()
 end
 
@@ -2085,11 +2180,13 @@ function save_game()
 	poke2(0x5e02,money)
 	poke(0x5e04,(hearts<<4)+stars)
 	--todo: character appearance
+	-- 0x5e05-0x5e07
 	local data=save_pot(hold)
 	for i=0,3 do
 		poke(0x5e08+i,data[i+1])
 	end
 	poke(0x5e0c,(lab_w<<4)+lab_h)
+	--unused:0x5e0d-0x5e0f
 
 	--wipe the existing mach data
 	for i=0,239 do
@@ -2203,14 +2300,14 @@ bbbb88b0bbb3883008888800bbb38830bbbb88b0bbb38830bbb38830bbb38830bbbb88b0bbb38830
 70000070711111707222217073333570744442707555517076666d707777767078888270799994707aaaa9707bbbb3707cccc1707dddd5707eeee2707ffff970
 7000007071111170722211707333557074442270755511707666dd707777667078882270799944707aaa99707bbb33707ccc11707ddd55707eee22707fff9970
 07777700077777000777770007777700077777000777770007777700077777000777770007777700077777000777770007777700077777000777770007777700
-000000000000bb00000000b3000000000000070000000000000000000330330056ddddddd000d000d000d0000077700000777000000000000000000000000000
-000cc00000bb33b000000b33007877000000076000000b3000000000333033305d000000000d000d000d000d0700070007000700000000000000000000000000
-00c7cc000b33b0300009a33007788880000076700000b3000000000033333330d00ddddd00d000d000d000d00700070007000700000000000000000000000000
-007ccc0003044000009a9aa00888887000076700000b33000000000000333000d0d00d000d000d000d000d000700070007000700007000000000700000000000
-0cccccc0000220000a99a9a00877887006767600000b30000000000033333330d0d0d000d000d000d000d0000070700000707000077000000000770000000000
-0ccccc100004400009999990000ff000076760000bb330000000000033303330d0dd000dddddddddd00d000d0700077777000700700700000007007000000000
-00ccc1000000200009a9a900000ff00000760000003300000000000003303300d0d000d0000000000dd000d07070706000707070706077777770007000000000
-0000000000004000009990000000000000000000000000000000000000000000d0d00d00dddddddd00d00d007600060006000670760006000600067000000000
+000000000000bb00000000b30000000000000700000000000006dd600330330056ddddddd000d000d000d0000077700000777000000000000000000000000000
+000cc00000bb33b000000b33007877000000076000000b30006d7d60333033305d000000000d000d000d000d0700070007000700000000000000000000000000
+00c7cc000b33b0300009a33007788880000076700000b30006d77d6033333330d00ddddd00d000d000d000d00700070007000700000000000000000000000000
+007ccc0003044000009a9aa00888887000076700000b33006d777d6000333000d0d00d000d000d000d000d000700070007000700007000000000700000000000
+0cccccc0000220000a99a9a00877887006767600000b300006d77d6033333330d0d0d000d000d000d000d0000070700000707000077000000000770000000000
+0ccccc100004400009999990000ff000076760000bb33000006d7d6033303330d0dd000dddddddddd00d000d0700077777000700700700000007007000000000
+00ccc1000000200009a9a900000ff00000760000003300000006dd6003303300d0d000d0000000000dd000d07070706000707070706077777770007000000000
+0000000000004000009990000000000000000000000000000000660000000000d0d00d00dddddddd00d00d007600060006000670760006000600067000000000
 0044440000444400000444000044440000000000000000000000004004400000d000dd0dd000d000d0d0d0000000000000000000000000000000000000000000
 0444444004444440004444000044444000444400004444000044444004444400000d0d0d000d000dd0dd000d0000000000000000000000000000000000000000
 044fff0000ffff0000ffff0000ffff0004ffff000044ff000044ff00004fff0000d00d0d00d000d0d0d000d00000000000000000000000000000000000000000
@@ -2275,20 +2372,20 @@ ddddddddddddddd0dddddddddd555ddddd555ddd5ddddddd566666666666666000000000d8888888
 5d65111111115dd556d5111111115dd55dd5111111115d655dd51111111156d5000000002e757e262e757e201116161000022222222200005555555555555555
 05555555555555500555555555555550055555555555555005555555555555500000000062555266625552600011611000000000000000005555555555555555
 00000000000000000000000000000000000000000000000000000000000000000000000066656666666566601111111000000000000000005555555555555555
-00555000005550001111111111111110566666666666666006666666666666000000000066d5d66666d5d6601666661088888888888888889999999999999999
-056555000565550017117111777177105677776666666660661111111111166000000000666d6666666d66601666661087778778877788889779977797779777
-05555500055555001711711171117170565ddd7666666660661d777d17d7166000000000d6666666666666d01116161087788777878788889777979797979979
-05555500055555001771711177117170565d8dd77777666066171117117d166000000000ddddddddddddddd01666611087888787877788889797977797779979
-00555000005550001771777177717170565ddd15d8d17660661d777d1111166000000000ddd8d8d8d8d8ddd01111111088888888888888889999999999999999
-00050000000500001111111111111110565d1dd5dd1d566066111111d77d166000000000ddddddddddddddd01666661087778777888888889999999999999999
-76555666665556701171777177111110565ddd85d1d8566066177d711d1116600000000005555555555555001666661087878878888888889999999999999999
-66656666666566601171711171711110561111d5dd8d566066111111111116600000000000000000000000001111161087778878888888889999999999999999
-66d5d66666d5d660177177117711111056155515d1d1566000000000000000000000000000000000000000001666611088888888888888889999999999999999
-666d6666666d66601771777171711110561555511111566000000000000000000000000000000000000000001111111088888888888888889999999999999999
-d6666666666666d01111111111111110561555555555166000000000000000000000000000000000000000001666661088888888888888889999999999999999
-ddddddddddddddd01111111111111110561111111111166000000000000000000000000000000000000000001666661088888888888888889999999999999999
-ddd8d8d8d8d8ddd01111111111111110566666666666666000000000000000000000000000000000000000001611161088888888888888889999999999999999
-ddddddddddddddd01111111111111110566666666666666000000000000000000000000000000000000000001166611088888888888888889999999999999999
+0055500000555000111111111111111056666666666666600ddddddddddddd000000000066d5d66666d5d6601666661088888888888888889999999999999999
+056555000565550017117111777177105677776666666660dd11111111111dd000000000666d6666666d66601666661087778778877788889779977797779777
+05555500055555001711711171117170565ddd7666666660dd1d777d17d71dd000000000d6666666666666d01116161087788777878788889777979797979979
+05555500055555001771711177117170565d8dd777776660dd171117117d1dd000000000ddddddddddddddd01666611087888787877788889797977797779979
+00555000005550001771777177717170565ddd15d8d17660dd1d777d11111dd000000000ddd8d8d8d8d8ddd01111111088888888888888889999999999999999
+00050000000500001111111111111110565d1dd5dd1d5660dd111111d77d1dd000000000ddddddddddddddd01666661087778777888888889999999999999999
+76555666665556701171777177111110565ddd85d1d85660dd177d711d111dd00000000005555555555555001666661087878878888888889999999999999999
+66656666666566601171711171711110561111d5dd8d566005555555555555000000000000000000000000001111161087778878888888889999999999999999
+66d5d66666d5d660177177117711111056155515d1d1566000000000000000001111111111100000000000001666611088888888888888889999999999999999
+666d6666666d66601771777171711110561555511111566000000000000000001d777d17d7100000000000001111111088888888888888889999999999999999
+d6666666666666d0111111111111111056155555555516600000000000000000171117117d100000000000001666661088888888888888889999999999999999
+ddddddddddddddd01111111111111110561111111111166000000000000000001d777d1111100000000000001666661088888888888888889999999999999999
+ddd8d8d8d8d8ddd0111111111111111056666666666666600000000000000000111111d77d100000000000001611161088888888888888889999999999999999
+ddddddddddddddd0111111111111111056666666666666600000000000000000177d711d11100000000000001166611088888888888888889999999999999999
 05555555555555001111111111111110566666666666666000000000000000000000000000000000000000000111110088888888888888889999999999999999
 00000000000000000000000000000000566666666666666000000000000000000000000000000000000000000000000088888888888888889999999999999999
 __label__
