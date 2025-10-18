@@ -1,0 +1,45 @@
+--todo
+-- move Otext and Xtext to update
+-- unlock machines at each level?
+--  leveling up for selling with new mats
+
+-- 4 directional sprite?
+-- overhaul HUD
+--  show money in editor mode
+--  replace hearts/stars w action indicator
+
+-- editor sounds
+-- collisions with top bed
+-- wall machs?
+--  editor
+--  mirror for changing appearance?
+
+-- battery power popup
+-- battery file i/o
+-- make dynamo only flash when actually running
+
+-- load dialog from a single table
+-- story + tutorial dialogue
+--  character creator
+-- menu juice
+--  animations
+--  sounds
+-- potion material
+--  bird laying egg
+-- offers shouldn't match
+-- expand lab animation/particles
+
+--sounds
+--00 footsteps
+--01 generating power
+--02 machine finished
+--03 pick up potion
+--04 place potion
+--05 ding-ding-ding
+--06 money change
+--07 cha-ching
+--08 bird call
+--09 bird gobble
+--10 bird peck
+--11 menu pop up
+--12 Westminster chimes

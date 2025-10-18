@@ -1,0 +1,122 @@
+Master:
+Apprentice? Apprentice!?
+Where are you?
+
+Apprentice:
+Right here, master!
+
+Master:
+Ah, there you are.
+
+Master:
+As you know, today I am leaving.
+
+Apprentice:
+L-leaving?
+
+Master:
+Yes, for my Wsuper secretW
+trip.
+
+Apprentice:
+Your t-trip?
+
+Master:
+The one I've been planning
+for weeks...? Never mind.
+
+Master:
+Apprentice, you will be left
+to run the alchemy shop all
+on your own. 
+
+Apprentice:
+A-all on my own?
+
+Master:
+One would think I'd hired a
+parrot rather than a gifted
+youngster.
+
+Master:
+All you've done thus far is
+repeat me!
+
+Apprentice:
+Sorry, Master.
+
+Master:
+Never mind, child.
+
+Master:
+Do you need a refresher on
+how to run the shop?
+[yes/no]
+
+Master:
+Very well.
+
+Master:
+First, we must wait until
+the shop magically opens
+at 8:00 each morning.
+
+Master:
+You can see the current time
+in the top right of the
+screen...
+
+Master:
+And you check whether the
+shop is open or closed at the
+top left of the lab.
+
+Master:
+Before opening and after
+closing are good times to
+reorganize, if necessary.
+
+Master:
+Customers will arrive outside
+between 8:00 and 20:00.
+
+Master:
+Walk to the counter on the
+left edge of the lab to
+see the customers lined up.
+
+Master:
+The first customer in line
+will make an offer in each
+of the 3 counter slots.
+
+Master:
+If a slot has a potion in it,
+the customer wishes to sell
+you that potion.
+
+Master:
+If the slot is empty, the
+customer wishes to buy a
+particular potion from you.
+
+Master:
+The price of each offer is
+listed below the slot.
+
+Master:
+Face the uppermost slot
+to see what this customer
+wishes to buy.
+
+Master:
+The formula for the desired
+potion will appear. Record
+it, mentally or physically.
+
+Master:
+Next, do the same for the
+potion in the next slot down.
+
+Master:
+We're in luck!
