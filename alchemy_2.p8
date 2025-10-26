@@ -44,7 +44,7 @@ function _init()
 	show_money=10
 	level=1
 --	day=1
-	tme=360
+	tme=540
 	open=false
 	tread_butt="❎"
 	power=0
@@ -64,7 +64,8 @@ function _init()
 	lab_w,lab_h=4,5
 	
 	--starting materials
-	upcharge=split"1,2,2,2,2,1.5,1.5,2,2,2,2,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,3,3,3,3,4,4,4,4,4,4,4,4"	upcharge[0]=1
+	upcharge=split"1,2,2,2,2,1.5,1.5,2,2,2,2,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,3,3,3,3,4,4,4,4,4,4,4,4"
+	upcharge[0]=1
 	mats=split2d"0,1|0,0,1,1,2,3|0,0,1,1,2,3,6,7|0,0,1,1,2,3,6,7|0,0,0,0,1,1,1,1,2,2,3,3,6,6,7,7,8,9,10,11|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11,12,13,14,15|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11,12,13,14,15,16,17,18,19|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11,12,13,14,15,16,17,18,19|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23|0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19,20,20,21,21,22,22,23,23,24,25,26,27,28,29,30,31"
 	
 	--levels
@@ -183,8 +184,8 @@ function _init()
 		{
 			function()
 				fade_out()
-				if (tme>360) day+=1
-				tme=360 --6:00
+--				tme=540 --9:00
+				open=false
 				save_game()
 				show_dia(confirm_dia)
 			end,
@@ -362,18 +363,22 @@ function update_game()
 			end
 		
 			if btnp(❎) then
-				if face_mach.name=="register"
-				and cur_cust then
-					del(cust,cur_cust)
-					cur_cust=nil
-					for i=1,3 do
-						local oc=offer_counters[i]
-						oc.pots[1]=nil
-						if oc.trade then
-							level+=1
+				if face_mach.name=="register" then
+					if tme<=540 then
+						open=true
+						sfx"12"
+					elseif cur_cust then
+						del(cust,cur_cust)
+						cur_cust=nil
+						for i=1,3 do
+							local oc=offer_counters[i]
+							oc.pots[1]=nil
+							if oc.trade then
+								level+=1
+							end
 						end
+						sfx"7"
 					end
-					sfx"7"
 				end
 			end
 		end
@@ -453,7 +458,7 @@ function update_game()
 	and tme>=next_customer then
 		customers_left-=1
 		next_customer=tme+rnd(
-			1200-tme)/(customers_left+1)
+			1020-tme)/(customers_left+1)
 		add(cust,
 			new_char(64+rnd(8),-16))
 		sfx"5"
@@ -514,7 +519,11 @@ function update_game()
 	elseif face_mach then
 		toptext="\f1\14"..face_mach.name
 		if face_mach.name=="register" then
-			❎text="\f1❎ next customer"
+			if tme<540 then
+				❎text="\f1❎ open shop"
+			elseif cur_cust
+				❎text="\f1❎ next customer"
+			end
 		end
 		if face_mach.pots then
 			local m,pot=get_m_pot_ind(act_x,act_y)
@@ -739,13 +748,13 @@ end
 
 --updates the in game clock
 function update_time()
-	tme+=.125
-	if tme>=60*24 then
-		day+=1
-		tme=0
-	end
-	if tme==480 or tme==1200 then
-		sfx"12"
+	if open then
+		tme+=.0625
+		--close at 17:00
+		if tme>=1020 then
+			open=false
+			sfx"12"
+		end
 	end
 end
 
@@ -778,11 +787,8 @@ function draw_game()
 	end
 	map()
 	
-	if tme>=480 and tme<1200 then
-		print("\014open",82,18,1)
-	else
-		print("\014closed",82,18,8)
-	end
+--	print(open and "\014open" or
+--		"\014closed",82,18,1)
 	
 	palt()
 	
@@ -846,7 +852,7 @@ function draw_game()
 	elseif face_mach then
 		--register key prompt
 	 if face_mach.name=="register"
-		and cur_cust then
+		and cur_cust or tme<=540 then
 			key_prompt("❎")
 		end
 	end
@@ -1102,8 +1108,8 @@ end
 
 function start_day()
 	--customers come between
-	--8:00 and 20:00
-	next_customer=480+rnd(720/13)
+	--9:00 and 17:00
+	next_customer=540+rnd(480/9)
 	customers_left=8
 end
 -->8
@@ -2216,19 +2222,19 @@ end
 
 --col is a string control code
 function print_time(col)
-	printr(col.."\014day "..day,127,9)
-	local hours,minutes=
-		col.."\14"..flr(tme/60)..":",
-		tostr(flr(tme%60))
-	if #minutes==1 then
-		minutes="0"..minutes
+--	printr(col.."\014day "..day,127,9)
+	if open then
+		local hours,minutes=
+			col.."\14"..(tme\60)..":",
+			flr(tme%60)
+		if minutes<10 then
+			minutes="0"..minutes
+		end
+		printr(hours..minutes,127,16)
+	else
+		printr(col.."\14closed",127,16)
 	end
-	printr(hours..minutes,127,16)
 end
-
---function draw_lock(x,y)
---	sspr(48,80,9,7,x,y)
---end
 -->8
 --file i/o
 
