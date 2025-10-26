@@ -43,8 +43,9 @@ function _init()
 	money=10
 	show_money=10
 	level=1
-	day=1
+--	day=1
 	tme=360
+	open=false
 	tread_butt="❎"
 	power=0
 	capacity=0
@@ -63,43 +64,13 @@ function _init()
 	lab_w,lab_h=4,5
 	
 	--starting materials
-	upcharge=split"1,1.5,1.5,1.5,1.5,1.5,1.5,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2.125,2,2,2,2,2.75,2.75,2.75,2.75,2.75,2.75,2.75,2.75"
-	upcharge[0]=1
-	mats={
-		split"0,1",
-		split"0,0,1,1,2,3",
-		split"0,0,1,1,2,3,6,7",
-		split"0,0,0,0,1,1,1,1,2,2,3,3,6,6,7,7,8,9,10,11",
-		split"0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11",
-		split"0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11,12,13,14,15",
-		split"0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11,12,13,14,15,16,17,18,19",
-		split"0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23",
-		split"0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19,20,20,21,21,22,22,23,23,24,25,26,27,28,29,30,31",
-	}
+	upcharge=split"1,2,2,2,2,1.5,1.5,2,2,2,2,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,3,3,3,3,4,4,4,4,4,4,4,4"	upcharge[0]=1
+	mats=split2d"0,1|0,0,1,1,2,3|0,0,1,1,2,3,6,7|0,0,1,1,2,3,6,7|0,0,0,0,1,1,1,1,2,2,3,3,6,6,7,7,8,9,10,11|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11,12,13,14,15|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11,12,13,14,15,16,17,18,19|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11,12,13,14,15,16,17,18,19|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23|0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,19,20,20,21,21,22,22,23,23,24,25,26,27,28,29,30,31"
 	
 	--levels
-	input_sizes={
-		split"1,1",
-		split"1,1",
-		split"2,1, 1,2",
-		split"1,1, 2,1, 1,2",
-		split"1,1, 2,1, 1,2",
-		split"1,1, 2,1, 1,2, 2,2",
-		split"1,1, 2,1, 1,2, 2,2",
-		split"1,1, 2,1, 1,2, 2,2",
-		split"1,1, 2,1, 1,2, 2,2",
-	}
-	output_sizes={
-		split"2,1",
-		split"2,1, 1,2",
-		split"1,1",
-		split"1,1, 2,1, 1,2",
-		split"1,1, 2,1, 1,2",
-		split"1,1, 2,1, 1,2, 2,2",
-		split"1,1, 2,1, 1,2, 2,2",
-		split"1,1, 2,1, 1,2, 2,2",
-		split"1,1, 2,1, 1,2, 2,2",
-	}
+	input_sizes= split2d"1,1|1,1     |2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2"
+	output_sizes=split2d"2,1|2,1, 1,2|1,1     |1,1, 2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2"
+	mach_unlock=split"2,10,10,0,1,7,5,8,11,11,3,9,7,0"
 
 	--title screen background
 	bkg={}
@@ -118,10 +89,10 @@ function _init()
 		end
 	end
 	
-	turn_cw= split"1, 2,3, 5,4, 7,6, 11,8,9,10, 15,12,13,14, 19,16,17,18, 21,20,23,22, 27,24,25,26, 31,28,29,30"
-	turn_ccw=split"1, 2,3, 5,4, 7,6, 9,10,11,8, 13,14,15,12, 17,18,19,16, 21,20,23,22, 25,26,27,24, 29,30,31,28"
-	flip_h=  split"1, 3,2, 4,5, 7,6, 8,11,10,9, 12,15,14,13, 18,17,16,19, 22,23,20,21, 28,31,30,29, 24,27,26,25"
-	flip_v=  split"1, 3,2, 4,5, 7,6, 10,9,8,11, 14,13,12,15, 16,19,18,17, 22,23,20,21, 30,29,28,31, 26,25,24,27"
+	turn_cw= split"1, 3,2, 4,5, 7,6, 11,8,9,10, 15,12,13,14, 19,16,17,18, 21,20,23,22, 27,24,25,26, 31,28,29,30"
+	turn_ccw=split"1, 3,2, 4,5, 7,6, 9,10,11,8, 13,14,15,12, 17,18,19,16, 21,20,23,22, 25,26,27,24, 29,30,31,28"
+	flip_h=  split"1, 2,3, 5,4, 7,6, 8,9,11,10, 12,15,14,13, 18,17,16,19, 22,23,20,21, 28,31,30,29, 24,27,26,25"
+	flip_v=  split"1, 2,3, 5,4, 7,6, 11,10,9,8, 14,13,12,15, 16,19,18,17, 22,23,20,21, 30,29,28,31, 26,25,24,27"
 	turn_cw[0]=0
 	turn_ccw[0]=0
 	flip_h[0]=0
@@ -260,6 +231,7 @@ end
 function _update()
 	_upd()
 	⧗+=1
+	local m,pot,ind=get_m_pot_ind(act_x,act_y)
 end
 
 function _draw()
@@ -273,7 +245,7 @@ function _draw()
 	clip()
 	local y=28
 	for k,v in pairs(debug) do
-		print(k..":"..v,1,y,8)
+		print(k..":"..v,1,y,12)
 		y+=8
 	end
 end
@@ -395,7 +367,11 @@ function update_game()
 					del(cust,cur_cust)
 					cur_cust=nil
 					for i=1,3 do
-						offer_counters[i].pots[1]=nil
+						local oc=offer_counters[i]
+						oc.pots[1]=nil
+						if oc.trade then
+							level+=1
+						end
 					end
 					sfx"7"
 				end
@@ -437,7 +413,7 @@ function update_game()
 		local m=machines[1]
 		if m.ready[1] then
 			power-=1
-			m.prog+=1/8--m.consum
+			m.prog+=.125--m.consum
 			if m.prog>=m.max_prog then
 				m.prog=0
 				m.pots=m.process(m.pots)
@@ -508,6 +484,7 @@ function update_game()
 			end
 			oc.price=price
 			oc.offer_pot=pot
+			oc.trade=false
 		end
 	end
 	
@@ -554,6 +531,8 @@ function update_game()
 			end
 		end
 	end
+	
+	debug.level=level\25
 end
 
 function update_editor()
@@ -834,6 +813,19 @@ function draw_game()
 		s:draw()
 	end
 	
+	--machine progress bars
+	for m in all(machines) do
+		if m.prog>0 then
+			local bar_x,bar_y=m.x,m.y+15
+			shade_rrect(bar_x,bar_y,15,4,
+				split"1,2,3,4,5,6,7,8,9,10,11,12,5,14,15")
+			rectfill2(bar_x+1,bar_y+1,
+				13,2,13)
+			rectfill2(bar_x+1,bar_y+1,
+				13*m.prog/m.max_prog,2,10)
+		end
+	end
+	
 --	--foreground tiles
 --	palt(7,true)
 --	map(0,0,0,0,32,16,2)
@@ -1035,27 +1027,37 @@ function draw_editor()
 	rrectfill2(0,-shop_slide,128,66,7)
 	rrectfill2(0,-shop_slide,128,65,6)
 
+	--lock "spr"
+	lock="\^:0e111f1b1f000000"
+
 	local name,w,h,price,desc=
 		unpack(mach_data[sel])
 	rrectfill2(8,29-shop_slide,33,33,1)
+	if level\25<mach_unlock[sel] then
+		name="locked"
+		desc="level up to unlock"
+		print(lock,22,44-shop_slide,13)
+	else
+		--price
+		print("\014$"..price,43,
+			36-shop_slide,money>=price and 1 or 2)
+		--size
+		print(w.."x"..h,71,
+			36-shop_slide,1)
+		--owned
+		print(mach_count[sel].." owned",
+			91,36-shop_slide,1)
+		--preview
+		draw_mach_body(sel,25-w*8,
+			46-h*8-shop_slide,true)
+	end
+	
+	pal()	
 	--name
 	print("\014"..name,43,
 		30-shop_slide,1)
-	--price
-	print("\014$"..price,43,
-		36-shop_slide,money>=price and 1 or 2)
-	--size
-	print(w.."x"..h,71,
-		36-shop_slide,1)
-	--owned
-	print(mach_count[sel].." owned",
-		91,36-shop_slide,1)
 	--description
 	print(desc,43,44-shop_slide,13)
-	--preview
-	draw_mach_body(sel,25-w*8,
-		46-h*8-shop_slide,true)
-	pal()
 	--arrows
 	if sel>1 then
 		spr(86,⧗/10%2,42-shop_slide)
@@ -1066,7 +1068,7 @@ function draw_editor()
 	end
 	
 	--label previews
-	pal(split"7,2,3,4,5,1,1,8,9,6,11,12,1,14,15")
+	pal(split"7,2,3,4,5,1,1,8,9,6,11,12,1,13,15")
 	for i=-5,5 do
 		local ind,x=
 			mid(5,sel,shop_size-4)+i,
@@ -1079,7 +1081,10 @@ function draw_editor()
 			md=mach_data[ind]
 			rectfill2(x+2,68-shop_slide,
 					9,7,6)
-			if md[10]>0 then
+			if level\25<mach_unlock[ind] then
+				print(lock,x+4,
+					69-shop_slide,14)
+			elseif md[10]>0 then
 				sspr(md[10],md[11],9,7,x+2,
 					68-shop_slide)
 			else
@@ -1762,7 +1767,7 @@ end
 
 function rand_offer(buy)
 	local pot
-	local l=min(level\5+1,#output_sizes)
+	local l=min(rnd(level)\25+1,#output_sizes)
 	if buy then
 		pot=rand_pot(mats[l],output_sizes[l])
 	else
@@ -1881,7 +1886,10 @@ end
 function get_m_pot_ind(x,y)
 	local m=get_mach(x,y)
 	if (not m or not m.pots) return m
-	local ind=m.lw*(y-m.y)\16+(x-m.x)\16+1
+	--has to be this way. can't
+	--add first then divide
+	local ind=m.lw*(y\16-m.y\16)+
+		(x\16-m.x\16)+1
 	return m,m.pots[ind],ind
 end
 
@@ -1897,12 +1905,14 @@ function swap_pots(x,y)
 		if pot and not hold
 		and money>=price then
 			money-=price
+			m.trade=not m.trade
 			--sfx(5)
 			
 		--player sells a potion
 		elseif not pot
 		and pots_match(hold,m.offer_pot) then
 			money+=price
+			m.trade=not m.trade
 			--sfx(5)
 		else
 			return
@@ -2028,18 +2038,6 @@ function draw_mach(m,bp)
 				end
 			end
 		end
-	end
-	
-	--progress bars
-	if m.prog>0 then
-		local bar_x,bar_y=m.x,m.y
-		bar_y+=15
-		shade_rrect(bar_x,bar_y,15,4,
-			split"1,2,3,4,5,6,7,8,9,10,11,12,5,14,15")
-		rectfill2(bar_x+1,bar_y+1,
-			13,2,13)
-		rectfill2(bar_x+1,bar_y+1,
-			13*m.prog/m.max_prog,2,10)
 	end
 	
 	--debug stuff
@@ -2227,6 +2225,10 @@ function print_time(col)
 	end
 	printr(hours..minutes,127,16)
 end
+
+--function draw_lock(x,y)
+--	sspr(48,80,9,7,x,y)
+--end
 -->8
 --file i/o
 
@@ -2314,13 +2316,13 @@ function load_game()
 end
 
 __gfx__
-77ccc77733333337999999979777779775557777777555777774444744447777777777777777778788888887877777777ee7ee777ee77777777777777777ee77
-7ccccc773333333779999977997779977755575757555777777744474447777777777777777778877888887788777777eeeeeee7eeee7777777e7777777eeee7
-ccccccc73333333777999777999799977555555755555577777774474477777777777777777788877788877788877777eeeeeee7eeeee77777eee77777eeeee7
-ccccccc733333337777977779999999755555557555555574777774747777747777877777778888777787777888877777eeeee777eeeee777eeeee777eeeee77
-ccccccc7333333377799977799979997555555777555555744777777777774477788877777778887777777778887777777eee777eeeee777eeeeeee777eeeee7
-7ccccc773333333779999977997779975755577777555757444777777777444778888877777778877777777788777777777e7777eeee7777eeeeeee7777eeee7
-77ccc7773333333799999997977777977775557775557777444477777774444788888887777777877777777787777777777777777ee777777ee7ee777777ee77
+77ccc77733333337999999979777779775557777777555777777447774477777877777777777778788888887888888877ee7ee777ee77777777777777777ee77
+7ccccc773333333779999977997779977755575757555777777744474447777788777777777778877888888788888877eeeeeee7eeee7777777e7777777eeee7
+ccccccc73333333777999777999799977555555755555577777444474444777788877777777788877788888788888777eeeeeee7eeeee77777eee77777eeeee7
+ccccccc733333337777977779999999755555557555555577744477777444777888877777778888777788887888877777eeeee777eeeee777eeeee777eeeee77
+ccccccc7333333377799977799979997555555777555555744447777777444478888877777888887777788878887777777eee777eeeee777eeeeeee777eeeee7
+7ccccc773333333779999977997779975755577777555757444777777777444788888877788888877777788788777777777e7777eeee7777eeeeeee7777eeee7
+77ccc7773333333799999997977777977775557775557777744777777777447788888887888888877777778787777777777777777ee777777ee7ee777777ee77
 77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
 71111177717771777111117771111177bbbb7777777777b7777bbbb7b777777777ddd77777dd777777dd7777777dd77777ddd77777dd7777777dd777777dd777
 111777171777771717771117111111177bbbb77777bbbbb777bbbb77bbbbb7777ddddd777ddd7777777d7777777ddd777ddddd777ddd7777777d7777777ddd77
@@ -2342,7 +2344,7 @@ b33b88b0bbb3883008888800bbb38830b33b88b0bbb38830bbb383b0bbb38830b33b88b0bbb38830
 bb3b88b0bbb3883008888800bbb38830bb3b88b0bbb38830bbb38830bbb38830bb3b88b0bbb3883008888800bbb38830bb3b88b0bbb38830bbb38830bbb38830
 bbbb88b0bbb3883008888800bbb38830bbbb88b0bbb38830bbb38830bbb38830bbbb88b0bbb3883008888800bbb38830bbbb88b0bbb38830bbb38830bbb38830
 3bbb88b0bbb3883008888800bb388830bbbb88b0bbb38830bbb38830bb3888303bbb88b0bbb3883008888800bb388830bbbb88b0bbb38830bbb38830bb388830
-0333cc30bb3ccc300ccccc00b3cccc30bbbbccb0bbb3cc30bbb3cc30b3cccc000333cc30bb3ccc300cccccc0b3cccc30bbbbccb0bbb3cc30bbb3ccc0b3ccccc0
+0333cc30bb3ccc300ccccc00b3cccc30bbbbccb0bbb3cc30bbb3cc30b3cccc000333cc30bb3ccc300cccccc0b3ccccc0bbbbccb0bbb3cc30bbb3ccc0b3ccccc0
 0c000c0033000c000c000c00b3333c00333b0cb033300c30bbb33c30b3333c000c00000c3300000c0c00000cb333330c333b00bc3330003cbbb3333cb333330c
 0c000c000c000c000c000c003c333c000c000c000c000c00bbb33c303c300c00c000000cc000000cc000000c3333300cc000000cc000000cbbb3333c3330000c
 0c000c000c000c000c000c000c000c000c000c000c000c0033333c300c000c000000000000000000000000000000000000000000000000003333333000000000
