@@ -184,7 +184,6 @@ function _init()
 		{
 			function()
 				fade_out()
---				tme=540 --9:00
 				open=false
 				save_game()
 				show_dia(confirm_dia)
@@ -519,9 +518,9 @@ function update_game()
 	elseif face_mach then
 		toptext="\f1\14"..face_mach.name
 		if face_mach.name=="register" then
-			if tme<540 then
+			if tme<=540 then
 				❎text="\f1❎ open shop"
-			elseif cur_cust
+			elseif cur_cust then
 				❎text="\f1❎ next customer"
 			end
 		end
@@ -540,8 +539,6 @@ function update_game()
 			end
 		end
 	end
-	
-	debug.level=level\25
 end
 
 function update_editor()
@@ -893,30 +890,6 @@ function draw_game()
 	--hud
 	camera()
 	draw_banner("\f1",6)
---	rrectfill2(0,-1,128,24,13)
---	rrectfill2(0,-1,128,23,6)
-	
-	--money
---	print("\014$",2,2,1)
---	for i=1,7-#tostr(flr(show_money)) do
---		print("\0140",2+5*i,2,13)
---	end
---	printr("\014"..flr(show_money),42,2,1)
---	print_money("\f1","\fd")
-		
-	--hearts
---	palt(7,true)
---	for i=0,4 do
---		local c=i<hearts and 8 or 13
---		pal(14,c)
---		spr(12,2+i*8,8)
---	end
-	
-	--stars
---	for i=0,4 do
---		local c=i<level%5 and 10 or 13
---		print("★",2+i*8,15,c)
---	end
 	
 	pal()
 	--potion in hand
@@ -1098,7 +1071,6 @@ function draw_editor()
 					69-shop_slide,1)
 			end
 		end
-		--print(i+1+ind,4+14*i,68,1)
 	end
 	pal()
 	
@@ -1109,7 +1081,8 @@ end
 function start_day()
 	--customers come between
 	--9:00 and 17:00
-	next_customer=540+rnd(480/9)
+	tme=540 --9:00
+	next_customer=tme+rnd(480/9)
 	customers_left=8
 end
 -->8
@@ -2196,7 +2169,7 @@ function draw_title()
 	do_fade()
 end
 
-function draw_banner(time_col,bkg_col)
+function draw_banner(txt_col,bkg_col)
 	camera()
 	pal()
 	rrectfill2(0,-1,128,24,13)
@@ -2206,8 +2179,10 @@ function draw_banner(time_col,bkg_col)
 	print(🅾️text,2,9)
 	print(❎text,2,16)
 	
-	print_time(time_col)
-	print_money(time_col)
+	print_money(txt_col)
+	printr(txt_col.."\14level "..
+		level\25,127,9)
+	print_time(txt_col)
 end
 
 --prints formatted money
