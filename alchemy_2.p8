@@ -224,8 +224,7 @@ function _init()
 	cur_x,cur_y=0,0
 	
 	--coordinates for lerping
-	cbox_x0,cbox_y0,cbox_x1,cbox_y1,
-	cbox_x2,cbox_y2=0,0,0,0,1,1
+	cbox=split"0,0,0,0,1,1"
 end
 
 function _update()
@@ -369,12 +368,17 @@ function update_game()
 					elseif cur_cust then
 						del(cust,cur_cust)
 						cur_cust=nil
+						local traded
 						for i=1,3 do
 							local oc=offer_counters[i]
-							oc.pots[1]=nil
-							if oc.trade then
-								level+=1
-							end
+							oc.pots={}
+							traded=traded or oc.trade
+						end
+						if traded then
+							--tip for fast service
+							--960 frames = 1 hour
+							money+=max(0,2-(⧗-deal⧗)\480)
+							level+=1
 						end
 						sfx"7"
 					end
@@ -475,6 +479,7 @@ function update_game()
 	--first in line
 	if not cur_cust and cust[1]
 	and not cant_deal then
+		deal⧗=⧗
 		cur_cust=cust[1]
 		for i=1,3 do
 			local oc=offer_counters[i]
@@ -581,20 +586,18 @@ function update_editor()
 	end
 	
 	--update cursor
-	local x1,y1,x2,y2=cur_x,cur_y,
-		cur_x+1,cur_y+1
-	local m=get_mach(lab_2_world(cur_x,cur_y))
+	local x,y,w,h=cur_x,cur_y,1,1
+	local m=get_mach(lab_2_world(x,y))
 	local mach=sel_mach or m
 	if mach then
-		x1,y1=world_2_lab(mach.x,mach.y)
-		x2,y2=x1+mach.lw,y1+mach.lh
+		x,y=world_2_lab(mach.x,mach.y)
+		w,h=mach.lw,mach.lh
 	end
-	cbox_x0=lerp(cbox_x0,cur_x,.5,.2)
-	cbox_y0=lerp(cbox_y0,cur_y,.5,.2)
-	cbox_x1=lerp(cbox_x1,x1,.5,.2)
-	cbox_y1=lerp(cbox_y1,y1,.5,.2)
-	cbox_x2=lerp(cbox_x2,x2,.5,.2)
-	cbox_y2=lerp(cbox_y2,y2,.5,.2)
+	for i=1,6 do
+		cbox[i]=lerp(cbox[i],
+			pack(cur_x,cur_y,x,y,w,h)[i],
+			.5,.2)
+	end
 	
 	if btnp(❎) and not sel_mach
 	and butt_hold==0 then
@@ -633,9 +636,9 @@ function update_editor()
 		typ=sel_mach.typ
 	
 		--update can_place
-		for x=x1,x2-1 do
-			for y=y1,y2-1 do
-				if get_mach(lab_2_world(x,y)) then
+		for _x=x,x+w-1 do
+			for _y=y,y+h-1 do
+				if get_mach(lab_2_world(_x,_y)) then
 					can_place=false
 				end
 			end
@@ -906,7 +909,7 @@ end
 function draw_editor()
 	pal()
 	
-	local cx,cy=lab_2_world(cbox_x0,cbox_y0)
+	local cx,cy=lab_2_world(unpack(cbox))
 	cam_y=mid(-16,cy-56,lab_h*16-80)
 	cam_x=mid(80,cx-60,lab_w*16-16)
 	camera(cam_x,cam_y)
@@ -937,18 +940,16 @@ function draw_editor()
 		elseif mach then
 			cur_col=12
 		end
-		local x,y,w,h=
-			cbox_x1*16,cbox_y1*16,
-			(cbox_x2-cbox_x1)*16,
-			(cbox_y2-cbox_y1)*16
-		rrectfill2(95+x,31+y,w+1,h+1,cur_col)
-		rrectfill2(96+x,32+y,w-1,h-1,1)
+		local x,y=
+			lab_2_world(unpack(cbox,3))
+		local w,h=
+			cbox[5]*16,cbox[6]*16
+		rrectfill2(x-1,y-1,w+1,h+1,cur_col)
+		rrectfill2(x,y,w-1,h-1,1)
 		rrectfill2(
-			97+cbox_x0*16,33+cbox_y0*16,
+			97+cbox[1]*16,33+cbox[2]*16,
 			13,13,13)
 	end
-	
---	map(64,0)
 	
 	--machines
 	for m in all(machines) do
@@ -959,7 +960,7 @@ function draw_editor()
 	
 	if sel_mach then
 		local x,y=
-			lab_2_world(cbox_x1,cbox_y1)
+			lab_2_world(cbox[3],cbox[4])
 		--red rect for invalid placement
 		if not can_place then
 			local w,h=sel_mach.lw*16-1,
