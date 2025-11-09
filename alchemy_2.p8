@@ -17,15 +17,12 @@ function _init()
 	
 	--palettes
 	dpal=split"0,1,5, 2,1,13,6, 2,4,9,3, 13,5,2,14"
-	lpal=split"13,14,6, 15,13,7,7, 14,15,15,6, 6,6,14,15"
-	lpal[0]=1
-	bpal=split"13,13,13,13,13,13,13,13,13,13,13,13,5,13,13"
-	bpal[0]=13
+	lpal=split0"13,14,6, 15,13,7,7, 14,15,15,6, 6,6,14,15",1
+	bpal=split0"13,13,13,13,13,13,13,13,13,13,13,13,5,13,13",13
 	fade_perc=0
 	
 	--prime numbers for hashing
-	primes=split"3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509,521,523,541,547,557,563,569,571,577,587,593,599,601,607,613,617,619,631,641,643,647,653,659,661,673,677,683,691,701,709,719"
-	primes[0]=2
+	primes=split0"3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509,521,523,541,547,557,563,569,571,577,587,593,599,601,607,613,617,619,631,641,643,647,653,659,661,673,677,683,691,701,709,719",2
 	
 	dirx,diry=split"-1,1,0,0,-1,1,-1,1",split"0,0,-1,1,-1,-1,1,1"
 	
@@ -35,8 +32,7 @@ function _init()
 	cam_x,cam_y=0,0
 	
 	--materials
-	upcharge=split"1,2,2,2,2,1.5,1.5,2,2,2,2,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,3,3,3,3,4,4,4,4,4,4,4,4"
-	upcharge[0]=1
+	upcharge=split0"1,2,2,2,2,1.5,1.5,2,2,2,2,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,3,3,3,3,4,4,4,4,4,4,4,4",1
 --	mats=split2d"0,1|0,0,1,1,2,3|0,0,1,1,2,3|0,0,1,1,2,3|0,0,1,1,2,3,4,5|0,0,1,1,2,3,4,5,6,7|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11,16,17,18,19|0,0,0,0,1,1,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,9,10,11,16,17,18,19,20,21,22,23|0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,9,9,10,10,11,11,16,16,17,17,18,18,19,19,20,20,21,21,22,22,23,23,24,25,26,27,28,29,30,31"
 	mats=split2d"0,1|0,1,2,3|0,1,2,3|0,1,2,3|0,1,2,3,4,5|0,1,2,3,4,5,6,7|0,1,2,3,4,5,6,7,8,9,10,11|0,1,2,3,4,5,6,7,8,9,10,11,16,17,18,19|0,1,2,3,4,5,6,7,8,9,10,11,16,17,18,19,20,21,22,23|0,1,2,3,4,5,6,7,8,9,10,11,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31"
 	
@@ -49,31 +45,26 @@ function _init()
 	bkg={}
 	for i=1,25 do
 		bkg[i]={
-			x=flr(rnd(16))*8,
-			y=flr(rnd(16))*8,
+			x=flr(rnd"16")*8,
+			y=flr(rnd"16")*8,
 		}
-		local dir,spd=flr(rnd(4))+1
-		bkg[i].dx=dirx[dir]
-		bkg[i].dy=diry[dir]
+		local dir,spd=flr(rnd"4")+1
+		bkg[i].dx,bkg[i].dy=dirx[dir],diry[dir]
 		
-		local len=flr(rnd(4))+2
+		local len=flr(rnd"4")+2
 		for j=1,len do
 			bkg[i][j]=rnd(mats)
 		end
 	end
 	
-	turn_cw= split"1, 3,2, 5,4, 6,7, 11,8,9,10, 15,12,13,14, 19,16,17,18, 21,20,23,22, 27,24,25,26, 31,28,29,30"
-	turn_ccw=split"1, 3,2, 5,4, 6,7, 9,10,11,8, 13,14,15,12, 17,18,19,16, 21,20,23,22, 25,26,27,24, 29,30,31,28"
-	flip_h=  split"1, 3,2, 4,5, 7,6, 8,9,11,10, 12,15,14,13, 18,17,16,19, 22,23,20,21, 28,31,30,29, 24,27,26,25"
-	flip_v=  split"1, 3,2, 4,5, 7,6, 11,10,9,8, 14,13,12,15, 16,19,18,17, 22,23,20,21, 30,29,28,31, 26,25,24,27"
-	turn_cw[0]=0
-	turn_ccw[0]=0
-	flip_h[0]=0
-	flip_v[0]=0
+	turn_cw= split0"1, 3,2, 5,4, 6,7, 11,8,9,10, 15,12,13,14, 19,16,17,18, 21,20,23,22, 27,24,25,26, 31,28,29,30"
+	turn_ccw=split0"1, 3,2, 5,4, 6,7, 9,10,11,8, 13,14,15,12, 17,18,19,16, 21,20,23,22, 25,26,27,24, 29,30,31,28"
+	flip_h=  split0"1, 3,2, 4,5, 7,6, 8,9,11,10, 12,15,14,13, 18,17,16,19, 22,23,20,21, 28,31,30,29, 24,27,26,25"
+	flip_v=  split0"1, 3,2, 4,5, 7,6, 11,10,9,8, 14,13,12,15, 16,19,18,17, 22,23,20,21, 30,29,28,31, 26,25,24,27"
 	
-	mach_data=split2d("h cut,1,2,50,separates the top\nand bottom halves\nof a formula.,0,true,3,1,24,64,3,24,7,12,7,10,7,14|v join,1,2,50,joins two formulas\nvertically.,0,true,4,2,42,64,3,24,7,12,7,10,7,14|v cut,2,1,50,separates the left\nand right halves\nof a formula.,0,true,5,3,33,64,11,8,15,4,13,4,17,4|h join,2,1,50,joins two formulas\nhorizontally.,0,true,6,4,51,64,11,8,15,4,13,4,17,4|cw turn,1,1,40,rotates a formula \n90 degrees\nclockwise.,0,true,2,5,33,71,3,8,0,10,0,0,0,0|ccw turn,1,1,40,rotates a formula \n90 degrees\ncounterclockwise.,0,true,2,6,24,71,3,8,0,10,0,0,0,0|h flip,1,1,40,reflects a formula\nover the y-axis.,0,true,2,7,51,71,3,8,0,10,0,0,0,0|v flip,1,1,40,reflects a formula\nover the x-axis.,0,true,2,8,42,71,3,8,0,10,0,0,0,0|treadmill,1,1,30,supplies energy to\nan adjacent dynamo.,1,false,1,0,0,0,0,0,0,0,0,0,0,0|dynamo,1,1,30,generates power\nwhen running on an\nadjacent treadmill.,1,false,1,0,0,0,0,0,0,0,0,0,0,0|storage,2,2,40,a place to store\nyour potions.,0,true,1,0,0,0,0,0,0,0,0,0,0,0|battery,1,1,30,stores unused power.,0,false,1,0,60,71,4,6,0,0,0,0,0,0|nest,1,1,30,chicken included.,0,false,1,0,0,0,0,0,0,0,0,0,0,0|trash,1,1,10,safely disposes of\nunneeded potions.,1,true,2,9,60,64,3,8,1,10,0,0,0,0|bed,1,2,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0|counter,1,1,0,,3,true,1,0,0,0,0,0,0,0,0,0,0,0|register,1,1,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0|editor,1,1,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0")
-	mach_sprs=split2d("128,129,144,145,160,161,176,177|128,129,144,145,160,161,176,177|128,130,160,129,176,146,146,177|128,130,160,129,176,146,146,177|128,129,176,177|128,129,176,177|128,129,176,177|128,129,176,177|192,193,208,209|224,225,240,241|128,130,160,129,144,144,144,145,160,130,160,161,176,146,146,177|171,172,187,188|204,205,220,221|139,140,155,156|95,95,95,95,169,170,185,186|165,161,163,145|228,229,244,245|230,231,246,247")
-	blup_sprs=split2d("141,143,157,159,157,159,173,175|141,143,157,159,157,159,173,175|141,142,142,143,173,174,174,175|141,142,142,143,173,174,174,175|141,143,173,175|141,143,173,175|141,143,173,175|141,143,173,175|109,111,125,127|91,92,125,127|141,142,142,143,157,158,158,159,157,158,158,159,173,174,174,175|167,168,183,184|107,108,123,124|141,143,173,175|93,94,157,159,157,159,125,127|157,159,157,159|157,159,157,159|141,143,173,175")
+	mach_data=split2d"h cut,1,2,50,separates the top\nand bottom halves\nof a formula.,0,true,3,1,24,64,3,24,7,12,7,10,7,14|v join,1,2,50,joins two formulas\nvertically.,0,true,4,2,42,64,3,24,7,12,7,10,7,14|v cut,2,1,50,separates the left\nand right halves\nof a formula.,0,true,5,3,33,64,11,8,15,4,13,4,17,4|h join,2,1,50,joins two formulas\nhorizontally.,0,true,6,4,51,64,11,8,15,4,13,4,17,4|cw turn,1,1,40,rotates a formula \n90 degrees\nclockwise.,0,true,2,5,33,71,3,8,0,10,0,0,0,0|ccw turn,1,1,40,rotates a formula \n90 degrees\ncounterclockwise.,0,true,2,6,24,71,3,8,0,10,0,0,0,0|h flip,1,1,40,reflects a formula\nover the y-axis.,0,true,2,7,51,71,3,8,0,10,0,0,0,0|v flip,1,1,40,reflects a formula\nover the x-axis.,0,true,2,8,42,71,3,8,0,10,0,0,0,0|treadmill,1,1,30,supplies energy to\nan adjacent dynamo.,1,false,1,0,0,0,0,0,0,0,0,0,0,0|dynamo,1,1,30,generates power\nwhen running on an\nadjacent treadmill.,1,false,1,0,0,0,0,0,0,0,0,0,0,0|storage,2,2,40,a place to store\nyour potions.,0,true,1,0,0,0,0,0,0,0,0,0,0,0|battery,1,1,30,stores unused power.,0,false,1,0,60,71,4,6,0,0,0,0,0,0|nest,1,1,30,chicken included.,0,false,1,0,0,0,0,0,0,0,0,0,0,0|trash,1,1,10,safely disposes of\nunneeded potions.,1,true,2,9,60,64,3,8,1,10,0,0,0,0|bed,1,2,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0|counter,1,1,0,,3,true,1,0,0,0,0,0,0,0,0,0,0,0|register,1,1,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0|editor,1,1,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0"
+	mach_sprs=split2d"128,129,144,145,160,161,176,177|128,129,144,145,160,161,176,177|128,130,160,129,176,146,146,177|128,130,160,129,176,146,146,177|128,129,176,177|128,129,176,177|128,129,176,177|128,129,176,177|192,193,208,209|224,225,240,241|128,130,160,129,144,144,144,145,160,130,160,161,176,146,146,177|171,172,187,188|204,205,220,221|139,140,155,156|95,95,95,95,169,170,185,186|165,161,163,145|228,229,244,245|230,231,246,247"
+	blup_sprs=split2d"141,143,157,159,157,159,173,175|141,143,157,159,157,159,173,175|141,142,142,143,173,174,174,175|141,142,142,143,173,174,174,175|141,143,173,175|141,143,173,175|141,143,173,175|141,143,173,175|109,111,125,127|91,92,125,127|141,142,142,143,157,158,158,159,157,158,158,159,173,174,174,175|167,168,183,184|107,108,123,124|141,143,173,175|93,94,157,159,157,159,125,127|157,159,157,159|157,159,157,159|141,143,173,175"
 	
 	conditions={
 		--1 no function
@@ -270,7 +261,7 @@ function update_game()
 		웃.frame+=.4
 		웃.frame%=2
 		웃.flp=(dx<=0)
-		sfx_no_overlap(0)
+		sfx_no_overlap"0"
 	else
 		웃.frame=0
 	end
@@ -286,16 +277,16 @@ function update_game()
 	--buttons
 	stand_mach_name=stand_mach and stand_mach.name
 	if stand_mach_name=="treadmill" then
-		if btn(❎) and not btn(🅾️)
+		if btn"5" and not btn"4"
 		and stand_mach.frame%2==0 then
 			do_treadmill(stand_mach)
 		end
-		if btn(🅾️) and not btn(❎)
+		if btn"4" and not btn"5"
 		and stand_mach.frame%2==1 then
 			do_treadmill(stand_mach)
 		end
 	elseif stand_mach_name=="bed" then
-		if btn(❎) then
+		if btn"5" then
 			butt_hold+=1
 		else
 			butt_hold=0
@@ -305,7 +296,7 @@ function update_game()
 			show_dia(sleep_dia)
 		end
 	elseif stand_mach_name=="editor" then
-		if btnp(❎) then
+		if btnp"5" then
 			_upd=update_editor
 			_drw=draw_editor
 			butt_hold=1
@@ -315,11 +306,11 @@ function update_game()
 	
 		--machine interactions
 		if face_mach then
-			if btnp(🅾️) then
+			if btnp"4" then
 				swap_pots(act_x,act_y)
 			end
 		
-			if btnp(❎) then
+			if btnp"5" then
 				if face_mach.name=="register" then
 					if tme<=540 then
 						open=true
@@ -368,7 +359,7 @@ function update_game()
 		if m.name=="dynamo" then
 			if power>0 then
 				m.glow=1
-				sfx_no_overlap(1)
+				sfx_no_overlap"1"
 			else
 				m.glow=max(m.glow-.05,0)
 			end
@@ -421,7 +412,7 @@ function update_game()
 	local cust_time=del(cust_times,tme)
 	if cust_time then
 		add(cust,
-			new_char(64+rnd(8),-16))
+			new_char(64+rnd"8",-16))
 		sfx"5"
 	end
 	
@@ -560,14 +551,14 @@ function update_editor()
 			.5,.2)
 	end
 	
-	if btnp(❎) and not sel_mach
+	if btnp"5" and not sel_mach
 	and butt_hold==0 then
 		웃.x,웃.y=editor.x+4,editor.y
 		_upd=update_game
 		_drw=draw_game
 	end
 	
-	if btnp(🅾️) then
+	if btnp"4" then
 		if can_place and sel_mach then
 			--place machine
 			add(machines,sel_mach)
@@ -610,7 +601,7 @@ function update_editor()
 			and mach_count[typ]>mach.min_count
 	end
 		
-	if btn(❎) then
+	if btn"5" then
 		if butt_hold>20
 		and can_sell then
 			--sell machine
@@ -635,14 +626,17 @@ function update_editor()
 	toptext,🅾️text,❎text="\14\fdnone",
 		"","\f7❎ exit editor"
 	if cur_x==lab_w then
-		toptext="\14\f7expand lab"
-		🅾️text="\f7🅾️ expand for \14$"..5*lab_h
+		toptext,🅾️text=
+			"\14\f7expand lab",
+			"\f7🅾️ expand for \14$"..5*lab_h
 	elseif cur_y==lab_h then
-		toptext="\14\f7expand lab"
-		🅾️text="\f7🅾️ expand for \14$"..5*lab_w
+		toptext,🅾️text=
+			"\14\f7expand lab",
+			"\f7🅾️ expand for \14$"..5*lab_w
 	elseif cur_y==-1 then
-		toptext="\14\f7machine shop"
-		🅾️text="\f7🅾️ open shop"
+		toptext,🅾️text=
+			"\14\f7machine shop",
+			"\f7🅾️ open shop"
 	elseif sel_mach then
 		if can_place then
 			🅾️text="\f7🅾️ place"
@@ -650,7 +644,6 @@ function update_editor()
 			🅾️text="\f8invalid placement"
 		end
 		if can_sell then
---				❎text="❎ hold to sell for $"..mach_data[sel_mach.typ][4]
 			❎text="\f7❎ hold to sell"
 		elseif is_empty(sel_mach) then
 			❎text="\fdneed at least "..sel_mach.min_count
@@ -672,13 +665,13 @@ function update_shop()
 	--slide the dialog box down
 	dia_y=lerp(dia_y,128,.4,1)
 	
-	if btnp(❎) then
+	if btnp"5" then
 		_upd=update_editor
 		_drw=draw_editor
 	end
 	
 	local price=mach_data[sel][4]
-	if btnp(🅾️)
+	if btnp"4"
 	and level>=mach_unlock[sel]
 	and money>=price then
 		money-=price
@@ -690,12 +683,12 @@ function update_shop()
 		_drw=draw_editor
 	end
 	
-	if btnp(⬅️) and sel>1 then
+	if btnp"0" and sel>1 then
 		sel-=1
 		if sel<shop_size-4 and sel>4 then
 			hslide=-1
 		end
-	elseif btnp(➡️) and sel<shop_size then
+	elseif btnp"1" and sel<shop_size then
 		sel+=1
 		if sel<shop_size-3 and sel>5 then
 			hslide=1
@@ -730,7 +723,7 @@ function update_money()
 	local prev=show_money
 	show_money=lerp(show_money,
 		money,.1,.2)
-	if (flr(prev%10)!=flr(show_money%10)) sfx(6)
+	if (flr(prev%10)!=flr(show_money%10)) sfx"6"
 end
 
 function draw_game()
@@ -1058,7 +1051,7 @@ function start_day()
 	cust_times={}
 	for i=1,16 do
 		add(cust_times,
-			flr(540+rnd(480)))
+			flr(540+rnd"480"))
 	end
 end
 
@@ -1142,8 +1135,8 @@ function new_char(x,y)
 		split"1,2,3,4,5,8,9,10,11,12,13,14,15"
 	
 	local p=new_sprite(x,y,6,6,1,10)
-	p.head=flr(rnd(8))
-	p.body=flr(rnd(8))
+	p.head=flr(rnd"8")
+	p.body=flr(rnd"8")
 	p.frame=0
 	p.face=0
 	
@@ -1215,7 +1208,7 @@ function update_bird(b)
 			b.x=flr(b.x-b.dx)
 			b.y=flr(b.y-b.dy)
 			b.state="wait"
-			b.⧗=⧗+rnd(60)+30
+			b.⧗=⧗+rnd"60"+30
 		end
 	elseif b.state=="wait" then
 		b.frame=0
@@ -1226,7 +1219,7 @@ function update_bird(b)
 			b.ty=rnd(lab_h*16)+32
 			b.dx,b.dy=normalize(
 				b.tx-b.x,b.ty-b.y)
-			if (spooked) sfx_no_overlap(9)
+			if (spooked) sfx_no_overlap"9"
 		end
 	end
 end
@@ -1234,8 +1227,7 @@ end
 --sets a machine's hitbox
 --to its lower half
 function half_box(m)
-	m.h=8
-	m.oy=8	
+	m.h,m.oy=8,8
 end
 
 --returns a machine that is
@@ -1452,12 +1444,12 @@ function split2d(s)
 end
 
 function sfx_no_overlap(s)
-	if stat(46)!=s
-	and stat(47)!=s
-	and stat(48)!=s
-	and stat(49)!=s then
-		sfx(s)
+	for i=46,49 do
+		if stat(i)==tonum(s) then
+			return
+		end
 	end
+	sfx(s)
 end
 
 function toggle_music()
@@ -1472,7 +1464,7 @@ function key_prompt(text,freq)
 	--with a space
 	local ❎_text,🅾️_text="",""
 	for i=1,#text do
-		local char=sub(text,i,i)
+		local char=text[i]
 		if char=="❎" then
 			❎_text..="❎"
 			🅾️_text..="  "
@@ -1543,6 +1535,12 @@ function fill_tiles(x,y,w,h,tile,bp)
 		end
 	end
 end
+
+function split0(s,val)
+	t=split(s)
+	t[0]=val or 0
+	return t
+end
 -->8
 --potions
 
@@ -1558,12 +1556,10 @@ function rand_pot(mats,sizes)
 		br=rnd(mats),
 	}
 	if pot.w==1 then
-		pot.tr=nil
-		pot.br=nil
+		pot.tr,pot.br=nil
 	end
 	if pot.h==1 then
-		pot.bl=nil
-		pot.br=nil
+		pot.bl,pot.br=nil
 	end
 	
 	return pot
@@ -1782,7 +1778,7 @@ function rand_offer(lvl,buy)
 	local pot=rand_pot(mats[lvl],
 		buy and output_sizes[lvl] or
 		input_sizes[lvl])
-	local price,r=0,rnd(3)+1
+	local price,r=0,rnd"3"+1
 	--buy/sell from the
 	--customer's perspective
 		price+=material_price(r,buy,pot.tl)
@@ -1915,14 +1911,12 @@ function swap_pots(x,y)
 		and money>=price then
 			money-=price
 			m.trade=not m.trade
-			--sfx(5)
 			
 		--player sells a potion
 		elseif not pot
 		and pots_match(hold,m.offer_pot) then
 			money+=price
 			m.trade=not m.trade
-			--sfx(5)
 		else
 			return
 		end
@@ -2074,10 +2068,9 @@ function is_empty(m)
 end
 
 function draw_new_mach(x,y)
-	local anim=split"189,189,189,189,189,189,189,189,189,189,189,189,190,190,190,190,189,191,189"
-	anim[0]=189
-	local yoff=split"0,0,0,0,0,0,0,0,0,0,0,0,-1,-3,-3,-1,0,0,0"
-	yoff[0]=0
+	local anim,yoff=
+		split0("189,189,189,189,189,189,189,189,189,189,189,189,190,190,190,190,189,191,189",189),
+		split0"0,0,0,0,0,0,0,0,0,0,0,0,-1,-3,-3,-1,0,0,0"
 	local f=⧗%(2*#anim)\2
 	spr(anim[f],x,y+yoff[f])
 end
@@ -2102,14 +2095,14 @@ function update_dia()
 	local choices=dia_actions[cur_dia]
 	
 	if choices then
-		if btnp(⬅️) then
+		if btnp"0" then
 			sel=max(sel-1,1)
-		elseif btnp(➡️) then
+		elseif btnp"1" then
 			sel=min(sel+1,#choices)
 		end
 	end
 
-	if btnp(🅾️) then
+	if btnp"4" then
 		if dia_char<#dia_table[cur_dia] then
 			dia_char=#dia_table[cur_dia]
 		elseif choices then
@@ -2160,7 +2153,7 @@ function update_title()
 	
 	dia_y=lerp(dia_y,128,.4,1)
 	
-	if btnp(🅾️) then
+	if btnp"4" then
 		_upd=update_game
 		_drw=draw_game
 		start_day()
@@ -2174,14 +2167,14 @@ function update_title()
 		if ln.x>128+#ln*8
 		or ln.x<-8-#ln*8 then
 			ln.x-=(128+#ln*8)*ln.dx
-			ln.y=flr(rnd(16))*8
+			ln.y=flr(rnd"16")*8
 		end
 		
 		ln.y+=ln.dy
 		if ln.y>128+#ln*8
 		or ln.y<-8-#ln*8 then
 			ln.y-=(128+#ln*8)*ln.dy
-			ln.x=flr(rnd(16))*8
+			ln.x=flr(rnd"16")*8
 		end
 	end
 end
