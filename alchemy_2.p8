@@ -36,7 +36,7 @@ function _init()
 	--levels
 	input_sizes= split2d"1,1|1,1     |2,1, 1,2|2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2"
 	output_sizes=split2d"2,1|2,1, 1,2|1,1     |1,1     |1,1, 2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2"
-	mach_unlock=split"3,10,10,1,2,8,6,9,7,7,4,7,5,1"
+	mach_unlock=split"1,10,10,3,2,8,6,9,7,7,4,7,5,1"
 
 	--title screen background
 	bkg={}
@@ -59,9 +59,9 @@ function _init()
 	flip_h=  split0"1, 3,2, 4,5, 7,6, 8,9,11,10, 12,15,14,13, 18,17,16,19, 22,23,20,21, 28,31,30,29, 24,27,26,25"
 	flip_v=  split0"1, 3,2, 4,5, 7,6, 11,10,9,8, 14,13,12,15, 16,19,18,17, 22,23,20,21, 30,29,28,31, 26,25,24,27"
 	
-	mach_data=split2d"h cut,1,2,50,separates the top\nand bottom halves\nof a formula.,0,true,3,1,24,64,3,24,7,12,7,10,7,14|v join,1,2,50,joins two formulas\nvertically.,0,true,4,2,42,64,3,24,7,12,7,10,7,14|v cut,2,1,50,separates the left\nand right halves\nof a formula.,0,true,5,3,33,64,11,8,15,4,13,4,17,4|h join,2,1,50,joins two formulas\nhorizontally.,0,true,6,4,51,64,11,8,15,4,13,4,17,4|cw turn,1,1,40,rotates a formula \n90 degrees\nclockwise.,0,true,2,5,33,71,3,8,0,10,0,0,0,0|ccw turn,1,1,40,rotates a formula \n90 degrees\ncounterclockwise.,0,true,2,6,24,71,3,8,0,10,0,0,0,0|h flip,1,1,40,reflects a formula\nover the y-axis.,0,true,2,7,51,71,3,8,0,10,0,0,0,0|v flip,1,1,40,reflects a formula\nover the x-axis.,0,true,2,8,42,71,3,8,0,10,0,0,0,0|treadmill,1,1,30,supplies energy to\nan adjacent dynamo.,1,false,1,0,0,0,0,0,0,0,0,0,0,0|dynamo,1,1,30,generates power\nwhen running on an\nadjacent treadmill.,1,false,1,0,0,0,0,0,0,0,0,0,0,0|storage,2,2,40,a place to store\nyour potions.,0,true,1,0,0,0,0,0,0,0,0,0,0,0|battery,1,1,30,stores unused power.,0,false,1,0,60,71,4,6,0,0,0,0,0,0|nest,1,1,30,chicken included.,0,false,1,0,0,0,0,0,0,0,0,0,0,0|trash,1,1,10,safely disposes of\nunneeded potions.,1,true,2,9,60,64,3,8,1,10,0,0,0,0|bed,1,2,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0|counter,1,1,0,,3,true,1,0,0,0,0,0,0,0,0,0,0,0|register,1,1,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0|editor,1,1,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0"
-	mach_sprs=split2d"128,129,144,145,160,161,176,177|128,129,144,145,160,161,176,177|128,130,160,129,176,146,146,177|128,130,160,129,176,146,146,177|128,129,176,177|128,129,176,177|128,129,176,177|128,129,176,177|192,193,208,209|224,225,240,241|128,130,160,129,144,144,144,145,160,130,160,161,176,146,146,177|171,172,187,188|204,205,220,221|139,140,155,156|95,95,95,95,169,170,185,186|165,161,163,145|228,229,244,245|230,231,246,247"
-	blup_sprs=split2d"141,143,157,159,157,159,173,175|141,143,157,159,157,159,173,175|141,142,142,143,173,174,174,175|141,142,142,143,173,174,174,175|141,143,173,175|141,143,173,175|141,143,173,175|141,143,173,175|109,111,125,127|91,92,125,127|141,142,142,143,157,158,158,159,157,158,158,159,173,174,174,175|167,168,183,184|107,108,123,124|141,143,173,175|93,94,157,159,157,159,125,127|157,159,157,159|157,159,157,159|141,143,173,175"
+	mach_data=split2d"h join,2,1,50,joins two formulas\nhorizontally.,0,true,6,4,51,64,11,8,15,4,13,4,17,4|v join,1,2,50,joins two formulas\nvertically.,0,true,4,2,42,64,3,24,7,12,7,10,7,14|v cut,2,1,50,separates the left\nand right halves\nof a formula.,0,true,5,3,33,64,11,8,15,4,13,4,17,4|h cut,1,2,50,separates the top\nand bottom halves\nof a formula.,0,true,3,1,24,64,3,24,7,12,7,10,7,14|cw turn,1,1,40,rotates a formula \n90 degrees\nclockwise.,0,true,2,5,33,71,3,8,0,10,0,0,0,0|ccw turn,1,1,40,rotates a formula \n90 degrees\ncounterclockwise.,0,true,2,6,24,71,3,8,0,10,0,0,0,0|h flip,1,1,40,reflects a formula\nover the y-axis.,0,true,2,7,51,71,3,8,0,10,0,0,0,0|v flip,1,1,40,reflects a formula\nover the x-axis.,0,true,2,8,42,71,3,8,0,10,0,0,0,0|treadmill,1,1,30,supplies energy to\nan adjacent dynamo.,1,false,1,0,0,0,0,0,0,0,0,0,0,0|dynamo,1,1,30,generates power\nwhen running on an\nadjacent treadmill.,1,false,1,0,0,0,0,0,0,0,0,0,0,0|storage,2,2,40,a place to store\nyour potions.,0,true,1,0,0,0,0,0,0,0,0,0,0,0|battery,1,1,30,stores unused power.,0,false,1,0,60,71,4,6,0,0,0,0,0,0|nest,1,1,30,chicken included.,0,false,1,0,0,0,0,0,0,0,0,0,0,0|trash,1,1,10,safely disposes of\nunneeded potions.,1,true,2,9,60,64,3,8,1,10,0,0,0,0|bed,1,2,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0|counter,1,1,0,,3,true,1,0,0,0,0,0,0,0,0,0,0,0|register,1,1,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0|editor,1,1,0,,1,false,1,0,0,0,0,0,0,0,0,0,0,0"
+	mach_sprs=split2d"128,130,160,129,176,146,146,177|128,129,144,145,160,161,176,177|128,130,160,129,176,146,146,177|128,129,144,145,160,161,176,177|128,129,176,177|128,129,176,177|128,129,176,177|128,129,176,177|192,193,208,209|224,225,240,241|128,130,160,129,144,144,144,145,160,130,160,161,176,146,146,177|171,172,187,188|204,205,220,221|139,140,155,156| 95, 95, 95, 95,169,170,185,186|165,161,163,145|228,229,244,245|230,231,246,247"
+	blup_sprs=split2d"141,142,142,143,173,174,174,175|141,143,157,159,157,159,173,175|141,142,142,143,173,174,174,175|141,143,157,159,157,159,173,175|141,143,173,175|141,143,173,175|141,143,173,175|141,143,173,175|109,111,125,127|91,92,125,127|141,142,142,143,157,158,158,159,157,158,158,159,173,174,174,175|167,168,183,184|107,108,123,124|141,143,173,175|93,94,157,159,157,159,125,127|157,159,157,159|157,159,157,159|141,143,173,175"
 	
 	conditions={
 		--1 no function
@@ -104,9 +104,13 @@ function _init()
 	setup()
 	if not data_found then
 		save_game()
-		poke(0x5e10,unpack(split"4,0, 255,255,255,255, 255,255,255,255, 15,48, 18,32, 9,51, 10,52, 14,36, 255,255,255,255"))
+		poke(0x5e10,unpack(split"1,0, 255,255,255,255, 255,255,255,255, 15,48, 18,32, 9,51, 10,52, 14,36, 255,255,255,255"))
 	end
 	load_game()
+	for i=1,#mach_unlock do
+		mach_seen[i]=
+			level>=mach_unlock[i]
+	end
 	
 	웃=new_char(bed.x+4,bed.y+6)
 	웃.draw=draw_char
@@ -1055,7 +1059,7 @@ end
 function clear_save()
 	setup()
 	save_game()
-	poke(0x5e10,unpack(split"4,0, 255,255,255,255, 255,255,255,255, 15,48, 18,32, 9,51, 10,52, 14,36, 255,255,255,255, 13,20,"))
+	poke(0x5e10,unpack(split"1,0, 255,255,255,255, 255,255,255,255, 15,48, 18,32, 9,51, 10,52, 14,36, 255,255,255,255, 13,20,"))
 	load_game()
 end
 
@@ -1089,10 +1093,6 @@ function setup()
 	birds={}
 	
 	mach_seen={}
-	for i=1,#mach_unlock do
-		mach_seen[i]=
-			level>=mach_unlock[i]
-	end
 	mach_count={}
 	for i=1,#mach_data do
 		mach_count[i]=0
