@@ -36,7 +36,7 @@ function _init()
 	--levels
 	input_sizes= split2d"1,1|1,1|1,1|2,1, 1,2|2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2"
 	output_sizes=split2d"2,1|2,1|1,2|1,1     |1,1     |1,1, 2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2"
-	buy_sell=				split2d"b,s,s|b,s,s|b,s,s|b,b,s|b,b,s|b,r,s|b,r,s|b,r,s|b,r,s|b,r,s"
+	buy_sell=				split2d"b,s,s|b,s,s|b,s,s|b,b,s|b,b,s|b,b,s|b,b,s|b,b,s|b,b,s|b,b,s"
 	mach_unlock=split"1,11,11,4,2,9,7,10,8,8,5,8,6,1"
 
 	--title screen background
@@ -437,8 +437,7 @@ function update_game()
 		cur_cust.level=lvl
 		for i=1,3 do
 			local oc=offer_counters[i]
-			local bs=buy_sell[lvl][i]
-			local buy=bs=="b" or bs=="r" and rnd"1">.5
+			local buy=buy_sell[lvl][i]=="b"
 			local pot,price=
 				rand_offer(lvl,buy)
 			--buy/sell from the 
