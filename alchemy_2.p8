@@ -34,9 +34,10 @@ function _init()
 	mats=split2d"0,1|0,1,2,3|0,1,2,3|0,1,2,3|0,1,2,3,4,5|0,1,2,3,4,5,6,7|0,1,2,3,4,5,6,7,8,9,10,11|0,1,2,3,4,5,6,7,8,9,10,11,16,17,18,19|0,1,2,3,4,5,6,7,8,9,10,11,16,17,18,19,20,21,22,23|0,1,2,3,4,5,6,7,8,9,10,11,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31"
 	
 	--levels
-	input_sizes= split2d"1,1|1,1     |2,1, 1,2|2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2"
-	output_sizes=split2d"2,1|2,1, 1,2|1,1     |1,1     |1,1, 2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2"
-	mach_unlock=split"1,10,10,3,2,8,6,9,7,7,4,7,5,1"
+	input_sizes= split2d"1,1|1,1|1,1|2,1, 1,2|2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2"
+	output_sizes=split2d"2,1|2,1|1,2|1,1     |1,1     |1,1, 2,1, 1,2|1,1, 2,1, 1,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2|1,1, 2,1, 1,2, 2,2"
+	buy_sell=				split2d"b,s,s|b,s,s|b,s,s|b,b,s|b,b,s|b,r,s|b,r,s|b,r,s|b,r,s|b,r,s"
+	mach_unlock=split"1,11,11,4,2,9,7,10,8,8,5,8,6,1"
 
 	--title screen background
 	bkg={}
@@ -436,7 +437,8 @@ function update_game()
 		cur_cust.level=lvl
 		for i=1,3 do
 			local oc=offer_counters[i]
-			local buy=i==1 or i==2 and lvl>=3
+			local bs=buy_sell[lvl][i]
+			local buy=bs=="b" or bs=="r" and rnd"1">.5
 			local pot,price=
 				rand_offer(lvl,buy)
 			--buy/sell from the 
@@ -697,7 +699,8 @@ function update_shop()
 	end
 	
 	--mark mach as seen
-	mach_seen[sel]=mach_unlock[sel]
+	mach_seen[sel]=
+		level>mach_unlock[sel]
 	
 	update_time()
 	update_money()
