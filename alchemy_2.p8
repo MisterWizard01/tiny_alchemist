@@ -279,12 +279,8 @@ function update_game()
 	--buttons
 	stand_mach_name=stand_mach and stand_mach.name
 	if stand_mach_name=="treadmill" then
-		if btn"5" and not btn"4"
-		and stand_mach.frame%2==0 then
-			do_treadmill(stand_mach)
-		end
-		if btn"4" and not btn"5"
-		and stand_mach.frame%2==1 then
+		if btn()/(stand_mach
+		.frame%2+1)==16 then
 			do_treadmill(stand_mach)
 		end
 	elseif stand_mach_name=="bed" then
@@ -1079,7 +1075,6 @@ function setup()
 	level=1
 	tme=540
 	open=false
-	tread_butt="❎"
 	power=0
 	capacity=0
 	charge=0
@@ -1221,10 +1216,13 @@ function update_bird(b)
 		local spooked=collision(웃,b)
 		if ⧗>=b.⧗ or spooked then
 			b.state="wander"
-			b.tx=rnd(lab_w*16)+96
-			b.ty=rnd(lab_h*16)+32
-			b.dx,b.dy=normalize(
-				b.tx-b.x,b.ty-b.y)
+			b.tx=rnd(lab_w*16)+88
+			b.ty=rnd(lab_h*16)+24
+			b.dx,b.dy=b.tx-b.x,b.ty-b.y
+			--normalize
+			local len=sqrt(b.dx^2+b.dy^2)
+			b.dx/=len
+			b.dy/=len
 			if spooked then
 				sfx_no_overlap"9"
 				if rnd"1"<.1 
@@ -1257,13 +1255,13 @@ end
 --tools
 
 --★
-function normalize(x,y)
-	local len=sqrt(x*x+y*y)
-	if len>0 then
-		return x/len,y/len
-	end
-	return x,y
-end
+--function normalize(x,y)
+--	local len=sqrt(x*x+y*y)
+--	if len>0 then
+--		return x/len,y/len
+--	end
+--	return x,y
+--end
 
 function rectfill2(x,y,w,h,c)
 	if w>=1 and h>=1 then
@@ -1289,16 +1287,19 @@ end
 --	end
 --end
 
---★
 function collision(a,b)
 	local a⬅️,a➡️,a⬆️,a⬇️,
-							b⬅️,b➡️,b⬆️,b⬇️=
-							a.x+a.ox,a.x+a.ox+a.w,
-							a.y+a.oy,a.y+a.oy+a.h,
-							b.x+b.ox,b.x+b.ox+b.w,
-							b.y+b.oy,b.y+b.oy+b.h
-	return not (a➡️<=b⬅️ or a⬅️>=b➡️
-	or a⬇️<=b⬆️ or a⬆️>=b⬇️)
+							b⬅️,b➡️,b⬆️,b⬇️,
+							ox_dif,oy_dif=
+							a.x,a.x+a.w,
+							a.y,a.y+a.h,
+							b.x,b.x+b.w,
+							b.y,b.y+b.h,
+							b.ox-a.ox,b.oy-a.oy
+	return not (a➡️<=b⬅️+ox_dif
+										or a⬅️>=b➡️+ox_dif
+										or a⬇️<=b⬆️+oy_dif
+										or a⬆️>=b⬇️+oy_dif)
 end
 
 --only checks the corners of the sprite
@@ -1319,7 +1320,6 @@ end
 --end
 
 function rrectfill2(x,y,w,h,c)
---	x2,y2=x+w-1,y+h-1
 	rectfill2(x,  y+1,w  ,h-2,c)
 	rectfill2(x+1,y,  w-2,h  ,c)
 end
@@ -1347,7 +1347,6 @@ function measure(s)
 	return print(s,0,1000)
 end
 
---★
 function oprint(t,x,y,c,oc)
 	for i=1,8 do
 		print(t,x+dirx[i],y+diry[i],oc)
@@ -1407,9 +1406,9 @@ function world_2_lab(x,y)
 	return x\16-6,y\16-2
 end
 
-function sign(n)
-	return n==0 and 0 or sgn(n)
-end
+--function sign(n)
+--	return n==0 and 0 or sgn(n)
+--end
 
 --fades what's already drawn
 function do_fade()
@@ -1505,7 +1504,9 @@ end
 function lerp(val,targ,perc,min_add)
 	local dif=abs(targ-val)
 	local delta=mid(dif,dif*perc,min_add)
-	return val+delta*sign(targ-val)
+	local sign=targ-val
+	sign=sign==0 and sign or sgn(sign) 
+	return val+delta*sign
 end
 
 function fill_invalid_tiles()
@@ -1554,6 +1555,11 @@ function split0(s,val)
 	t=split(s)
 	t[0]=val or 0
 	return t
+end
+
+function move(s)
+	s.x+=s.dx
+	s.y+=s.dy
 end
 -->8
 --potions
