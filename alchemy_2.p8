@@ -335,7 +335,8 @@ function update_game()
 								cur_cust.level)
 						end
 						sfx"7"
-						del(cust,cur_cust)
+						add(cust,del(cust_line,
+							cur_cust))
 						cur_cust=nil
 					end
 				end
@@ -391,31 +392,37 @@ function update_game()
 	power=0
 	
 	--update customers
-	--★
-	if cur_cust then
-	 if cur_cust.y<64 then
-			cur_cust.y+=1
-			cur_cust.frame=(cur_cust.frame+.2)%2
-		else
-			cur_cust.frame=0
-		end
-	end
-	for i=2,#cust do
-		local c=cust[i]
-		if c.y<cust[i-1].y-8 then
+	for i=1,#cust_line do
+		local c=cust_line[i]
+		add(lab_sprs,c)
+		if c.y<72-i*8 then
 			c.y+=1
 			c.frame=(c.frame+.2)%2
 		else
 			c.frame=0
 		end
 	end
+	for c in all(cust) do
+		add(lab_sprs,c)
+		c.y+=1
+		c.frame=(c.frame+.2)%2
+		if c.y>300 then
+			del(cust,c)
+		end
+	end
 	
 	--create new customers
 	local cust_time=del(cust_times,tme)
 	if cust_time then
-		add(cust,
-			new_char(64+rnd"8",-16))
-		sfx"5"
+		local c=new_char(
+			66+rnd"8",-16)
+		if rnd"9">(#cust_line+1) then
+			add(cust_line,c)
+			sfx"5"
+		else
+			add(cust,c)
+			c.x-=8
+		end
 	end
 	
 	--check if counters are empty
@@ -428,10 +435,10 @@ function update_game()
 	
 	--initiate deal with the
 	--first in line
-	if not cur_cust and cust[1]
+	if not cur_cust and cust_line[1]
 	and not cant_deal then
 		deal⧗=⧗
-		cur_cust=cust[1]
+		cur_cust=cust_line[1]
 		local lvl=min(#input_sizes,
 			flr(rnd(level-1)+1))
 		cur_cust.level=lvl
@@ -717,6 +724,9 @@ function update_time()
 		if tme>=1020 then
 			open=false
 			sfx"12"
+			for c in all(cust_line) do
+				add(cust,del(cust_line,c))
+			end
 		end
 	end
 end
@@ -754,13 +764,6 @@ function draw_game()
 --		"\014closed",82,18,1)
 	
 	palt()
-	
-	--customers
-	if cust[1] then
-		for i=#cust,1,-1 do
-			draw_char(cust[i])
-		end
-	end
 	
 	--bed headboard
 	spr(137,bed.x,bed.y,2,3)
@@ -1051,8 +1054,9 @@ function start_day()
 	--9:00 and 17:00
 	tme=540 --9:00
 	cust={}
+	cust_line={}
 	cust_times={}
-	for i=1,16 do
+	for i=1,24 do
 		add(cust_times,
 			flr(540+rnd"480"))
 	end
@@ -1153,7 +1157,9 @@ function new_char(x,y)
 	del(pants_cols,p.coat)
 	
 	p.pants=rnd(pants_cols)
-
+	
+	p.draw=draw_char
+	
 	return p
 end
 
