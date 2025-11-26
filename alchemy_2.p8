@@ -260,8 +260,7 @@ function update_game()
 	
 	--animate 웃
 	if dx!=0 or dy!=0 then
-		웃.frame+=.4
-		웃.frame%=2
+		animate(웃,.4,2)
 		웃.flp=(dx<=0)
 		sfx_no_overlap"0"
 	else
@@ -393,7 +392,7 @@ function update_game()
 		add(lab_sprs,c)
 		if c.y<72-i*8 then
 			c.y+=1
-			c.frame=(c.frame+.2)%2
+			animate(c,.2,2)
 		else
 			c.frame=0
 		end
@@ -401,7 +400,7 @@ function update_game()
 	for c in all(cust) do
 		add(lab_sprs,c)
 		c.y+=1
-		c.frame=(c.frame+.2)%2
+		animate(c,.2,2)
 		if c.y>300 then
 			del(cust,c)
 		end
@@ -536,8 +535,7 @@ function update_editor()
 			my+=dy
 			
 			if sel_mach then
-				sel_mach.x+=dx*16
-				sel_mach.y+=dy*16
+				move(sel_mach,dx*16,dy*16)
 			end
 		end
 	end
@@ -954,7 +952,7 @@ function draw_editor()
 	oprintc("\14buy machines",
 		x,y-4,6,1)
 	if new_mach then
-		draw_new_mach(x+27,y-8)
+		draw_notif(x+27,y-8)
 	end
 	
 	--shop
@@ -1033,7 +1031,7 @@ function draw_editor()
 						69-shop_slide,1)
 				end
 				if not mach_seen[ind] then
-					draw_new_mach(x+8,
+					draw_notif(x+8,
 						64-shop_slide)
 				end
 			end
@@ -1196,18 +1194,16 @@ function draw_bird(b)
 		1,1,b.flp)
 end
 
---★
+--★ could de-extract
 function update_bird(b)
 	if b.state=="wander" then
-		b.x+=b.dx
-		b.y+=b.dy
-		b.frame=(b.frame+.2)%2
+		move(b)
+		animate(b,.2,2)
 		b.flp=b.dx<0
 		if abs(b.tx-b.x)<1
 		and abs(b.ty-b.y)<1
 		or collision_mach(b) then
-			b.x=flr(b.x-b.dx)
-			b.y=flr(b.y-b.dy)
+			move(b,-b.dx,-b.dy)
 			b.state="wait"
 			b.⧗=⧗+rnd"60"+30
 		end
@@ -1373,8 +1369,7 @@ function move_out(s,dx,dy,dist)
 		if not collision_mach(box) then
 			return moved
 		end
-		box.x+=dx
-		box.y+=dy
+		move(box,dx,dy)
 		moved+=1
 		if moved>dist then
 			return
@@ -1557,9 +1552,13 @@ function split0(s,val)
 	return t
 end
 
-function move(s)
-	s.x+=s.dx
-	s.y+=s.dy
+function move(s,dx,dy)
+	s.x+=dx or s.dx
+	s.y+=dy or s.dy
+end
+
+function animate(s,spd,mx)
+	s.frame=(s.frame+spd)%mx
 end
 -->8
 --potions
@@ -1975,7 +1974,7 @@ function do_treadmill(m)
 	end
 	power+=4*dynamos
 	웃.frame=1
-	m.frame=(m.frame+1)%4
+	animate(m,1,4)
 end
 
 function draw_dynamo(m)
@@ -2062,7 +2061,7 @@ function draw_mach(m,bp)
 	--new mach unlocked
 	if m.name=="editor"
 	and new_mach then
-		draw_new_mach(m.x+9,m.y-3)
+		draw_notif(m.x+9,m.y-3)
 	end
 		
 	--debug stuff
@@ -2083,7 +2082,7 @@ function is_empty(m)
 	return true
 end
 
-function draw_new_mach(x,y)
+function draw_notif(x,y)
 	local anim,yoff=
 		split0("189,189,189,189,189,189,189,189,189,189,189,189,190,190,190,190,189,191,189",189),
 		split0"0,0,0,0,0,0,0,0,0,0,0,0,-1,-3,-3,-1,0,0,0"
@@ -2178,15 +2177,13 @@ function update_title()
 	--background animation
 	for i=1,15 do
 		local ln=bkg[i]
+		move(ln)
 		
-		ln.x+=ln.dx
 		if ln.x>128+#ln*8
 		or ln.x<-8-#ln*8 then
 			ln.x-=(128+#ln*8)*ln.dx
 			ln.y=flr(rnd"16")*8
 		end
-		
-		ln.y+=ln.dy
 		if ln.y>128+#ln*8
 		or ln.y<-8-#ln*8 then
 			ln.y-=(128+#ln*8)*ln.dy
